@@ -21,4 +21,9 @@ class NotesRepository {
     void addNote(String note){
         notes.add(note);
     }
+
+
+    public void setNotes(List<String> notes) {
+        this.notes = notes;
+    }
 }

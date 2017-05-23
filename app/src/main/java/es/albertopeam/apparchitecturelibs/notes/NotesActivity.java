@@ -13,6 +13,7 @@ import java.util.List;
 import es.albertopeam.apparchitecturelibs.R;
 
 //TODO: duplica notas el viewmodel
+//TODO: revisar si setear al repo los datos del viewmodel en la construccion(factoría) es el lugar adecuado
 //TODO: observe notes...pa ver como funciona el live data...abrir otra activity y modificar contenidos
 //TODO: sync or lock in viewmodel
 public class NotesActivity

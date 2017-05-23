@@ -3,6 +3,7 @@ package es.albertopeam.apparchitecturelibs.notes;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,9 @@ class NotesViewModel
 
     List<String> getNotes() {
         List<String> noteList = notes.getValue();
+        if (noteList == null){
+            return new ArrayList<>();
+        }
         return noteList;
     }
 
