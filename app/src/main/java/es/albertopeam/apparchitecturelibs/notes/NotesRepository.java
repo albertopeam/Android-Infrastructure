@@ -1,6 +1,5 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,8 +9,12 @@ import java.util.List;
 class NotesRepository {
 
 
-    private List<String>notes = new ArrayList<>();
+    private List<String>notes;
 
+
+    NotesRepository(List<String> notes) {
+        this.notes = notes;
+    }
 
     List<String> loadNotes(){
         return notes;
@@ -20,10 +23,5 @@ class NotesRepository {
 
     void addNote(String note){
         notes.add(note);
-    }
-
-
-    public void setNotes(List<String> notes) {
-        this.notes = notes;
     }
 }

@@ -2,6 +2,7 @@ package es.albertopeam.apparchitecturelibs.notes;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,24 +17,25 @@ class NotesViewModel
 
     private MutableLiveData<List<String>> notes = new MutableLiveData<>();
 
-
+    @NonNull
     List<String> getNotes() {
-        List<String> noteList = notes.getValue();
-        if (noteList == null){
-            return new ArrayList<>();
+        List<String>noteList;
+        if (isEmpty()){
+            noteList = new ArrayList<>();
+            setNotes(noteList);
+        }else{
+            noteList = notes.getValue();
         }
         return noteList;
     }
 
 
-    void setNotes(List<String>notesList) {
+    void setNotes(@NonNull List<String>notesList) {
         notes.postValue(notesList);
     }
 
 
-    void addNote(String note){
-        List<String>notesList = notes.getValue();
-        notesList.add(note);
-        notes.setValue(notesList);
+    boolean isEmpty(){
+        return notes.getValue() == null;
     }
 }

@@ -10,10 +10,7 @@ class NotesFactory {
 
     static NotesPresenter provide(NotesActivity activity){
         NotesViewModel model = ViewModelProviders.of(activity).get(NotesViewModel.class);
-        NotesRepository notesRepository = new NotesRepository();
-        if (!model.getNotes().isEmpty()){
-            notesRepository.setNotes(model.getNotes());
-        }
+        NotesRepository notesRepository = new NotesRepository(model.getNotes());
         LoadNotesUseCase loadNotesUseCase = new LoadNotesUseCase(notesRepository);
         AddNoteUseCase addNoteUseCase = new AddNoteUseCase(notesRepository);
         NotesPresenter presenter = new NotesPresenter(activity, model, loadNotesUseCase, addNoteUseCase);

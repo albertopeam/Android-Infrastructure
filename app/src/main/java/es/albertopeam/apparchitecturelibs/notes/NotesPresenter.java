@@ -30,7 +30,6 @@ class NotesPresenter {
         loadNotesUC.loadNotes(new LoadNotesUseCase.Callback() {
             @Override
             public void onLoadNotes(List<String> notes) {
-                model.setNotes(notes);
                 view.onLoadedNotes(notes);
             }
         });
@@ -41,7 +40,6 @@ class NotesPresenter {
         addNoteUC.addNote(note, new AddNoteUseCase.Callback() {
             @Override
             public void onAddedNote(String note) {
-                model.addNote(note);
                 view.onLoadedNotes(model.getNotes());
             }
 
