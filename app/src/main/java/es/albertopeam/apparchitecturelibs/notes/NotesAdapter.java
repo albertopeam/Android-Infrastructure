@@ -22,8 +22,14 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
     private List<String> notes = new ArrayList<>();
 
 
-    public void setNotes(List<String> notes) {
+    void setNotes(List<String> notes) {
         this.notes = notes;
+        notifyDataSetChanged();
+    }
+
+
+    void removeNote(String note) {
+        notes.remove(note);
         notifyDataSetChanged();
     }
 
@@ -44,6 +50,7 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
     public int getItemCount() {
         return notes.size();
     }
+
 
     static class NoteViewHolder extends RecyclerView.ViewHolder{
 

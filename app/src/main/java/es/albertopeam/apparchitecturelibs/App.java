@@ -4,18 +4,30 @@ import android.app.Application;
 
 import com.squareup.leakcanary.LeakCanary;
 
+import es.albertopeam.apparchitecturelibs.data.DatabaseFactory;
+
 public class App
         extends Application {
 
+
     @Override
     public void onCreate() {
-    super.onCreate();
-    if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
-      return;
+        super.onCreate();
+        initLeakCanary();
+        initDatabase();
     }
-    LeakCanary.install(this);
-    // Normal app init code...
-  }
+
+
+    private void initLeakCanary(){
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+
+        }else{
+            LeakCanary.install(this);
+        }
+    }
+
+
+    private void initDatabase(){
+        DatabaseFactory.init(this);
+    }
 }
