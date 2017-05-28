@@ -41,7 +41,7 @@ public class NotesFactory {
 
     private static void checkNotNull() {
         if (notesRepository == null){
-            throw new NullPointerException("NotesRepository isnt init. Invoke public static NotesRepository provide(List<String> notes) before");
+            throw new NullPointerException("NotesRepository isnt init. Invoke public static NotesRepository instance(List<String> notes) before");
         }
     }
 }

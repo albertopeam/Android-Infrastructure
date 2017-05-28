@@ -22,7 +22,6 @@ import es.albertopeam.apparchitecturelibs.R;
 //TODO: implement remove in view
 //todo: db, falta el remove
 //todo: presenter lyfecicle, para tronzar casos de uso
-//TODO: duplica al meter en memoria...
 public class NotesActivity
         extends AppCompatActivity
     implements NotesView,

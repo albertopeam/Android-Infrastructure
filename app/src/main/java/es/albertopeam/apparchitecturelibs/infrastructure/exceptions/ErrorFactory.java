@@ -1,4 +1,4 @@
-package es.albertopeam.apparchitecturelibs.infrastructure;
+package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 
 /**
  * Created by Al on 25/05/2017.

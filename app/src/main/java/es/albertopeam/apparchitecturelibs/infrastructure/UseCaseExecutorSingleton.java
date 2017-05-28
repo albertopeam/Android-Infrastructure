@@ -1,12 +1,12 @@
 package es.albertopeam.apparchitecturelibs.infrastructure;
 
-import java.util.concurrent.Executor;
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ErrorFactory;
 
 /**
  * Created by Al on 25/05/2017.
  */
 
-public class UseCaseExecutorFactory {
+public class UseCaseExecutorSingleton {
 
 
     private static UseCaseExecutorImpl useCaseExecutorImpl;
@@ -15,7 +15,7 @@ public class UseCaseExecutorFactory {
     private static ErrorFactory errorFactory;
 
 
-    public static UseCaseExecutor provide(){
+    public static UseCaseExecutor instance(){
         if (useCaseExecutorImpl == null){
             useCaseExecutorImpl = new UseCaseExecutorImpl(
                     executor = new ExecutorImpl(),

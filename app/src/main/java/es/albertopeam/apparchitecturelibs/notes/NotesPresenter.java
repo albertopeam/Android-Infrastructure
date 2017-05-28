@@ -6,7 +6,7 @@ import es.albertopeam.apparchitecturelibs.domain.AddNoteUseCase;
 import es.albertopeam.apparchitecturelibs.domain.LoadNotesUseCase;
 import es.albertopeam.apparchitecturelibs.domain.RemoveNoteUseCase;
 import es.albertopeam.apparchitecturelibs.infrastructure.Callback;
-import es.albertopeam.apparchitecturelibs.infrastructure.Error;
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
 import es.albertopeam.apparchitecturelibs.infrastructure.UseCaseExecutor;
 
 /**

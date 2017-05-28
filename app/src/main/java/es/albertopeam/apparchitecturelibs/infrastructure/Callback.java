@@ -1,5 +1,7 @@
 package es.albertopeam.apparchitecturelibs.infrastructure;
 
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
+
 /**
  * Created by Al on 25/05/2017.
  */

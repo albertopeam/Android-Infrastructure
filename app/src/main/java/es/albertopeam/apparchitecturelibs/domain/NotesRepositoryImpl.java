@@ -27,7 +27,11 @@ class NotesRepositoryImpl
 
     @Override
     public synchronized List<String> loadNotes(){
+        if (!notes.isEmpty()){
+            return notes;
+        }
         List<String>loaded = loadNotes.load();
+        notes.clear();
         for (String note:loaded){
             notes.add(note);
         }

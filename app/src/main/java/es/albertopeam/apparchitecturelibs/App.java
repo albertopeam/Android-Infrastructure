@@ -5,6 +5,7 @@ import android.app.Application;
 import com.squareup.leakcanary.LeakCanary;
 
 import es.albertopeam.apparchitecturelibs.data.DatabaseFactory;
+import es.albertopeam.apparchitecturelibs.data.DatabaseSingleton;
 
 public class App
         extends Application {
@@ -28,6 +29,6 @@ public class App
 
 
     private void initDatabase(){
-        DatabaseFactory.init(this);
+        DatabaseSingleton.init(this);
     }
 }

@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ErrorFactory;
+
 /**
  * Created by Al on 25/05/2017.
  */
 
-public class UseCaseExecutorImpl
+class UseCaseExecutorImpl
     implements UseCaseExecutor{
 
 
