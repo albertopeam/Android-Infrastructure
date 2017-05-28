@@ -48,6 +48,6 @@ class NotesRepositoryImpl
 
     @Override
     public synchronized void removeNote(String note){
-        notes.remove(note);
+        throw new UnsupportedOperationException();
     }
 }

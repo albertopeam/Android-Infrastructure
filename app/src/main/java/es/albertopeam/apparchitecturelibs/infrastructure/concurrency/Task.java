@@ -1,4 +1,4 @@
-package es.albertopeam.apparchitecturelibs.infrastructure;
+package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
 /**
  * Created by Al on 25/05/2017.

@@ -1,4 +1,4 @@
-package es.albertopeam.apparchitecturelibs.infrastructure;
+package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +74,11 @@ class UseCaseExecutorImpl
                 e.printStackTrace();
             }
         }
+    }
+
+
+    synchronized void setExceptionController(ExceptionController exceptionController) {
+        this.exceptionController = exceptionController;
     }
 
 

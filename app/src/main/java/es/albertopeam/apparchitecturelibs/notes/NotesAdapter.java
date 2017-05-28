@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +20,12 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
 
     private List<String> notes = new ArrayList<>();
+    private View.OnClickListener onClickListener;
+
+
+    NotesAdapter(View.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
 
     void setNotes(List<String> notes) {
@@ -42,8 +49,9 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
-        holder.fill(notes.get(position));
+        holder.fill(notes.get(position), onClickListener);
     }
+
 
     @Override
     public int getItemCount() {
@@ -53,16 +61,22 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
     static class NoteViewHolder extends RecyclerView.ViewHolder{
 
-        TextView noteTV;
+
+        private TextView noteTV;
+        private Button removeBTN;
+
 
         NoteViewHolder(View itemView) {
             super(itemView);
             noteTV = (TextView) itemView.findViewById(R.id.notetv);
+            removeBTN = (Button) itemView.findViewById(R.id.removebutton);
         }
 
 
-        void fill(String note){
+        void fill(String note, View.OnClickListener onClickListener){
+            removeBTN.setOnClickListener(onClickListener);
             noteTV.setText(note);
+            removeBTN.setTag(note);
         }
     }
 }

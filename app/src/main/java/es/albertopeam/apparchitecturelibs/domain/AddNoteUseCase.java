@@ -1,6 +1,6 @@
 package es.albertopeam.apparchitecturelibs.domain;
 
-import es.albertopeam.apparchitecturelibs.infrastructure.UseCase;
+import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase;
 
 /**
  * Created by Al on 22/05/2017.

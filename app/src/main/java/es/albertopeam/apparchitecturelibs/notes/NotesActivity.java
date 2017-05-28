@@ -11,23 +11,16 @@ import android.widget.Toast;
 import java.util.List;
 
 import es.albertopeam.apparchitecturelibs.R;
-//TODO: check room lib in repo. good place to start with Async -> new executor. Remember to return an error executable(remember permissions, etc..)-> prepare a good infra to sufisio
-//TODO: revisar si setear al repo los datos del viewmodel en la construccion(factoría) es el lugar adecuado
-//TODO: observe notes...pa ver como funciona el live data...abrir otra activity y modificar contenidos
-//TODO: sync or lock in viewmodel
-//TODO: test with an executor and force rotations during simulated network calls...
-//TODO: make espresso tests...maybe need a scope system for retain dependencies(DI for the repo(to mock it in the tests...))
-//TODO: revisar como funciona viewmodel clear. invocado cuando se llama al finish..creo
-//TODO: play with room db
-//TODO: implement remove in view
-//todo: db, falta el remove
-//todo: presenter lyfecicle, para STOPEAR casos de uso
-//TODO: tests
-//TODO: probar infrastructure/errors package. Meter un NPE para probar...
+//TODO: observe notes. To check how it works
+//TODO: review viewmodel clear method
+//todo: presenter lyfecicle, for automatically stops usecases
+//TODO: tests: unit and integration
+//TODO: commment infrastructure
+//TODO: test infrastructure(MThreading)
 public class NotesActivity
         extends AppCompatActivity
-    implements NotesView,
-        View.OnClickListener {
+        implements NotesView,
+                View.OnClickListener {
 
 
     private EditText noteET;
@@ -73,14 +66,21 @@ public class NotesActivity
 
     @Override
     public void onClick(View v) {
-        presenter.addNote(noteET.getText().toString());
+        switch (v.getId()){
+            case R.id.addbutton:
+                presenter.addNote(noteET.getText().toString());
+                break;
+            case R.id.removebutton:
+                presenter.removeNote((String) v.getTag());
+                break;
+        }
     }
 
 
     private void setup(){
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new NotesAdapter());
+        recyclerView.setAdapter(new NotesAdapter(this));
         findViewById(R.id.addbutton).setOnClickListener(this);
         noteET = (EditText) findViewById(R.id.editText);
     }

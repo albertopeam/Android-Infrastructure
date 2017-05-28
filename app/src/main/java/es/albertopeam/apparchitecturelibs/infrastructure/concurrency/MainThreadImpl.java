@@ -1,4 +1,4 @@
-package es.albertopeam.apparchitecturelibs.infrastructure;
+package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
 import android.os.Handler;
 import android.os.Looper;

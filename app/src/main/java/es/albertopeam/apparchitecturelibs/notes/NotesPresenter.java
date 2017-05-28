@@ -5,8 +5,8 @@ import java.util.List;
 import es.albertopeam.apparchitecturelibs.domain.AddNoteUseCase;
 import es.albertopeam.apparchitecturelibs.domain.LoadNotesUseCase;
 import es.albertopeam.apparchitecturelibs.domain.RemoveNoteUseCase;
-import es.albertopeam.apparchitecturelibs.infrastructure.Callback;
-import es.albertopeam.apparchitecturelibs.infrastructure.UseCaseExecutor;
+import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.Callback;
+import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutor;
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
 
 /**
@@ -49,7 +49,7 @@ class NotesPresenter {
             @Override
             public void onError(Error error) {
                 if (error.isRecoverable()){
-
+                    error.recover();
                 }else {
                     view.showError(error.message());
                 }
@@ -68,7 +68,7 @@ class NotesPresenter {
             @Override
             public void onError(Error error) {
                 if (error.isRecoverable()){
-
+                    error.recover();
                 }else {
                     view.showError(error.message());
                 }
@@ -87,7 +87,7 @@ class NotesPresenter {
             @Override
             public void onError(Error error) {
                 if (error.isRecoverable()){
-
+                    error.recover();
                 }else {
                     view.showError(error.message());
                 }

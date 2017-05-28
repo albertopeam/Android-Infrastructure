@@ -1,4 +1,4 @@
-package es.albertopeam.apparchitecturelibs.infrastructure;
+package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionController;
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionControllerFactory;
@@ -18,6 +18,10 @@ public class UseCaseExecutorSingleton {
     private static ExceptionController exceptionController;
 
 
+    /**
+     * Provides the use case executor with defults
+     * @return UseCaseExecutor
+     */
     public static UseCaseExecutor instance(){
         if (useCaseExecutorImpl == null){
             useCaseExecutorImpl = new UseCaseExecutorImpl(
@@ -27,6 +31,31 @@ public class UseCaseExecutorSingleton {
             );
         }
         return useCaseExecutorImpl;
+    }
+
+
+    /**
+     * Provides the use case executor
+     * @param aExceptionController custom exception controller
+     * @return UseCaseExecutor
+     */
+    public static UseCaseExecutor instance(ExceptionController aExceptionController){
+        exceptionController = aExceptionController;
+        if (hasInstance()){
+            useCaseExecutorImpl.setExceptionController(exceptionController);
+        }else {
+            useCaseExecutorImpl = new UseCaseExecutorImpl(
+                    executor = new ExecutorImpl(),
+                    mainThread = new MainThreadImpl(),
+                    exceptionController = aExceptionController
+            );
+        }
+        return useCaseExecutorImpl;
+    }
+
+
+    private static boolean hasInstance(){
+        return useCaseExecutorImpl != null;
     }
 
 
