@@ -6,7 +6,7 @@ import java.util.List;
 import es.albertopeam.apparchitecturelibs.domain.LoadNotes;
 
 /**
- * Created by Al on 27/05/2017.
+ * Created by Alberto Penas Amor on 27/05/2017.
  */
 
 class LoadNotesImpl

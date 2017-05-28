@@ -6,7 +6,7 @@ import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionCon
 import static es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegateFactory.provide;
 
 /**
- * Created by Al on 25/05/2017.
+ * Created by Alberto Penas Amor on 25/05/2017.
  */
 
 public class UseCaseExecutorSingleton {

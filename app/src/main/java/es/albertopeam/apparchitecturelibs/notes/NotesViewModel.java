@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Al on 22/05/2017.
+ * Created by Alberto Penas Amor on 22/05/2017.
  */
 
 class NotesViewModel

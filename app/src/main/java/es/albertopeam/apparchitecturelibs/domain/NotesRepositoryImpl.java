@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.domain;
 import java.util.List;
 
 /**
- * Created by Al on 22/05/2017.
+ * Created by Alberto Penas Amor on 22/05/2017.
  * all methods are synchronized for avoid exceptions for concurrent modifications
  */
 

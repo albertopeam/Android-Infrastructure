@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.domain;
 import java.util.List;
 
 /**
- * Created by Al on 27/05/2017.
+ * Created by Alberto Penas Amor on 27/05/2017.
  */
 
 interface NotesRepository {

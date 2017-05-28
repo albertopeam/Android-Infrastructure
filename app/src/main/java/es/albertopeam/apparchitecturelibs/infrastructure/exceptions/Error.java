@@ -1,7 +1,7 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 
 /**
- * Created by Al on 25/05/2017.
+ * Created by Alberto Penas Amor on 25/05/2017.
  */
 public abstract class Error {
     public abstract boolean isRecoverable();

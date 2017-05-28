@@ -19,7 +19,7 @@ import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideAdd
 import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideLoadNotes;
 
 /**
- * Created by Al on 22/05/2017.
+ * Created by Alberto Penas Amor on 22/05/2017.
  */
 
 class NotesViewFactory {

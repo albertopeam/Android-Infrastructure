@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.domain;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase;
 
 /**
- * Created by Al on 25/05/2017.
+ * Created by Alberto Penas Amor on 25/05/2017.
  */
 public class RemoveNoteUseCase
         implements UseCase<String, String> {

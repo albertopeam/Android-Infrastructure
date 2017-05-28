@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 import android.support.annotation.NonNull;
 
 /**
- * Created by Al on 28/05/2017.
+ * Created by Alberto Penas Amor on 28/05/2017.
  */
 
 class NotRecoverableError

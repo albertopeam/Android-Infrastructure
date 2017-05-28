@@ -1,7 +1,7 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
 /**
- * Created by Al on 25/05/2017.
+ * Created by Alberto Penas Amor on 25/05/2017.
  */
 
 class Task {

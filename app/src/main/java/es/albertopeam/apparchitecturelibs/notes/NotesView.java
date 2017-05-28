@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.notes;
 import java.util.List;
 
 /**
- * Created by Al on 22/05/2017.
+ * Created by Alberto Penas Amor on 22/05/2017.
  */
 
 interface NotesView {

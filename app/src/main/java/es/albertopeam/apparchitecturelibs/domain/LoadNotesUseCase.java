@@ -5,7 +5,7 @@ import java.util.List;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase;
 
 /**
- * Created by Al on 22/05/2017.
+ * Created by Alberto Penas Amor on 22/05/2017.
  */
 
 public class LoadNotesUseCase
