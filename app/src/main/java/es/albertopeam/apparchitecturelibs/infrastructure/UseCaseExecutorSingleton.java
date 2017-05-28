@@ -1,6 +1,9 @@
 package es.albertopeam.apparchitecturelibs.infrastructure;
 
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ErrorFactory;
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionController;
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionControllerFactory;
+
+import static es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegateFactory.provide;
 
 /**
  * Created by Al on 25/05/2017.
@@ -12,7 +15,7 @@ public class UseCaseExecutorSingleton {
     private static UseCaseExecutorImpl useCaseExecutorImpl;
     private static ExecutorImpl executor;
     private static MainThreadImpl mainThread;
-    private static ErrorFactory errorFactory;
+    private static ExceptionController exceptionController;
 
 
     public static UseCaseExecutor instance(){
@@ -20,7 +23,7 @@ public class UseCaseExecutorSingleton {
             useCaseExecutorImpl = new UseCaseExecutorImpl(
                     executor = new ExecutorImpl(),
                     mainThread = new MainThreadImpl(),
-                    errorFactory = new ErrorFactory()
+                    exceptionController = ExceptionControllerFactory.provide(provide())
             );
         }
         return useCaseExecutorImpl;
@@ -39,8 +42,8 @@ public class UseCaseExecutorSingleton {
         if (mainThread != null){
             mainThread = null;
         }
-        if (errorFactory != null){
-            errorFactory = null;
+        if (exceptionController != null){
+            exceptionController = null;
         }
     }
 }

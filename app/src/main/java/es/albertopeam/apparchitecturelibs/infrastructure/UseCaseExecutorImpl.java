@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ErrorFactory;
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionController;
 
 /**
  * Created by Al on 25/05/2017.
@@ -15,7 +15,7 @@ class UseCaseExecutorImpl
     implements UseCaseExecutor{
 
 
-    private ErrorFactory errorFactory;
+    private ExceptionController exceptionController;
     private Executor executor;
     private MainThreadImpl mainThread;
     private List<Task> tasks = new ArrayList<>();
@@ -23,10 +23,10 @@ class UseCaseExecutorImpl
 
     UseCaseExecutorImpl(Executor executor,
                         MainThreadImpl mainThread,
-                        ErrorFactory errorFactory) {
+                        ExceptionController exceptionController) {
         this.executor = executor;
         this.mainThread = mainThread;
-        this.errorFactory = errorFactory;
+        this.exceptionController = exceptionController;
     }
 
 
@@ -130,7 +130,7 @@ class UseCaseExecutorImpl
             @Override
             public void run() {
                 if (canRespond(useCase)){
-                    final Error error = errorFactory.provide(e);
+                    final Error error = exceptionController.handle(e);
                     callback.onError(error);
                     removeUseCase(useCase);
                 }

@@ -21,7 +21,9 @@ import es.albertopeam.apparchitecturelibs.R;
 //TODO: play with room db
 //TODO: implement remove in view
 //todo: db, falta el remove
-//todo: presenter lyfecicle, para tronzar casos de uso
+//todo: presenter lyfecicle, para STOPEAR casos de uso
+//TODO: tests
+//TODO: probar infrastructure/errors package. Meter un NPE para probar...
 public class NotesActivity
         extends AppCompatActivity
     implements NotesView,

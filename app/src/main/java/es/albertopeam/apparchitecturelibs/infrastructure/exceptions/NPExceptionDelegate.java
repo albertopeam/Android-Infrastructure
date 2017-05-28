@@ -15,6 +15,6 @@ class NPExceptionDelegate
 
     @Override
     public Error handle(Exception exception) {
-        return new Error();
+        return new NotRecoverableError(exception.getMessage());
     }
 }
