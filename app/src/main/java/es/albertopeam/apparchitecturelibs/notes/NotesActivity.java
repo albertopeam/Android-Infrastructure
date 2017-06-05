@@ -11,12 +11,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import es.albertopeam.apparchitecturelibs.R;
-//TODO: observe notes. To check how it works
-//TODO: review viewmodel clear method
-//todo: presenter lyfecicle, for automatically stops usecases
-//TODO: tests: unit and integration
-//TODO: commment infrastructure
-//TODO: test infrastructure(MThreading)
+
 public class NotesActivity
         extends AppCompatActivity
         implements NotesView,
