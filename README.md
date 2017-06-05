@@ -17,6 +17,7 @@ implementation can be tested easily.
 *  Test: unit and infrastructure(database, usecase handler)
 *  Improve stop use cases. Maybe use LiveData or Lyfecicles.
 *  Comment code
+*  Decouple infrastructure to a library and upload to bintray
 
 ##### Collaborations
 Via PR. They will be well received
