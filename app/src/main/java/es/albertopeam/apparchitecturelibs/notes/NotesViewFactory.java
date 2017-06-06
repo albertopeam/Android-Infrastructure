@@ -36,6 +36,7 @@ class NotesViewFactory {
         UseCaseExecutor useCaseExecutor = UseCaseExecutorSingleton.instance(exceptionController);
         NotesPresenter presenter = new NotesPresenter(
                 activity,
+                activity.getLifecycle(),
                 model,
                 useCaseExecutor,
                 loadNotesUseCase,

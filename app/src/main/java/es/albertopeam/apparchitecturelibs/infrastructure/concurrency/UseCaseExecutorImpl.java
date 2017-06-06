@@ -1,5 +1,8 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
+import android.arch.lifecycle.Lifecycle;
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -18,26 +21,29 @@ class UseCaseExecutorImpl
     private ExceptionController exceptionController;
     private Executor executor;
     private MainThreadImpl mainThread;
-    private List<Task> tasks = new ArrayList<>();
+    private Tasks tasks;
 
 
     UseCaseExecutorImpl(Executor executor,
                         MainThreadImpl mainThread,
-                        ExceptionController exceptionController) {
+                        ExceptionController exceptionController,
+                        Tasks tasks) {
         this.executor = executor;
         this.mainThread = mainThread;
         this.exceptionController = exceptionController;
+        this.tasks = tasks;
     }
 
 
     @Override
     public <Args, Response> void execute(final Args args,
-                                         final UseCase<Args, Response> useCase,
-                                         final Callback<Response>callback){
-        if (find(useCase)){
-            return;
+                                           final UseCase<Args, Response> useCase,
+                                           final Lifecycle lifecycle,
+                                           final Callback<Response>callback){
+        if (tasks.alreadyAdded(useCase)){
+            return;//TODO: maybe notify that already running...
         }
-        addUseCase(useCase);
+        tasks.addUseCase(useCase, lifecycle);
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -53,11 +59,12 @@ class UseCaseExecutorImpl
     }
 
 
+    @Deprecated
     @Override
     public synchronized void cancel(UseCase... useCases){
         for (UseCase useCase:useCases) {
             try {
-                Task task = findTask(useCase);
+                Task task = tasks.findTask(useCase);
                 task.canceled = true;
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -65,9 +72,9 @@ class UseCaseExecutorImpl
         }
     }
 
-
+    @Deprecated
     synchronized void cancelAll(){
-        for (Task task:tasks) {
+        for (Task task:tasks.tasks()) {
             try {
                 task.canceled = true;
             } catch (NullPointerException e) {
@@ -82,36 +89,6 @@ class UseCaseExecutorImpl
     }
 
 
-    private boolean find(UseCase useCase){
-        for (Task task:tasks){
-            if (task.useCase == useCase){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    private Task findTask(UseCase useCase) throws NullPointerException{
-        for (Task task : tasks) {
-            if (task.useCase == useCase) {
-                return task;
-            }
-        }
-        throw new NullPointerException();
-    }
-
-
-    private boolean canRespond(UseCase useCase){
-        for (Task task:tasks){
-            if (task.useCase == useCase){
-                return !task.canceled;
-            }
-        }
-        return false;
-    }
-
-
     private <Args, Response> void notifySuccess(
                                 final UseCase<Args, Response> useCase,
                                 final Callback<Response> callback,
@@ -119,10 +96,10 @@ class UseCaseExecutorImpl
         mainThread.run(new Runnable() {
             @Override
             public void run() {
-                if (canRespond(useCase)){
+                if (tasks.canRespond(useCase)){
                     callback.onSuccess(success);
                 }
-                removeUseCase(useCase);
+                tasks.removeUseCase(useCase);
             }
         });
     }
@@ -134,27 +111,12 @@ class UseCaseExecutorImpl
         mainThread.run(new Runnable() {
             @Override
             public void run() {
-                if (canRespond(useCase)){
+                if (tasks.canRespond(useCase)){
                     final Error error = exceptionController.handle(e);
                     callback.onError(error);
-                    removeUseCase(useCase);
+                    tasks.removeUseCase(useCase);
                 }
             }
         });
-    }
-
-
-    private synchronized void addUseCase(UseCase useCase){
-        tasks.add(new Task(useCase));
-    }
-
-
-    private synchronized void removeUseCase(UseCase useCase){
-        try{
-            Task task = findTask(useCase);
-            tasks.remove(task);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
     }
 }

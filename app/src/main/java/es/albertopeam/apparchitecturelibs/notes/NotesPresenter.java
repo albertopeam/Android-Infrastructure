@@ -1,5 +1,7 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.arch.lifecycle.Lifecycle;
+
 import java.util.List;
 
 import es.albertopeam.apparchitecturelibs.domain.AddNoteUseCase;
@@ -22,15 +24,18 @@ class NotesPresenter {
     private LoadNotesUseCase loadNotesUC;
     private AddNoteUseCase addNoteUC;
     private RemoveNoteUseCase removeNoteUC;
+    private Lifecycle lifecycle;
 
 
     NotesPresenter(NotesView view,
+                   Lifecycle lifecycle,
                    NotesViewModel model,
                    UseCaseExecutor useCaseExecutor,
                    LoadNotesUseCase loadNotesUC,
                    AddNoteUseCase addNoteUC,
                    RemoveNoteUseCase removeNoteUseCase) {
         this.view = view;
+        this.lifecycle = lifecycle;
         this.model = model;
         this.useCaseExecutor = useCaseExecutor;
         this.loadNotesUC = loadNotesUC;
@@ -40,7 +45,7 @@ class NotesPresenter {
 
 
     void loadNotes(){
-        useCaseExecutor.execute(null, loadNotesUC, new Callback<List<String>>() {
+        useCaseExecutor.execute(null, loadNotesUC, lifecycle, new Callback<List<String>>() {
             @Override
             public void onSuccess(List<String> notes) {
                 view.onLoadedNotes(notes);
@@ -59,7 +64,7 @@ class NotesPresenter {
 
 
     void addNote(String note){
-        useCaseExecutor.execute(note, addNoteUC, new Callback<String>() {
+        useCaseExecutor.execute(note, addNoteUC, lifecycle, new Callback<String>() {
             @Override
             public void onSuccess(String s) {
                 view.onLoadedNotes(model.getNotes());
@@ -78,7 +83,7 @@ class NotesPresenter {
 
 
     void removeNote(String note){
-        useCaseExecutor.execute(note, removeNoteUC, new Callback<String>(){
+        useCaseExecutor.execute(note, removeNoteUC, lifecycle, new Callback<String>(){
             @Override
             public void onSuccess(String note) {
                 view.onRemovedNote(note);
@@ -97,6 +102,6 @@ class NotesPresenter {
 
 
     void cancel(){
-        useCaseExecutor.cancel(loadNotesUC, addNoteUC, removeNoteUC);
+        //useCaseExecutor.cancel(loadNotesUC, addNoteUC, removeNoteUC);
     }
 }

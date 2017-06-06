@@ -1,5 +1,7 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
+import java.util.ArrayList;
+
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionController;
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionControllerFactory;
 
@@ -16,6 +18,7 @@ public class UseCaseExecutorSingleton {
     private static ExecutorImpl executor;
     private static MainThreadImpl mainThread;
     private static ExceptionController exceptionController;
+    private static Tasks tasks;
 
 
     /**
@@ -27,7 +30,8 @@ public class UseCaseExecutorSingleton {
             useCaseExecutorImpl = new UseCaseExecutorImpl(
                     executor = new ExecutorImpl(),
                     mainThread = new MainThreadImpl(),
-                    exceptionController = ExceptionControllerFactory.provide(provide())
+                    exceptionController = ExceptionControllerFactory.provide(provide()),
+                    tasks = new Tasks(new ArrayList<Task>())
             );
         }
         return useCaseExecutorImpl;
@@ -47,7 +51,8 @@ public class UseCaseExecutorSingleton {
             useCaseExecutorImpl = new UseCaseExecutorImpl(
                     executor = new ExecutorImpl(),
                     mainThread = new MainThreadImpl(),
-                    exceptionController = aExceptionController
+                    exceptionController = aExceptionController,
+                    tasks = new Tasks(new ArrayList<Task>())
             );
         }
         return useCaseExecutorImpl;

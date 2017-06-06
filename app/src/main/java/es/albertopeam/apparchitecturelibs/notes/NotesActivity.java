@@ -1,5 +1,6 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.arch.lifecycle.LifecycleActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,8 +13,10 @@ import java.util.List;
 
 import es.albertopeam.apparchitecturelibs.R;
 
+todo: añade pero no muestra, al volver a entrar si muestra....
+todo: PENSAR move lifecycle to use case. it can be run from a service or intent service -> lifefycle can be null...no force @NonNull
 public class NotesActivity
-        extends AppCompatActivity
+        extends LifecycleActivity
         implements NotesView,
                 View.OnClickListener {
 
@@ -35,7 +38,7 @@ public class NotesActivity
 
     @Override
     protected void onDestroy() {
-        presenter.cancel();
+        //presenter.cancel();
         super.onDestroy();
     }
 
