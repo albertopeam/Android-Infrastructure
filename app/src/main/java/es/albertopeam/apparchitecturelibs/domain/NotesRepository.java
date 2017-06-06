@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 interface NotesRepository {
-    List<String> loadNotes();
-    void addNote(String note);
-    void removeNote(String note);
+    List<String> loadNotes() throws Exception;
+    void addNote(String note) throws Exception;
+    void removeNote(String note) throws Exception;
 }

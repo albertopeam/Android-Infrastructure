@@ -20,9 +20,6 @@ public class AddNoteUseCase
 
     @Override
     public String run(String note) throws Exception {
-        if (note.equalsIgnoreCase("")){
-            throw new NullPointerException("Note cannot be empty");
-        }
         repository.addNote(note);
         return note;
     }

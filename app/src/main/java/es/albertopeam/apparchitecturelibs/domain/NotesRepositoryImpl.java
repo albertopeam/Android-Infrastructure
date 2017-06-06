@@ -26,7 +26,7 @@ class NotesRepositoryImpl
 
 
     @Override
-    public synchronized List<String> loadNotes(){
+    public synchronized List<String> loadNotes() throws Exception{
         if (!notes.isEmpty()){
             return notes;
         }
@@ -40,14 +40,17 @@ class NotesRepositoryImpl
 
 
     @Override
-    public synchronized void addNote(String note){
+    public synchronized void addNote(String note) throws Exception{
+        if (note.equalsIgnoreCase("")){
+            throw new Exception("Note cannot be empty");
+        }
         addNote.add(note);
         notes.add(note);
     }
 
 
     @Override
-    public synchronized void removeNote(String note){
+    public synchronized void removeNote(String note) throws Exception{
         throw new UnsupportedOperationException();
     }
 }

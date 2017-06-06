@@ -45,13 +45,13 @@ public class LoadNotesUseCaseTest {
 
 
     @Test(expected = Exception.class)
-    public void givenInvalidNotesRepoWhenLoadNotesThenThrownException() throws Exception {
+    public void givenInvalidNotesRepoWhenLoadNotesThenThrowException() throws Exception {
         givenInvalidRepo();
         whenLoadNotes();
     }
 
 
-    private void givenValidRepo() {
+    private void givenValidRepo() throws Exception{
         when(notesRepositoryMock.loadNotes()).thenReturn(new ArrayList<String>());
     }
 
@@ -61,7 +61,7 @@ public class LoadNotesUseCaseTest {
     }
 
 
-    private void givenInvalidRepo() {
+    private void givenInvalidRepo() throws Exception{
         when(notesRepositoryMock.loadNotes()).thenThrow(new Exception());
     }
 

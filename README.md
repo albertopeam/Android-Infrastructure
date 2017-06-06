@@ -15,7 +15,9 @@ implementation can be tested easily.
 
 ##### Todos:
 *  Test: unit and infrastructure(database, usecase handler)
-*  Improve stop use cases. Maybe use LiveData or Lyfecicles.
+*  Improve stoping use cases. Use Lyfecicles(pass Lyfecycle adapter to use case
+executor, then add this adapter to the task. when the task ends or lyfecicle
+stops then clear callback, maybe leave the task end or stop it if i can).
 *  Comment code
 *  Decouple infrastructure to a library and upload to bintray
 
