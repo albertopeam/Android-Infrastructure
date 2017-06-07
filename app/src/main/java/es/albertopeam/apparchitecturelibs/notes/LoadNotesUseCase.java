@@ -1,14 +1,15 @@
-package es.albertopeam.apparchitecturelibs.domain;
+package es.albertopeam.apparchitecturelibs.notes;
 
 import java.util.List;
 
+import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase;
 
 /**
  * Created by Alberto Penas Amor on 22/05/2017.
  */
 
-public class LoadNotesUseCase
+class LoadNotesUseCase
         implements UseCase<Void,List<String>> {
 
 

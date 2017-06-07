@@ -1,4 +1,4 @@
-package es.albertopeam.apparchitecturelibs.domain;
+package es.albertopeam.apparchitecturelibs.notes;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +7,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
+import es.albertopeam.apparchitecturelibs.notes.LoadNotesUseCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

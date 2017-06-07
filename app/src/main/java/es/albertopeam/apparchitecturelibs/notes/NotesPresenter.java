@@ -4,9 +4,6 @@ import android.arch.lifecycle.Lifecycle;
 
 import java.util.List;
 
-import es.albertopeam.apparchitecturelibs.domain.AddNoteUseCase;
-import es.albertopeam.apparchitecturelibs.domain.LoadNotesUseCase;
-import es.albertopeam.apparchitecturelibs.domain.RemoveNoteUseCase;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.Callback;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutor;
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;

@@ -4,17 +4,19 @@ import android.app.Activity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.lang.ref.WeakReference;
+
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegate;
 
 class UnsupportedOperationExceptionDelegate
         implements ExceptionDelegate {
 
-    private Activity activity;
+    private WeakReference<Activity> activity;
 
 
     UnsupportedOperationExceptionDelegate(Activity activity) {
-        this.activity = activity;
+        this.activity = new WeakReference<>(activity);
     }
 
 
@@ -38,7 +40,7 @@ class UnsupportedOperationExceptionDelegate
 
             @Override
             public void recover() {
-                new MaterialDialog.Builder(activity)
+                new MaterialDialog.Builder(activity.get())
                         .content(message())
                         .positiveText("ok")
                         .show();

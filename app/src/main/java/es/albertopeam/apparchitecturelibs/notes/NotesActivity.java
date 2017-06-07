@@ -13,8 +13,9 @@ import java.util.List;
 
 import es.albertopeam.apparchitecturelibs.R;
 
-todo: añade pero no muestra, al volver a entrar si muestra....
-todo: PENSAR move lifecycle to use case. it can be run from a service or intent service -> lifefycle can be null...no force @NonNull
+//todo: añade pero no muestra, al volver a entrar si muestra....
+//  fixed???
+//todo: PENSAR move lifecycle to use case(in presenter too much noise...solo debe cambiar estados y proporcionar su estado al ejecutor para saber que diablos hacer con el). it can be run from a service or intent service -> lifefycle can be null...no force @NonNull
 public class NotesActivity
         extends LifecycleActivity
         implements NotesView,
@@ -32,9 +33,14 @@ public class NotesActivity
         setContentView(R.layout.activity_notes);
         setup();
         presenter = NotesViewFactory.provide(this);
-        presenter.loadNotes();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.loadNotes();
+    }
 
     @Override
     protected void onDestroy() {
