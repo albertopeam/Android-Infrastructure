@@ -1,10 +1,5 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
-import android.arch.lifecycle.Lifecycle;
-import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executor;
 
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
@@ -38,12 +33,11 @@ class UseCaseExecutorImpl
     @Override
     public <Args, Response> void execute(final Args args,
                                            final UseCase<Args, Response> useCase,
-                                           final Lifecycle lifecycle,
                                            final Callback<Response>callback){
         if (tasks.alreadyAdded(useCase)){
-            return;//TODO: maybe notify that already running...
+            return;
         }
-        tasks.addUseCase(useCase, lifecycle);
+        tasks.addUseCase(useCase);
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -59,31 +53,6 @@ class UseCaseExecutorImpl
     }
 
 
-    @Deprecated
-    @Override
-    public synchronized void cancel(UseCase... useCases){
-        for (UseCase useCase:useCases) {
-            try {
-                Task task = tasks.findTask(useCase);
-                task.canceled = true;
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Deprecated
-    synchronized void cancelAll(){
-        for (Task task:tasks.tasks()) {
-            try {
-                task.canceled = true;
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
     synchronized void setExceptionController(ExceptionController exceptionController) {
         this.exceptionController = exceptionController;
     }
@@ -96,7 +65,7 @@ class UseCaseExecutorImpl
         mainThread.run(new Runnable() {
             @Override
             public void run() {
-                if (tasks.canRespond(useCase)){
+                if (useCase.canRespond()){
                     callback.onSuccess(success);
                 }
                 tasks.removeUseCase(useCase);
@@ -111,11 +80,11 @@ class UseCaseExecutorImpl
         mainThread.run(new Runnable() {
             @Override
             public void run() {
-                if (tasks.canRespond(useCase)){
+                if (useCase.canRespond()){
                     final Error error = exceptionController.handle(e);
                     callback.onError(error);
-                    tasks.removeUseCase(useCase);
                 }
+                tasks.removeUseCase(useCase);
             }
         });
     }

@@ -1,5 +1,7 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.arch.lifecycle.Lifecycle;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -30,12 +32,14 @@ public class LoadNotesUseCaseTest {
     private List<String> result;
     @Mock
     private NotesRepository notesRepositoryMock;
+    @Mock
+    private Lifecycle lifecycle;
 
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        sut = new LoadNotesUseCase(notesRepositoryMock);
+        sut = new LoadNotesUseCase(lifecycle, notesRepositoryMock);
     }
 
 

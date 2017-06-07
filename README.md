@@ -13,11 +13,20 @@ Apply a clean design(SOLID principles) and avoid coupling to
 framework or external libs. Also provide tests for show that this
 implementation can be tested easily.
 
+##### How it works?
+There is a package called infrastructure where we can found the neccesary classes to
+make our code async. All the code inside other packages is synchronous. Also, there is a error handling
+package to avoid duplicate code when handling exceptions(uses delegation pattern).
+
+Domain package contains a repository for abstract the access to the data.
+
+Data package contains code to decouple access to data providers, in this case the database.
+
+Notes package is the sample activity with all the configuration stuff needed to make the use cases run.
+
 ##### Todos:
+*  add UseCaseExecutorImpl an return param in execute to check if use case was sended to execution.
 *  Test: unit and infrastructure(database, usecase handler)
-*  Improve stoping use cases. Use Lyfecicles(pass Lyfecycle adapter to use case
-executor, then add this adapter to the task. when the task ends or lyfecicle
-stops then clear callback, maybe leave the task end or stop it if i can).
 *  Comment code
 *  Decouple infrastructure to a library and upload to bintray
 

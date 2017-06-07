@@ -1,5 +1,6 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.ViewModelProviders;
 
 import com.google.common.collect.ImmutableList;
@@ -23,11 +24,12 @@ import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideLoa
 class NotesViewFactory {
 
     static NotesPresenter provide(NotesActivity activity){
+        Lifecycle lifecycle = activity.getLifecycle();
         NotesViewModel model = ViewModelProviders.of(activity).get(NotesViewModel.class);
         NotesRepository notesRepository = NotesSingleton.instance(model.getNotes(), provideLoadNotes(), provideAddNote());
-        LoadNotesUseCase loadNotesUseCase = new LoadNotesUseCase(notesRepository);
-        AddNoteUseCase addNoteUseCase = new AddNoteUseCase(notesRepository);
-        RemoveNoteUseCase removeNoteUseCase = new RemoveNoteUseCase(notesRepository);
+        LoadNotesUseCase loadNotesUseCase = new LoadNotesUseCase(lifecycle, notesRepository);
+        AddNoteUseCase addNoteUseCase = new AddNoteUseCase(lifecycle, notesRepository);
+        RemoveNoteUseCase removeNoteUseCase = new RemoveNoteUseCase(lifecycle, notesRepository);
         ImmutableList<ExceptionDelegate>delegates = ExceptionDelegateFactory.provide(
                 new UnsupportedOperationExceptionDelegate(activity));
         ExceptionController exceptionController = ExceptionControllerFactory.provide(delegates);

@@ -1,7 +1,5 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
-import android.arch.lifecycle.Lifecycle;
-
 import java.util.List;
 
 /**
@@ -21,7 +19,7 @@ class Tasks {
 
     synchronized boolean alreadyAdded(UseCase useCase){
         for (Task task:tasks){
-            if (task.useCase == useCase){
+            if (task.getUseCase() == useCase){
                 return true;
             }
         }
@@ -31,7 +29,7 @@ class Tasks {
 
     synchronized Task findTask(UseCase useCase) throws NullPointerException{
         for (Task task : tasks) {
-            if (task.useCase == useCase) {
+            if (task.getUseCase() == useCase) {
                 return task;
             }
         }
@@ -39,18 +37,8 @@ class Tasks {
     }
 
 
-    synchronized boolean canRespond(UseCase useCase){
-        for (Task task:tasks){
-            if (task.useCase == useCase){
-                return !task.canceled;
-            }
-        }
-        return false;
-    }
-
-
-    synchronized void addUseCase(UseCase useCase, Lifecycle lifecycle){
-        tasks.add(new Task(useCase, lifecycle));
+    synchronized void addUseCase(UseCase useCase){
+        tasks.add(new Task(useCase));
     }
 
 

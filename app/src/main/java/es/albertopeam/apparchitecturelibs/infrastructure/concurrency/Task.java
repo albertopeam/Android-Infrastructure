@@ -9,51 +9,17 @@ import android.support.annotation.NonNull;
  * Created by Alberto Penas Amor on 25/05/2017.
  */
 
-class Task implements LifecycleObserver {
+class Task  {
 
 
-    UseCase useCase;
-    boolean canceled = false;
-    private String state = "";
+    private UseCase useCase;
 
 
-    Task(@NonNull UseCase useCase,
-         @NonNull Lifecycle lifecycle) {
+    Task(@NonNull UseCase useCase) {
         this.useCase = useCase;
-        lifecycle.addObserver(this);
     }
 
-
-    boolean canBeExecuted(){
-        System.out.println("state: " + state);
-        return state.equalsIgnoreCase("resumed");
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    void create() {
-        state = "created";
-        canceled = false;
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    void start() {
-        state = "started";
-        canceled = false;
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    void resume() {
-        state = "resumed";
-        canceled = false;
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    void pause() {
-        state = "paused";
-        canceled = true;
+    public UseCase getUseCase() {
+        return useCase;
     }
 }

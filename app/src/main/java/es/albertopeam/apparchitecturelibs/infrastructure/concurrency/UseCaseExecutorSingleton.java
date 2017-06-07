@@ -66,7 +66,6 @@ public class UseCaseExecutorSingleton {
 
     public static void release(){
         if (useCaseExecutorImpl != null){
-            useCaseExecutorImpl.cancelAll();
             useCaseExecutorImpl = null;
         }
         if (executor != null){

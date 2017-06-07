@@ -1,5 +1,8 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.arch.lifecycle.Lifecycle;
+import android.support.annotation.NonNull;
+
 import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase;
 
@@ -8,13 +11,15 @@ import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase;
  */
 
 class AddNoteUseCase
-        implements UseCase<String, String> {
+        extends UseCase<String, String> {
 
 
     private NotesRepository repository;
 
 
-    AddNoteUseCase(NotesRepository repository) {
+    AddNoteUseCase(@NonNull Lifecycle lifecycle,
+                   @NonNull NotesRepository repository) {
+        super(lifecycle);
         this.repository = repository;
     }
 

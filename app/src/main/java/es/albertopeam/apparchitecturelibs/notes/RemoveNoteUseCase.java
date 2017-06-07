@@ -1,19 +1,24 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.arch.lifecycle.Lifecycle;
+import android.support.annotation.NonNull;
+
 import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase;
 
 /**
  * Created by Alberto Penas Amor on 25/05/2017.
  */
-public class RemoveNoteUseCase
-        implements UseCase<String, String> {
+class RemoveNoteUseCase
+        extends UseCase<String, String> {
 
 
     private NotesRepository repository;
 
 
-    RemoveNoteUseCase(NotesRepository repository) {
+    RemoveNoteUseCase(@NonNull Lifecycle lifecycle,
+                      @NonNull NotesRepository repository) {
+        super(lifecycle);
         this.repository = repository;
     }
 
