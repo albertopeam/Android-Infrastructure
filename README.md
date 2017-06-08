@@ -25,6 +25,7 @@ Data package contains code to decouple access to data providers, in this case th
 Notes package is the sample activity with all the configuration stuff needed to make the use cases run.
 
 ##### Todos:
+*  Create a wiki with instructions for usage.
 *  add UseCaseExecutorImpl an return param in execute to check if use case was sended to execution.
 *  Test: unit and infrastructure(database, usecase handler)
 *  Comment code
