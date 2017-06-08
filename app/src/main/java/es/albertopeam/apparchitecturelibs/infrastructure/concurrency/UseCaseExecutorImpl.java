@@ -31,11 +31,11 @@ class UseCaseExecutorImpl
 
 
     @Override
-    public <Args, Response> void execute(final Args args,
+    public <Args, Response> boolean execute(final Args args,
                                            final UseCase<Args, Response> useCase,
                                            final Callback<Response>callback){
         if (tasks.alreadyAdded(useCase)){
-            return;
+            return false;
         }
         tasks.addUseCase(useCase);
         executor.execute(new Runnable() {
@@ -50,6 +50,7 @@ class UseCaseExecutorImpl
 
             }
         });
+        return true;
     }
 
 

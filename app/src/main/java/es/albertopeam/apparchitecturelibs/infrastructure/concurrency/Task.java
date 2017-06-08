@@ -1,8 +1,5 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.NonNull;
 
 /**

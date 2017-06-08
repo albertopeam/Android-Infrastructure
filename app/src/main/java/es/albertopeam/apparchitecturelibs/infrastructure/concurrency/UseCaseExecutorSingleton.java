@@ -9,8 +9,12 @@ import static es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Excep
 
 /**
  * Created by Alberto Penas Amor on 25/05/2017.
+ *
+ * This class is a singleton and represents a way of execute async code and handle errors.
+ * It provides an {@link UseCaseExecutor} to execute {@link UseCase} intances. Also it contains
+ * an {@link ExceptionController} that handles the exceptions raised during the execution of the
+ * {@link UseCase} instances.
  */
-
 public class UseCaseExecutorSingleton {
 
 
@@ -40,7 +44,7 @@ public class UseCaseExecutorSingleton {
 
     /**
      * Provides the use case executor
-     * @param aExceptionController custom exception controller
+     * @param aExceptionController custom {@link ExceptionController}
      * @return UseCaseExecutor
      */
     public static UseCaseExecutor instance(ExceptionController aExceptionController){
@@ -64,19 +68,17 @@ public class UseCaseExecutorSingleton {
     }
 
 
+    /**
+     * Release the pool of threads that handle this class
+     */
     public static void release(){
-        if (useCaseExecutorImpl != null){
-            useCaseExecutorImpl = null;
-        }
-        if (executor != null){
+        if (executor != null) {
             executor.shutdown();
-            executor = null;
         }
-        if (mainThread != null){
-            mainThread = null;
-        }
-        if (exceptionController != null){
-            exceptionController = null;
-        }
+        useCaseExecutorImpl = null;
+        executor = null;
+        mainThread = null;
+        exceptionController = null;
+        tasks = null;
     }
 }

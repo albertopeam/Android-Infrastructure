@@ -7,8 +7,14 @@ import android.support.annotation.NonNull;
 
 /**
  * Created by Alberto Penas Amor on 25/05/2017.
+ *
+ * Class used for execute async code. This class handle the activity or fragment {@link Lifecycle},
+ * allowing know if it can return after its execution through a {@link Callback}
+ * To send to execution a subclass of {@see UseCase} its needed to pass it to
+ * {@link UseCaseExecutor#execute(Object, UseCase, Callback)}
  */
-public abstract class UseCase<Args, Response> implements LifecycleObserver {
+public abstract class UseCase<Args, Response>
+        implements LifecycleObserver {
 
 
     private LifecycleState state;
@@ -23,11 +29,6 @@ public abstract class UseCase<Args, Response> implements LifecycleObserver {
 
 
     protected abstract Response run(Args args) throws Exception;
-
-
-    LifecycleState getState(){
-        return state;
-    }
 
 
     boolean canRespond(){

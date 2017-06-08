@@ -27,7 +27,7 @@ Notes package is the sample activity with all the configuration stuff needed to 
 ##### Todos:
 *  add UseCaseExecutorImpl an return param in execute to check if use case was sended to execution.
 *  Test: unit and infrastructure(database, usecase handler)
-*  Comment code
+*  Comment code(infrastructure->exceptions)
 *  Decouple infrastructure to a library and upload to bintray
 
 ##### Collaborations
