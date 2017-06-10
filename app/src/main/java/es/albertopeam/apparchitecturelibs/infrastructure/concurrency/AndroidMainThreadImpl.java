@@ -4,9 +4,12 @@ import android.os.Handler;
 import android.os.Looper;
 
 /**
- * MainThread represents ability to change the execution flow between background thread to UI thread
+ * Created by Alberto Penas Amor on 01/05/2017.
+ *
+ * MainThread can change the execution flow between any thread to UI thread
  */
-class MainThreadImpl {
+class MainThreadImpl
+        implements MainThread {
 
 
     private Handler handler;
@@ -21,7 +24,9 @@ class MainThreadImpl {
      * Run the passed runnable in the UI thread
      * @param runnable
      */
-    void run(Runnable runnable) {
+    @Override
+    public void execute(Runnable runnable) {
         handler.post(runnable);
     }
+
 }
