@@ -21,18 +21,15 @@ class NotesPresenter {
     private LoadNotesUseCase loadNotesUC;
     private AddNoteUseCase addNoteUC;
     private RemoveNoteUseCase removeNoteUC;
-    private Lifecycle lifecycle;
 
 
     NotesPresenter(NotesView view,
-                   Lifecycle lifecycle,
                    NotesViewModel model,
                    UseCaseExecutor useCaseExecutor,
                    LoadNotesUseCase loadNotesUC,
                    AddNoteUseCase addNoteUC,
                    RemoveNoteUseCase removeNoteUseCase) {
         this.view = view;
-        this.lifecycle = lifecycle;
         this.model = model;
         this.useCaseExecutor = useCaseExecutor;
         this.loadNotesUC = loadNotesUC;

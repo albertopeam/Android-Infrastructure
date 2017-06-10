@@ -6,6 +6,6 @@ package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
  * Used for change between any thread to android main thread
  */
 
-interface MainThread {
+interface AndroidMainThread {
     void execute(Runnable runnable);
 }

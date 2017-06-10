@@ -28,6 +28,7 @@ Notes package is the sample activity with all the configuration stuff needed to 
 *  add UseCaseExecutorImpl an return param in execute to check if use case was sended to execution.
 *  Test: unit and infrastructure(database, usecase handler)
 *  Comment code(infrastructure->exceptions)
+*  ExceptionController handle int refs from strings file
 *  Decouple infrastructure to a library and upload to bintray
 
 ##### Collaborations

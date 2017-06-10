@@ -29,7 +29,12 @@ public class NotesActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
         setup();
-        presenter = NotesViewFactory.provide(this);
+        presenter = makePresenter();
+    }
+
+
+    protected NotesPresenter makePresenter(){
+        return NotesViewFactory.provide(this);
     }
 
 

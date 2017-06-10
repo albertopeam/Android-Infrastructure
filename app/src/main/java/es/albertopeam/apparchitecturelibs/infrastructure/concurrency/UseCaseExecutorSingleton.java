@@ -20,7 +20,7 @@ public class UseCaseExecutorSingleton {
 
     private static UseCaseExecutorImpl useCaseExecutorImpl;
     private static ExecutorImpl executor;
-    private static MainThreadImpl mainThread;
+    private static AndroidMainThreadImpl mainThread;
     private static ExceptionController exceptionController;
     private static Tasks tasks;
 
@@ -33,7 +33,7 @@ public class UseCaseExecutorSingleton {
         if (useCaseExecutorImpl == null){
             useCaseExecutorImpl = new UseCaseExecutorImpl(
                     executor = new ExecutorImpl(),
-                    mainThread = new MainThreadImpl(),
+                    mainThread = new AndroidMainThreadImpl(),
                     exceptionController = ExceptionControllerFactory.provide(provide()),
                     tasks = new Tasks(new ArrayList<Task>())
             );
@@ -54,7 +54,7 @@ public class UseCaseExecutorSingleton {
         }else {
             useCaseExecutorImpl = new UseCaseExecutorImpl(
                     executor = new ExecutorImpl(),
-                    mainThread = new MainThreadImpl(),
+                    mainThread = new AndroidMainThreadImpl(),
                     exceptionController = aExceptionController,
                     tasks = new Tasks(new ArrayList<Task>())
             );

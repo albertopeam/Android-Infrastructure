@@ -6,9 +6,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * Created by Alberto Penas Amor on 01/05/2017.
+ *
  * Executor can be used to execute tasks in background threads
  */
-class ExecutorImpl implements java.util.concurrent.Executor {
+class ExecutorImpl
+        implements java.util.concurrent.Executor {
 
 
     private int NUM_THREADS = 0;

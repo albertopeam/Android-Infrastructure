@@ -1,8 +1,16 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
-/**
- * Created by Al on 09/06/2017.
- */
+import android.support.annotation.NonNull;
 
-public class CurrentThreadExecutor {
+import java.util.concurrent.Executor;
+
+/**
+ * Created by Alberto Penas Amor on 09/06/2017.
+ */
+class CurrentThreadExecutor
+    implements Executor{
+    @Override
+    public void execute(@NonNull Runnable command) {
+        command.run();
+    }
 }

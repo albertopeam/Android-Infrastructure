@@ -6,16 +6,16 @@ import android.os.Looper;
 /**
  * Created by Alberto Penas Amor on 01/05/2017.
  *
- * MainThread can change the execution flow between any thread to UI thread
+ * AndroidMainThread can change the execution flow between any thread to UI thread
  */
-class MainThreadImpl
-        implements MainThread {
+class AndroidMainThreadImpl
+        implements AndroidMainThread {
 
 
     private Handler handler;
 
 
-    MainThreadImpl() {
+    AndroidMainThreadImpl() {
         this.handler = new Handler(Looper.getMainLooper());
     }
 

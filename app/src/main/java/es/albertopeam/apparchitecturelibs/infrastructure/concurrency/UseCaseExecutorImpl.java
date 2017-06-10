@@ -15,12 +15,12 @@ class UseCaseExecutorImpl
 
     private ExceptionController exceptionController;
     private Executor executor;
-    private MainThreadImpl mainThread;
+    private AndroidMainThread mainThread;
     private Tasks tasks;
 
 
     UseCaseExecutorImpl(Executor executor,
-                        MainThreadImpl mainThread,
+                        AndroidMainThread mainThread,
                         ExceptionController exceptionController,
                         Tasks tasks) {
         this.executor = executor;
@@ -63,7 +63,7 @@ class UseCaseExecutorImpl
                                 final UseCase<Args, Response> useCase,
                                 final Callback<Response> callback,
                                 final Response success){
-        mainThread.run(new Runnable() {
+        mainThread.execute(new Runnable() {
             @Override
             public void run() {
                 if (useCase.canRespond()){
@@ -78,7 +78,7 @@ class UseCaseExecutorImpl
     private void notifyError(final UseCase useCase,
                              final Callback callback,
                              final Exception e){
-        mainThread.run(new Runnable() {
+        mainThread.execute(new Runnable() {
             @Override
             public void run() {
                 if (useCase.canRespond()){

@@ -7,7 +7,7 @@ package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
  */
 public interface UseCaseExecutor {
     /**
-     * Invoke this method to run {@link UseCase} async
+     * Invoke this method to execute {@link UseCase} async
      * @param args passed to {@link UseCase} for its exection
      * @param useCase to execute in background thread
      * @param callback to respond in main thread after the execution of the {@link UseCase}
