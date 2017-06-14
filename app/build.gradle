@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 25
@@ -39,6 +40,9 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.google.guava:guava:22.0-android'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+    apt 'com.google.dagger:dagger-compiler:2.11'
+    compile 'com.google.dagger:dagger:2.11'
+    provided 'javax.annotation:jsr250-api:1.0'
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
 
@@ -54,4 +58,5 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     androidTestCompile 'org.mockito:mockito-core:2.7.22'
+    androidTestCompile 'org.mockito:mockito-android:2.8.9'
 }

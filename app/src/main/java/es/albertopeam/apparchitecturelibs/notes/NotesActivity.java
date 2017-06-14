@@ -1,6 +1,7 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
 import android.arch.lifecycle.LifecycleActivity;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import es.albertopeam.apparchitecturelibs.App;
 import es.albertopeam.apparchitecturelibs.R;
 
 public class NotesActivity
@@ -29,12 +31,12 @@ public class NotesActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
         setup();
-        presenter = makePresenter();
+        makeDependencies();
     }
 
 
-    protected NotesPresenter makePresenter(){
-        return NotesViewFactory.provide(this);
+    private void makeDependencies(){
+        presenter = (NotesPresenter) ((App)getApplicationContext()).getContainer().provide(this);
     }
 
 

@@ -1,7 +1,5 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
-import android.arch.lifecycle.Lifecycle;
-
 import java.util.List;
 
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.Callback;

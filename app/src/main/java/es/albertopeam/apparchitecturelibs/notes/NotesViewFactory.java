@@ -21,9 +21,9 @@ import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideLoa
  * Created by Alberto Penas Amor on 22/05/2017.
  */
 
-class NotesViewFactory {
+public class NotesViewFactory {
 
-    static NotesPresenter provide(NotesActivity activity){
+    public NotesPresenter provide(NotesActivity activity){
         Lifecycle lifecycle = activity.getLifecycle();
         NotesViewModel model = ViewModelProviders.of(activity).get(NotesViewModel.class);
         NotesRepository notesRepository = NotesSingleton.instance(model.getNotes(), provideLoadNotes(), provideAddNote());
