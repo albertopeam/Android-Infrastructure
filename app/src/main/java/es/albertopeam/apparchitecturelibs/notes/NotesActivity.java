@@ -6,14 +6,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import es.albertopeam.apparchitecturelibs.App;
 import es.albertopeam.apparchitecturelibs.R;
+import es.albertopeam.apparchitecturelibs.di.Container;
 
 public class NotesActivity
         extends LifecycleActivity
@@ -23,7 +27,8 @@ public class NotesActivity
 
     private EditText noteET;
     private RecyclerView recyclerView;
-    private NotesPresenter presenter;
+    @Inject
+    NotesPresenter presenter;
 
 
     @Override
@@ -36,7 +41,10 @@ public class NotesActivity
 
 
     private void makeDependencies(){
-        presenter = (NotesPresenter) ((App)getApplicationContext()).getContainer().provide(this);
+        ((App)getApplication())
+                .container()
+                .inject(NotesActivity.this);
+        Log.d("", presenter.toString());
     }
 
 

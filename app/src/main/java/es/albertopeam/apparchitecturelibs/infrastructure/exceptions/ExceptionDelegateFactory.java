@@ -26,7 +26,7 @@ public class ExceptionDelegateFactory {
      * @return a inmutable collection of exception delegates
      */
     public static List<ExceptionDelegate> provide(){
-        return ImmutableList.copyOf(delegates);
+        return delegates;
     }
 
 
@@ -34,13 +34,13 @@ public class ExceptionDelegateFactory {
      * Provides a copy of the default delegates plus the passed elements
      * @param extras more delegates
      * @return a inmutable collection of exception delegates
-     */
+     *//*
     public static ImmutableList<ExceptionDelegate>provide(ExceptionDelegate... extras){
         List<ExceptionDelegate>allDelegates = new ArrayList<>(delegates);
         allDelegates.addAll(Arrays.asList(extras));
         return ImmutableList.copyOf(allDelegates);
     }
-
+*/
 
 
 }

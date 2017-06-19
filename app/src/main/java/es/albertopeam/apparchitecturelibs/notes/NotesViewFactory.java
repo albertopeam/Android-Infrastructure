@@ -22,7 +22,7 @@ import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideLoa
  */
 
 public class NotesViewFactory {
-
+/*
     public NotesPresenter provide(NotesActivity activity){
         Lifecycle lifecycle = activity.getLifecycle();
         NotesViewModel model = ViewModelProviders.of(activity).get(NotesViewModel.class);
@@ -43,4 +43,5 @@ public class NotesViewFactory {
                 removeNoteUseCase);
         return presenter;
     }
+    */
 }

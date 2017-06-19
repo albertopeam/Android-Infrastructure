@@ -23,14 +23,13 @@ public class UseCaseExecutorFactory {
     /**
      * Provides the use case executor with defults
      */
-    public static UseCaseExecutor provide(){
-        UseCaseExecutorImpl useCaseExecutorImpl = new UseCaseExecutorImpl(
+    public static UseCaseExecutor provide(ExceptionController exceptionController){
+        return  new UseCaseExecutorImpl(
                     new ExecutorImpl(),
                     new AndroidMainThreadImpl(),
-                    ExceptionControllerFactory.provide(ExceptionDelegateFactory.provide()),
+                    exceptionController,
                     new Tasks(new ArrayList<Task>())
             );
-        return useCaseExecutorImpl;
     }
 
 }

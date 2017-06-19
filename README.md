@@ -26,6 +26,8 @@ Notes package is the sample activity with all the configuration stuff needed to 
 
 ##### Todos:
 *  add UseCaseExecutorImpl an return param in execute to check if use case was sended to execution.
+*  Improved ExceptionController with delegates with lifecycle(refactor to maintain SOLID)
+*  Replace NotRecoverableError String property with a int reference to support I18N
 *  Test: unit and infrastructure(database, usecase handler)
 *  Comment code(infrastructure->exceptions)
 *  ExceptionController handle int refs from strings file

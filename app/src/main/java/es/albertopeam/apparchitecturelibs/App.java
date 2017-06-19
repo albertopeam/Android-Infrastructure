@@ -13,12 +13,18 @@ public class App
 
     private Container container;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
         initContainer();
         initLeakCanary();
         initDatabase();
+    }
+
+
+    public Container container(){
+        return container;
     }
 
 

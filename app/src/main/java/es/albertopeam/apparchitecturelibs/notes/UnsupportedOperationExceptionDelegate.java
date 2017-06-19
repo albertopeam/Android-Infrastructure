@@ -1,6 +1,7 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
 import android.app.Activity;
+import android.arch.lifecycle.LifecycleOwner;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -12,11 +13,11 @@ import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDel
 class UnsupportedOperationExceptionDelegate
         implements ExceptionDelegate {
 
-    private WeakReference<Activity> activity;
+    private WeakReference<Activity> activityWeakReference;
 
 
     UnsupportedOperationExceptionDelegate(Activity activity) {
-        this.activity = new WeakReference<>(activity);
+        this.activityWeakReference = new WeakReference<>(activity);
     }
 
 
@@ -40,11 +41,16 @@ class UnsupportedOperationExceptionDelegate
 
             @Override
             public void recover() {
-                new MaterialDialog.Builder(activity.get())
+                new MaterialDialog.Builder(activityWeakReference.get())
                         .content(message())
                         .positiveText("ok")
                         .show();
             }
         };
+    }
+
+    @Override
+    public boolean belongsTo(LifecycleOwner lifecycleOwner) {
+        return activityWeakReference.get() == null || lifecycleOwner == activityWeakReference.get();
     }
 }
