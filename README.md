@@ -25,6 +25,7 @@ Data package contains code to decouple access to data providers, in this case th
 Notes package is the sample activity with all the configuration stuff needed to make the use cases run.
 
 ##### Todos:
+*  Add dagger mock rule to test notes activity
 *  add UseCaseExecutorImpl an return param in execute to check if use case was sended to execution.
 *  Improved ExceptionController with delegates with lifecycle(refactor to maintain SOLID)
 *  Replace NotRecoverableError String property with a int reference to support I18N
