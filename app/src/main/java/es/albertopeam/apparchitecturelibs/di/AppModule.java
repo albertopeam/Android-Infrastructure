@@ -12,27 +12,27 @@ import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionCon
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegateFactory;
 
 @Module
-class AppModule {
+public class AppModule {
 
 
     private App app;
 
 
-    AppModule(App app) {
+    public AppModule(App app) {
         this.app = app;
     }
 
 
     @Provides
     @Singleton
-    UseCaseExecutor provideUseCaseExecutor(ExceptionController exceptionController){
+    public UseCaseExecutor provideUseCaseExecutor(ExceptionController exceptionController){
         return UseCaseExecutorFactory.provide(exceptionController);
     }
 
 
     @Provides
     @Singleton
-    ExceptionController provideExceptionController(){
+    public ExceptionController provideExceptionController(){
         return ExceptionControllerFactory.provide(ExceptionDelegateFactory.provide());
     }
 }

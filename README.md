@@ -1,7 +1,7 @@
 ### Android architecture
 This project shows how to build and app using mvp. It provides
 the basic infrastructure to handle multhithreading and errors.
-The project doesnt use any DI framework, but can be used anyway.
+The project use Dagger2 DI framework.
 
 The project is a sample that shows a list of notes, create notes
 and remove notes.
@@ -25,14 +25,13 @@ Data package contains code to decouple access to data providers, in this case th
 Notes package is the sample activity with all the configuration stuff needed to make the use cases run.
 
 ##### Todos:
-*  Add dagger mock rule to test notes activity
-*  add UseCaseExecutorImpl an return param in execute to check if use case was sended to execution.
-*  Improved ExceptionController with delegates with lifecycle(refactor to maintain SOLID)
 *  Replace NotRecoverableError String property with a int reference to support I18N
-*  Test: unit and infrastructure(database, usecase handler)
-*  Comment code(infrastructure->exceptions)
-*  ExceptionController handle int refs from strings file
-*  Decouple infrastructure to a library and upload to bintray
+*  Test: unit and infrastructure(database)
+*  Comment code: infrastructure->exceptions, review concurrency
+*  Decouple infrastructure to a library and upload to bintray.
+*  Library wiki(Github) with samples
+*  Mount a jenkinsfile. Local jenkins. Search free jenkins providers.
+*  Automatic upload from jenkins to bintray.
 
 ##### Collaborations
 Via PR. They will be well received

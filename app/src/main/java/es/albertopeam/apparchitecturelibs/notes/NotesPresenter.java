@@ -13,7 +13,7 @@ import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
 class NotesPresenter {
 
 
-    private NotesView view;
+    public NotesView view;
     private NotesViewModel model;
     private UseCaseExecutor useCaseExecutor;
     private LoadNotesUseCase loadNotesUC;
@@ -37,14 +37,17 @@ class NotesPresenter {
 
 
     void loadNotes(){
+        view.loading();
         useCaseExecutor.execute(null, loadNotesUC, new Callback<List<String>>() {
             @Override
             public void onSuccess(List<String> notes) {
+                view.endLoading();
                 view.onLoadedNotes(notes);
             }
 
             @Override
             public void onError(Error error) {
+                view.endLoading();
                 if (error.isRecoverable()){
                     error.recover();
                 }else {

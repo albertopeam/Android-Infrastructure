@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class NotesActivity
 
     private EditText noteET;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
     @Inject
     NotesPresenter presenter;
 
@@ -44,7 +46,6 @@ public class NotesActivity
         ((App)getApplication())
                 .container()
                 .inject(NotesActivity.this);
-        Log.d("", presenter.toString());
     }
 
 
@@ -74,6 +75,15 @@ public class NotesActivity
         adapter.removeNote(note);
     }
 
+    @Override
+    public void loading() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void endLoading() {
+        progressBar.setVisibility(View.GONE);
+    }
 
     @Override
     public void onClick(View v) {
@@ -94,5 +104,6 @@ public class NotesActivity
         recyclerView.setAdapter(new NotesAdapter(this));
         findViewById(R.id.addbutton).setOnClickListener(this);
         noteET = (EditText) findViewById(R.id.editText);
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
     }
 }

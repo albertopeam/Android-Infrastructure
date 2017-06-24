@@ -20,11 +20,15 @@ public class Container {
                 .build();
     }
 
-
     public void inject(NotesActivity notesActivity){
         appComponent
                 .plus(new NotesActivitySubcomponent.NotesModule(notesActivity))
                 .inject(notesActivity);
+    }
+
+
+    public void setAppComponent(AppComponent appComponent){
+        this.appComponent = appComponent;
     }
 
 }

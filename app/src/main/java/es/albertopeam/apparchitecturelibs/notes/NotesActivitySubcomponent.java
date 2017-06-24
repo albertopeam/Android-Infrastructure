@@ -40,16 +40,15 @@ public interface NotesActivitySubcomponent {
 
         @Provides
         @ActivityScope
-        NotesPresenter provide(UseCaseExecutor useCaseExecutor,
-                               ExceptionController exceptionController){
-            Lifecycle lifecycle = activity.getLifecycle();
-            NotesViewModel model = ViewModelProviders.of(activity).get(NotesViewModel.class);
-            NotesRepository notesRepository = NotesSingleton.instance(model.getNotes(), provideLoadNotes(), provideAddNote());
-            LoadNotesUseCase loadNotesUseCase = new LoadNotesUseCase(lifecycle, notesRepository);
-            AddNoteUseCase addNoteUseCase = new AddNoteUseCase(lifecycle, notesRepository);
-            RemoveNoteUseCase removeNoteUseCase = new RemoveNoteUseCase(lifecycle, notesRepository);
+        public NotesPresenter provide(NotesActivity notesActivity,
+                                      UseCaseExecutor useCaseExecutor,
+                                      ExceptionController exceptionController,
+                                      NotesViewModel model,
+                                      LoadNotesUseCase loadNotesUseCase,
+                                      AddNoteUseCase addNoteUseCase,
+                                      RemoveNoteUseCase removeNoteUseCase){
             ExceptionDelegate delegate = new UnsupportedOperationExceptionDelegate(activity);
-            exceptionController.addDelegate(delegate, lifecycle);
+            exceptionController.addDelegate(delegate, notesActivity.getLifecycle());
             return new NotesPresenter(
                     activity,
                     model,
@@ -57,6 +56,45 @@ public interface NotesActivitySubcomponent {
                     loadNotesUseCase,
                     addNoteUseCase,
                     removeNoteUseCase);
+        }
+
+        @Provides
+        @ActivityScope
+        public  NotesActivity provideNotesActivity(){
+            return activity;
+        }
+
+        @Provides
+        @ActivityScope
+        public NotesViewModel provideNotesViewModel(NotesActivity notesActivity){
+            return ViewModelProviders.of(notesActivity).get(NotesViewModel.class);
+        }
+
+        @Provides
+        @ActivityScope
+        public NotesRepository provideNotesRepository(NotesViewModel model){
+            return NotesSingleton.instance(model.getNotes(), provideLoadNotes(), provideAddNote());
+        }
+
+        @Provides
+        @ActivityScope
+        public LoadNotesUseCase provideLoadNotesUseCase(NotesActivity notesActivity,
+                                                        NotesRepository notesRepository){
+            return new LoadNotesUseCase(notesActivity.getLifecycle(), notesRepository);
+        }
+
+        @Provides
+        @ActivityScope
+        public AddNoteUseCase provideAddNoteUseCase(NotesActivity notesActivity,
+                                                    NotesRepository notesRepository){
+            return new AddNoteUseCase(notesActivity.getLifecycle(), notesRepository);
+        }
+
+        @Provides
+        @ActivityScope
+        public RemoveNoteUseCase provideRemoveNoteUseCase(NotesActivity notesActivity,
+                                                          NotesRepository notesRepository){
+            return new RemoveNoteUseCase(notesActivity.getLifecycle(), notesRepository);
         }
     }
 }

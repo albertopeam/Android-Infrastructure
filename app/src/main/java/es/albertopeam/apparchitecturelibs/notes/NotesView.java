@@ -10,4 +10,7 @@ interface NotesView {
     void onLoadedNotes(List<String> notes);
     void showError(String error);
     void onRemovedNote(String note);
+    void loading();
+
+    void endLoading();
 }

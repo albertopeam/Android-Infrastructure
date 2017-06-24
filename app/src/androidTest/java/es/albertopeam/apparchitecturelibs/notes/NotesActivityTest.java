@@ -1,25 +1,34 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
-import es.albertopeam.apparchitecturelibs.App;
+import java.util.ArrayList;
+import java.util.List;
+
+import es.albertopeam.apparchitecturelibs.R;
+import es.albertopeam.apparchitecturelibs.di.EspressoDaggerMockRule;
+import es.albertopeam.apparchitecturelibs.espresso.RecyclerViewAssertions;
+import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.Callback;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutor;
+import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionController;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doAnswer;
 
 /**
  * Created by Al on 09/06/2017.
@@ -28,55 +37,59 @@ import static org.mockito.Mockito.when;
 @LargeTest
 public class NotesActivityTest {
 
-/*
+    @Mock
+    UseCaseExecutor mockUseCaseExecutor;
+    @Mock
+    ExceptionController mocExceptionController;
+    @Mock
+    LoadNotesUseCase mockLoadNotesUseCase;
+    @Mock
+    AddNoteUseCase mockAddNoteUseCase;
+    @Mock
+    NotesViewModel mockNotesViewModel;
+    @Rule
+    public EspressoDaggerMockRule rule =
+            new EspressoDaggerMockRule();
     @Rule
     public ActivityTestRule<NotesActivity> activityTestRule =
             new ActivityTestRule<>(NotesActivity.class, true, false);
-    @Mock
-    private UseCaseExecutor mockUseCaseExecutor;
-    private NotesPresenter notesPresenter;
 
 
-    @Before
-    public void setUp(){
-        MockitoAnnotations.initMocks(this);
-        notesPresenter = new NotesPresenter(
-                activityTestRule.launchActivity(null),
-                mock(NotesViewModel.class),
-                mockUseCaseExecutor,
-                mock(LoadNotesUseCase.class),
-                mock(AddNoteUseCase.class),
-                mock(RemoveNoteUseCase.class));
-        Context context = InstrumentationRegistry.getTargetContext();
-        App app = (App) context.getApplicationContext();
-        Container mockContainer = mock(Container.class);
-        when(mockContainer.provide(any(NotesActivity.class))).thenReturn(notesPresenter);
-        app.setContainer(mockContainer);
+    @Test
+    public void givenResumedThenLoadingIsVisible(){
+        activityTestRule.launchActivity(null);
+        onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
 
     @Test
-    public void givenClearAppWhenLoadNotesThenEmpty(){
-        doAnswer(new Answer() {
+    public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedException {
+        final List<String> notes = new ArrayList<>();
+        notes.add("a-note");
+          doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                activityTestRule.getActivity().onLoadedNotes(new ArrayList<String>());
+                ((Callback<List<String>>)invocationOnMock.getArguments()[2]).onSuccess(notes);
                 return null;
             }
-        }).when(notesPresenter).loadNotes();
-        //onView(withId(R.id.recycler)).check(new RecyclerViewItemCountAssertion(0));
+        }).when(mockUseCaseExecutor).execute(
+                ArgumentMatchers.<Void>any(),
+                any(LoadNotesUseCase.class),
+                ArgumentMatchers.<Callback<List<String>>>any());
+        activityTestRule.launchActivity(null);
+        onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.recycler)).check(RecyclerViewAssertions.hasItemsCount(1));
     }
 
 
     @Test
     public void givenNewNoteWhenClickAddThenIsAdded(){
-
+        //TODO:
     }
 
 
     @Test
     public void givenEmptyNoteWhenClickAddThenShowToast(){
-
+        //TODO:
     }
-    */
 }
