@@ -22,41 +22,41 @@ every one will handle a concrete expception.
 The next example covers a exception delegate that handle only a
 exception, a NullPointerException, it will return an Error that contains
 a description of the exception.
-```
-       ExceptionDelegate aDelegate = new ExceptionDelegate() {
+```java
+ExceptionDelegate aDelegate = new ExceptionDelegate() {
+    @Override
+    public boolean canHandle(Exception exception) {
+        return exception instanceof NullPointerException;
+    }
+
+    @Override
+    public Error handle(Exception exception) {
+        return new Error() {
             @Override
-            public boolean canHandle(Exception exception) {
-                return exception instanceof NullPointerException;
-            }
-
-            @Override
-            public Error handle(Exception exception) {
-                return new Error() {
-                    @Override
-                    public boolean isRecoverable() {
-                        return false;
-                    }
-
-                    @Override
-                    public String message() {
-                        return "Oh, there is an internal error.";
-                    }
-
-                    @Override
-                    public void recover() {
-                        //not recoverable
-                    }
-                };
-            }
-
-            @Override
-            public boolean belongsTo(LifecycleOwner lifecycleOwner) {
+            public boolean isRecoverable() {
                 return false;
             }
+
+            @Override
+            public String message() {
+                return "Oh, there is an internal error.";
+            }
+
+            @Override
+            public void recover() {
+                //not recoverable
+            }
         };
-        List<ExceptionDelegate> delegates = new ArrayList<>();
-        delegates.add(aDelegate);
-        ExceptionController exceptController = ExceptionControllerFactory.provide(delegates);
+    }
+
+    @Override
+    public boolean belongsTo(LifecycleOwner lifecycleOwner) {
+        return false;
+    }
+};
+List<ExceptionDelegate> delegates = new ArrayList<>();
+delegates.add(aDelegate);
+ExceptionController exceptController = ExceptionControllerFactory.provide(delegates);
 ```
 
 ##### <a name="createinfra">2. Create use case executor</a>
@@ -65,7 +65,7 @@ when it completes invoke the Android main thread with the result.
 This executor need as a parameter an implementation of a
 ExceptionController, this have been created in step one,
 [Create exception handler](#createexceptionhandler).
-```
+```java
 UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide(exceptionController);
 ```
 
@@ -78,7 +78,7 @@ more information visit:
 [Android lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
 
 In this example we will only return the string converted to uppercase.
-```
+```java
 Lifecycle lifecycle = activity.getLifecycle();
 UseCase<String, String> upperCaseUseCase = new UseCase<String, String>(lifecycle){
 
@@ -97,7 +97,7 @@ If any exception is triggered in the use case there is a block to check if the E
 can be recovered or not.
 In case of success the callback will invoke the onUpperCase method to
 send the result to the activity.
-```
+```java
 void toUpperCase(String aString){
     useCaseExecutor.execute(aString, upperCaseUseCase, new Callback<String>(){
                 @Override
@@ -117,7 +117,7 @@ void toUpperCase(String aString){
 }
 ```
 Activity code that handles the received events from the presenter.
-```
+```java
 public class UpperCaseActivity
         extends LifecycleActivity {
 
@@ -146,12 +146,12 @@ Scoped delegates can handle exceptions that are only triggered in a concrete
 scenario. For example an activity where we need location permissions can
 thrown an SecurityException, in this case we can add a scoped delegate
 that will only be used during its activity Lifecycle.
-```
+```java
 TODO: example
 ```
 
 ##### <a name="testandroidui">6 Test the activity</a>
-```
+```java
 TODO: daggermock
 ```
 
