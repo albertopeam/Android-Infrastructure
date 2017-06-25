@@ -73,8 +73,9 @@ UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide(exceptionContro
 An use case is a piece of code that executes an operation and returns a
 result. This operation will be executed in a background thread. The result
 will be posted to main thread.
-We will need to pass as parameter a Lifecycle. This is in alpha, to get
-more information visit:
+We will need to pass as parameter a lifecycle, this lifecycle will
+handle use case cancelation in the case that the android component be
+destroyed. This lifecycle is in alpha, to get more information visit:
 [Android lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
 
 In this example we will only return the string converted to uppercase.
@@ -115,8 +116,9 @@ void toUpperCase(String aString){
                 }
             });
 }
+
 ```
-Activity code that handles the received events from the presenter.
+Activity code that handles events from/toward the presenter.
 ```java
 public class UpperCaseActivity
         extends LifecycleActivity {
@@ -143,16 +145,145 @@ public class UpperCaseActivity
 
 ##### <a name="scopeddelegate">5 Scoped delegate</a>
 Scoped delegates can handle exceptions that are only triggered in a concrete
-scenario. For example an activity where we need location permissions can
-thrown an SecurityException, in this case we can add a scoped delegate
-that will only be used during its activity Lifecycle.
+scenario. For example an activity where we dont have available an Android Api,
+in this case we can add a scoped delegate that will only be used during
+the activity Lifecycle.
+
+Scoped delegates have a method that must return if the current scope
+belongs or not to the Lyfecicle passed as parameter.
+```
+public boolean belongsTo(LifecycleOwner lifecycleOwner);
+```
+
+This example shows how it can be used. This delegate must be added to the
+ExceptionController, when the scope of the Android component be destroyed
+then ExceptionDelegate will be removed from the list
+of delegates that the ExceptionController has.
+
 ```java
-TODO: example
+class UnsupportedOperationExceptionDelegate
+        implements ExceptionDelegate {
+
+    private WeakReference<Activity> activityWeakReference;
+
+
+    UnsupportedOperationExceptionDelegate(Activity activity) {
+        this.activityWeakReference = new WeakReference<>(activity);
+    }
+
+
+    @Override
+    public boolean canHandle(Exception exception) {
+        return exception instanceof UnsupportedOperationException;
+    }
+
+    @Override
+    public Error handle(Exception exception) {
+        return new Error() {
+            @Override
+            public boolean isRecoverable() {
+                return true;
+            }
+
+            @Override
+            public String message() {
+                return "Unsupported operation";
+            }
+
+            @Override
+            public void recover() {
+                new MaterialDialog.Builder(activityWeakReference.get())
+                        .content(message())
+                        .positiveText("ok")
+                        .show();
+            }
+        };
+    }
+
+    @Override
+    public boolean belongsTo(LifecycleOwner lifecycleOwner) {
+        return activityWeakReference.get() == null || lifecycleOwner == activityWeakReference.get();
+    }
+}
+```
+Create an instance of this class and add it to the ExceptionController
+
+```java
+ExceptionDelegate delegate = new UnsupportedOperationExceptionDelegate(activity);
+exceptionController.addDelegate(delegate, notesActivity.getLifecycle());
 ```
 
 ##### <a name="testandroidui">6 Test the activity</a>
+To test all this stuff that is mounted with the help of Dagger 2 we can
+use a library called [DaggerMock](https://github.com/fabioCollini/DaggerMock) .
+This library overrides the objects provided by the dagger modules, that
+way we can replace dependencies with test doubles.
+
+First of all we need to replace the first Component that is created in the
+graph. We are assuming that the main component is called AppComponent/AppModule,
+the Application class name is App.
+
 ```java
-TODO: daggermock
+public class EspressoDaggerMockRule
+        extends DaggerMockRule<AppComponent>{
+
+    public EspressoDaggerMockRule() {
+        super(AppComponent.class, new AppModule(getApp()));
+        set(new DaggerMockRule.ComponentSetter<AppComponent>() {
+            @Override public void setComponent(AppComponent component) {
+                getApp().setAppComponent(component);
+            }
+        });
+    }
+
+    private static App getApp() {
+        return (App) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
+    }
+}
+```
+
+Now in the instrumentation test. We define all the mocks that we will need
+in the test. Also create the ActivityTestRule but config it to avoid autorun.
+Finally create the EspressoDaggerMockRule. With the setup complete we can
+create a test and run it. All the mocks will be injected as doubles in the
+Activity module.
+
+```java
+@Mock
+UseCaseExecutor mockUseCaseExecutor;
+@Mock
+ExceptionController mocExceptionController;
+@Mock
+LoadNotesUseCase mockLoadNotesUseCase;
+@Mock
+AddNoteUseCase mockAddNoteUseCase;
+@Mock
+NotesViewModel mockNotesViewModel;
+@Rule
+public EspressoDaggerMockRule rule =
+            new EspressoDaggerMockRule();
+@Rule
+public ActivityTestRule<NotesActivity> activityTestRule =
+            new ActivityTestRule<>(NotesActivity.class, true, false);
+
+@Test
+public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedException {
+    final List<String> notes = new ArrayList<>();
+    notes.add("a-note");
+      doAnswer(new Answer() {
+        @Override
+        public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+            ((Callback<List<String>>)invocationOnMock.getArguments()[2]).onSuccess(notes);
+            return null;
+        }
+    }).when(mockUseCaseExecutor).execute(
+            ArgumentMatchers.<Void>any(),
+            any(LoadNotesUseCase.class),
+            ArgumentMatchers.<Callback<List<String>>>any());
+    activityTestRule.launchActivity(null);
+    onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+    onView(withId(R.id.recycler)).check(RecyclerViewAssertions.hasItemsCount(1));
+}
 ```
 
 #### Todos:
