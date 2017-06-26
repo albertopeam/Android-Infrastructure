@@ -15,6 +15,8 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.albertopeam.apparchitecturelibs.R;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -52,13 +54,14 @@ public class ExceptionControllerImplTest {
         List<ExceptionDelegate> delegates = new ArrayList<>();
         delegates.add(mockDelegate);
         NullPointerException targetException = new NullPointerException();
-        Error error = new NotRecoverableError("npe");
+        Error error = new NotRecoverableError(R.string.null_pointer_exception);
         when(mockDelegate.canHandle(targetException)).thenReturn(true);
         when(mockDelegate.handle(targetException)).thenReturn(error);
         sut = new ExceptionControllerImpl(delegates);
         Error resultError = sut.handle(targetException);
         assertThat(resultError, instanceOf(NotRecoverableError.class));
         assertThat(resultError, equalTo(error));
+        assertThat(resultError.messageReference(), equalTo(R.string.null_pointer_exception));
     }
 
 

@@ -1,9 +1,6 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,19 +25,4 @@ public class ExceptionDelegateFactory {
     public static List<ExceptionDelegate> provide(){
         return delegates;
     }
-
-
-    /**
-     * Provides a copy of the default delegates plus the passed elements
-     * @param extras more delegates
-     * @return a inmutable collection of exception delegates
-     *//*
-    public static ImmutableList<ExceptionDelegate>provide(ExceptionDelegate... extras){
-        List<ExceptionDelegate>allDelegates = new ArrayList<>(delegates);
-        allDelegates.addAll(Arrays.asList(extras));
-        return ImmutableList.copyOf(allDelegates);
-    }
-*/
-
-
 }

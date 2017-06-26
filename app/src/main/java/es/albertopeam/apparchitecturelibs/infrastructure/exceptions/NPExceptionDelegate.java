@@ -2,8 +2,12 @@ package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 
 import android.arch.lifecycle.LifecycleOwner;
 
+import es.albertopeam.apparchitecturelibs.R;
+
 /**
  * Created by Alberto Penas Amor on 28/05/2017.
+ *
+ * Represents an {@link ExceptionDelegate} that handles NullPointerException
  */
 
 class NPExceptionDelegate
@@ -17,7 +21,7 @@ class NPExceptionDelegate
 
     @Override
     public Error handle(Exception exception) {
-        return new NotRecoverableError(exception.getMessage());
+        return new NotRecoverableError(R.string.null_pointer_exception);
     }
 
     @Override

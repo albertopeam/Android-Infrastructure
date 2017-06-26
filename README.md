@@ -287,9 +287,9 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 ```
 
 #### Todos:
-*  Replace NotRecoverableError String property with a int reference to support I18N
 *  Test: unit and infrastructure(database)
-*  Comment code: infrastructure->exceptions, review concurrency
+*  Comment code: review concurrency and exceptions
+*  Maybe break the interface of ExceptionController in two: use/build
 *  Decouple infrastructure to a library and upload to bintray.
 *  Library wiki(Github) with samples
 *  Mount a jenkinsfile. Local jenkins. Search free jenkins providers.

@@ -51,7 +51,7 @@ class NotesPresenter {
                 if (error.isRecoverable()){
                     error.recover();
                 }else {
-                    view.showError(error.message());
+                    view.showError(error.messageReference());
                 }
             }
         });
@@ -70,7 +70,7 @@ class NotesPresenter {
                 if (error.isRecoverable()){
                     error.recover();
                 }else {
-                    view.showError(error.message());
+                    view.showError(error.messageReference());
                 }
             }
         });
@@ -89,7 +89,7 @@ class NotesPresenter {
                 if (error.isRecoverable()){
                     error.recover();
                 }else {
-                    view.showError(error.message());
+                    view.showError(error.messageReference());
                 }
             }
         });

@@ -1,20 +1,22 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 
-import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 
 /**
  * Created by Alberto Penas Amor on 28/05/2017.
+ *
+ * Represents an @{link Error} that isnt recoverable.
  */
 
 class NotRecoverableError
         extends Error {
 
 
-    private String message;
+    private int reference;
 
 
-    NotRecoverableError(@NonNull String message) {
-        this.message = message;
+    NotRecoverableError(@StringRes int reference) {
+        this.reference = reference;
     }
 
 
@@ -23,12 +25,10 @@ class NotRecoverableError
         return false;
     }
 
-
     @Override
-    public String message(){
-        return message;
+    public int messageReference() {
+        return reference;
     }
-
 
     @Override
     public void recover() {
