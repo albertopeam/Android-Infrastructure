@@ -1,6 +1,7 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
 import android.arch.lifecycle.LifecycleActivity;
+import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -64,7 +65,7 @@ public class NotesActivity
 
 
     @Override
-    public void showError(String error) {
+    public void showError(@StringRes int error) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
 

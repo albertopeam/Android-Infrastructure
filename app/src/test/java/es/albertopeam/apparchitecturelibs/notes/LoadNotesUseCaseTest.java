@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by Al on 05/06/2017.
+ * Created by Alberto Penas Amor on 05/06/2017.
  */
 
 public class LoadNotesUseCaseTest {

@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.doThrow;
 
 /**
- * Created by Al on 06/06/2017.
+ * Created by Alberto Penas Amor on 06/06/2017.
  */
 
 public class AddNoteUseCaseTest {

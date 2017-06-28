@@ -1,13 +1,16 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
-import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.Callback;
-import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutor;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
+import es.albertopeam.infrastructure.concurrency.Callback;
+import es.albertopeam.infrastructure.concurrency.UseCaseExecutor;
+import es.albertopeam.infrastructure.exceptions.Error;
+
 
 /**
- * Created by Alberto Penas Amor on 22/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 22/05/2017.
  */
 
 class NotesPresenter {
@@ -51,7 +54,7 @@ class NotesPresenter {
                 if (error.isRecoverable()){
                     error.recover();
                 }else {
-                    view.showError(error.message());
+                    view.showError(error.messageReference());
                 }
             }
         });
@@ -70,7 +73,7 @@ class NotesPresenter {
                 if (error.isRecoverable()){
                     error.recover();
                 }else {
-                    view.showError(error.message());
+                    view.showError(error.messageReference());
                 }
             }
         });
@@ -89,7 +92,7 @@ class NotesPresenter {
                 if (error.isRecoverable()){
                     error.recover();
                 }else {
-                    view.showError(error.message());
+                    view.showError(error.messageReference());
                 }
             }
         });

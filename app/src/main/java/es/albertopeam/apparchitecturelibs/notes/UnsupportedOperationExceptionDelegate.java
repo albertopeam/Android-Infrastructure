@@ -7,8 +7,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
 
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegate;
+import es.albertopeam.apparchitecturelibs.R;
+import es.albertopeam.infrastructure.exceptions.Error;
+import es.albertopeam.infrastructure.exceptions.ExceptionDelegate;
 
 class UnsupportedOperationExceptionDelegate
         implements ExceptionDelegate {
@@ -35,14 +36,15 @@ class UnsupportedOperationExceptionDelegate
             }
 
             @Override
-            public String message() {
-                return "Unsupported operation";
+            public int messageReference() {
+                return R.string.unsupported_operation_exception;
             }
+
 
             @Override
             public void recover() {
                 new MaterialDialog.Builder(activityWeakReference.get())
-                        .content(message())
+                        .content(messageReference())
                         .positiveText("ok")
                         .show();
             }
