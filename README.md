@@ -290,7 +290,8 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 *  Test: unit and infrastructure(database)
 *  Comment code: review concurrency and exceptions
 *  Maybe break the interface of ExceptionController in two: use/build
-*  Decouple infrastructure to a library and upload to bintray.
+*  Review infrastructure module. Clean and refactor.
+*  Upload to bintray.
 *  Library wiki(Github) with samples
 *  Mount a jenkinsfile. Local jenkins. Search free jenkins providers.
 *  Automatic upload from jenkins to bintray.
