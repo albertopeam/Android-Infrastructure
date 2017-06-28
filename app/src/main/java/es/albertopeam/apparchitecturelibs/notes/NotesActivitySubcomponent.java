@@ -23,7 +23,7 @@ import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideAdd
 import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideLoadNotes;
 
 /**
- * Created by Al on 17/06/2017.
+ * Created by Alberto Penas Amor on 17/06/2017.
  */
 @ActivityScope
 @Subcomponent(modules = {NotesActivitySubcomponent.NotesModule.class})

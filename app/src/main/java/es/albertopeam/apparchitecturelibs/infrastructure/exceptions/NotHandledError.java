@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 import es.albertopeam.apparchitecturelibs.R;
 
 /**
- * Created by Alberto Penas Amor on 28/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 28/05/2017.
  *
  * This class represens an Error that isnt in the list of delegates that handle exceptions. When
  * an @{link {@link es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase} throws

@@ -5,7 +5,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import es.albertopeam.apparchitecturelibs.R;
 
 /**
- * Created by Alberto Penas Amor on 28/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 28/05/2017.
  *
  * Represents an {@link ExceptionDelegate} that handles NullPointerException
  */

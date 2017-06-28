@@ -8,7 +8,7 @@ import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionCon
 import static es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegateFactory.provide;
 
 /**
- * Created by Alberto Penas Amor on 25/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
  *
  * This class is a singleton and represents a way of execute async code and handle errors.
  * It provides an {@link UseCaseExecutor} to execute {@link UseCase} intances. Also it contains

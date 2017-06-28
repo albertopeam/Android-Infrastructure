@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Alberto Penas Amor on 22/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 22/05/2017.
  */
 class NotesViewModel
         extends ViewModel{

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by Alberto Penas Amor on 09/06/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 09/06/2017.
  */
 
 public class UseCaseExecutorImplTest {

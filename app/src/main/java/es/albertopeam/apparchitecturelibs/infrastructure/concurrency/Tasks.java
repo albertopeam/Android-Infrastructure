@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 import java.util.List;
 
 /**
- * Created by Alberto Penas Amor on 06/06/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 06/06/2017.
  */
 
 class Tasks {

@@ -1,7 +1,7 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.concurrency;
 
 /**
- * Created by Alberto Penas Amor on 25/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
  *
  * Used for send to background execution a use case {@link UseCase} instance
  */

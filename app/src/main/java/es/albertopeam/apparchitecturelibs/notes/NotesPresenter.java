@@ -7,7 +7,7 @@ import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExec
 import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.Error;
 
 /**
- * Created by Alberto Penas Amor on 22/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 22/05/2017.
  */
 
 class NotesPresenter {

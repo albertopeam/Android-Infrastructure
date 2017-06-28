@@ -6,7 +6,7 @@ import es.albertopeam.apparchitecturelibs.App;
 import it.cosenonjaviste.daggermock.DaggerMockRule;
 
 /**
- * Created by Al on 21/06/2017.
+ * Created by Alberto Penas Amor on 21/06/2017.
  * This rule overrides AppComponent and can override any object provided by it and any
  * of its subcomponents provided objects. To override a provided object its mandatory to define
  * with a mock object with the @Mock annotation inside the test. The {@link DaggerMockRule} class

@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.data;
 import es.albertopeam.apparchitecturelibs.domain.AddNote;
 
 /**
- * Created by Alberto Penas Amor on 27/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 27/05/2017.
  */
 
 class AddNoteImpl

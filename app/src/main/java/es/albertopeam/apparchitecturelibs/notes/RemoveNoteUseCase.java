@@ -7,7 +7,7 @@ import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase;
 
 /**
- * Created by Alberto Penas Amor on 25/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
  */
 class RemoveNoteUseCase
         extends UseCase<String, String> {

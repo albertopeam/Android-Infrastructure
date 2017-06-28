@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 
 /**
- * Created by Al on 09/06/2017.
+ * Created by Alberto Penas Amor on 09/06/2017.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest

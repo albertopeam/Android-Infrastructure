@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
 /**
- * Created by Alberto Penas Amor on 09/06/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 09/06/2017.
  */
 class CurrentThreadExecutor
     implements Executor{

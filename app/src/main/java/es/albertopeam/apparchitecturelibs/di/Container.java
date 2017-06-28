@@ -5,7 +5,7 @@ import es.albertopeam.apparchitecturelibs.notes.NotesActivity;
 import es.albertopeam.apparchitecturelibs.notes.NotesActivitySubcomponent;
 
 /**
- * Created by Al on 15/06/2017.
+ * Created by Alberto Penas Amor on 15/06/2017.
  */
 
 public class Container {

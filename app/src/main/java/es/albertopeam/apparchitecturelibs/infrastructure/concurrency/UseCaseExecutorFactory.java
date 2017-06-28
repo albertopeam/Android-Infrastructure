@@ -9,7 +9,7 @@ import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDel
 import static es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegateFactory.provide;
 
 /**
- * Created by Alberto Penas Amor on 25/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
  *
  * This class is a factory to provide an UseCaseExecutor, an object capable of execute async code
  * and handle errors.

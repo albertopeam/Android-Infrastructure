@@ -1,7 +1,7 @@
 package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 
 /**
- * Created by Alberto Penas Amor on 25/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
  *
  * Base class that represents an Exception during the execution of an
  * {@link es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase}.

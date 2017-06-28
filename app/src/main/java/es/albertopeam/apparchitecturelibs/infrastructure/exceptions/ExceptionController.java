@@ -3,7 +3,7 @@ package es.albertopeam.apparchitecturelibs.infrastructure.exceptions;
 import android.arch.lifecycle.Lifecycle;
 
 /**
- * Created by Alberto Penas Amor on 28/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 28/05/2017.
  *
  * This interface provides a way of handle Exceptions raised during the execution of
  * {@link es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase}, it returns an

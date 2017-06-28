@@ -6,7 +6,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.NonNull;
 
 /**
- * Created by Alberto Penas Amor on 25/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
  *
  * Class used for execute async code. This class handle the activity or fragment {@link Lifecycle},
  * allowing know if it can return after its execution through a {@link Callback}

@@ -13,7 +13,7 @@ import java.util.List;
 import es.albertopeam.apparchitecturelibs.R;
 
 /**
- * Created by Alberto Penas Amor on 22/05/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 22/05/2017.
  */
 
 class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by Alberto Penas Amor on 20/06/2017.
+ * Created by Alberto Penas Amorberto Penas Amor on 20/06/2017.
  */
 public class ExceptionControllerImplTest {
 
