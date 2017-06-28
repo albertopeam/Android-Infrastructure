@@ -1,15 +1,18 @@
 package es.albertopeam.apparchitecturelibs.di;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import es.albertopeam.apparchitecturelibs.App;
-import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutor;
-import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutorFactory;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionController;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionControllerFactory;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegateFactory;
+import es.albertopeam.infrastructure.concurrency.UseCaseExecutor;
+import es.albertopeam.infrastructure.concurrency.UseCaseExecutorFactory;
+import es.albertopeam.infrastructure.exceptions.ExceptionController;
+import es.albertopeam.infrastructure.exceptions.ExceptionControllerFactory;
+import es.albertopeam.infrastructure.exceptions.ExceptionDelegate;
 
 @Module
 public class AppModule {
@@ -33,6 +36,7 @@ public class AppModule {
     @Provides
     @Singleton
     public ExceptionController provideExceptionController(){
-        return ExceptionControllerFactory.provide(ExceptionDelegateFactory.provide());
+        List<ExceptionDelegate> delegates = new ArrayList<>();
+        return ExceptionControllerFactory.provide(delegates);
     }
 }

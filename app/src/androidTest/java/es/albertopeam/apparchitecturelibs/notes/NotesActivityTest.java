@@ -19,9 +19,9 @@ import java.util.List;
 import es.albertopeam.apparchitecturelibs.R;
 import es.albertopeam.apparchitecturelibs.di.EspressoDaggerMockRule;
 import es.albertopeam.apparchitecturelibs.espresso.RecyclerViewAssertions;
-import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.Callback;
-import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutor;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionController;
+import es.albertopeam.infrastructure.concurrency.Callback;
+import es.albertopeam.infrastructure.concurrency.UseCaseExecutor;
+import es.albertopeam.infrastructure.exceptions.ExceptionController;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;

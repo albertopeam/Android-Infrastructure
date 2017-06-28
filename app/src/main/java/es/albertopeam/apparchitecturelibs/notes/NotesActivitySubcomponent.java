@@ -1,10 +1,6 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
-import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.ViewModelProviders;
-import android.util.Log;
-
-import com.google.common.collect.ImmutableList;
 
 import dagger.Module;
 import dagger.Provides;
@@ -12,12 +8,9 @@ import dagger.Subcomponent;
 import es.albertopeam.apparchitecturelibs.di.ActivityScope;
 import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import es.albertopeam.apparchitecturelibs.domain.NotesSingleton;
-import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutor;
-import es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCaseExecutorSingleton;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionController;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionControllerFactory;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegate;
-import es.albertopeam.apparchitecturelibs.infrastructure.exceptions.ExceptionDelegateFactory;
+import es.albertopeam.infrastructure.concurrency.UseCaseExecutor;
+import es.albertopeam.infrastructure.exceptions.ExceptionController;
+import es.albertopeam.infrastructure.exceptions.ExceptionDelegate;
 
 import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideAddNote;
 import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideLoadNotes;

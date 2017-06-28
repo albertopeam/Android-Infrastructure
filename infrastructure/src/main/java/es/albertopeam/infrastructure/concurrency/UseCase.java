@@ -28,7 +28,7 @@ public abstract class UseCase<Args, Response>
     }
 
 
-    abstract Response run(Args args) throws Exception;
+    protected abstract Response run(Args args) throws Exception;
 
 
     boolean canRespond(){
