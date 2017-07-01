@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 /**
- * Created by Alberto Penas Amorberto Penas Amor on 06/06/2017.
+ * Created by Alberto Penas Amor on 06/06/2017.
+ *
+ * Handles all tasks sended to execution
  */
 
 class Tasks {

@@ -1,10 +1,9 @@
 package es.albertopeam.infrastructure.exceptions;
 
 /**
- * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
+ * Created by Alberto Penas Amor on 25/05/2017.
  *
- * Base class that represents an Exception during the execution of an
- * {@link es.albertopeam.apparchitecturelibs.infrastructure.concurrency.UseCase}.
+ * Base class that represents an Exception during the execution of an {@link es.albertopeam.infrastructure.concurrency.UseCase}.
  * An error can be recoverable, this means that this class will handle the process of recover via
  * {@link #recover()}. In case that the error isnt recoverable then the client must handle the Error
  * via {@link #messageReference()}

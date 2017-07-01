@@ -287,6 +287,9 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 ```
 
 #### Todos:
+*  add config in readme to install with dependecy
+*  improve gradle upload to bintray.
+*  CI: review github https://github.com/marketplace/category/continuous-integration https://github.com/works-with/category/continuous-integration
 *  Test: unit and infrastructure(database)
 *  Comment code: review concurrency and exceptions
 *  Maybe break the interface of ExceptionController in two: use/build
@@ -294,7 +297,7 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 *  Upload to bintray.
 *  Library wiki(Github) with samples
 *  Mount a jenkinsfile. Local jenkins. Search free jenkins providers.
-*  Automatic upload from jenkins to bintray.
+*  Automatic upload fxrom jenkins to bintray.
 
 #### Collaborations
 Via PR. They will be well received

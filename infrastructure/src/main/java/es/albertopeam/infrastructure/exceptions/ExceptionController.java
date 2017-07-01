@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
  * Created by Alberto Penas Amor on 28/05/2017.
  *
  * This interface provides a way of handle Exceptions raised during the execution of
- * {@link .concurrency.UseCase}, it returns an
+ * {@link es.albertopeam.infrastructure.concurrency.UseCase}, it returns an
  * {@link Error} that represents the way in which we are going to handle the captured Exception.
  *
  * It can be added scoped {@link ExceptionDelegate} that will only live during the scope of its

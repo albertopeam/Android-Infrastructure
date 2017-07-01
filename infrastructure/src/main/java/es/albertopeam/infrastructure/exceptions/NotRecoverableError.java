@@ -3,7 +3,7 @@ package es.albertopeam.infrastructure.exceptions;
 import android.support.annotation.StringRes;
 
 /**
- * Created by Alberto Penas Amorberto Penas Amor on 28/05/2017.
+ * Created by Alberto Penas Amor on 28/05/2017.
  *
  * Represents an @{link Error} that isnt recoverable.
  */

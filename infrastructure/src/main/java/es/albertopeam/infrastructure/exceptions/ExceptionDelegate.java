@@ -4,7 +4,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
 
 /**
- * Created by Alberto Penas Amorberto Penas Amor on 28/05/2017.
+ * Created by Alberto Penas Amor on 28/05/2017.
  *
  * This interface provides a way of handle a {@link Exception}.
  */

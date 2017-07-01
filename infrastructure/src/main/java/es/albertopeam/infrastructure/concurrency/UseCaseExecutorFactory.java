@@ -1,12 +1,14 @@
 package es.albertopeam.infrastructure.concurrency;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 
 import es.albertopeam.infrastructure.exceptions.ExceptionController;
 
 
 /**
- * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
+ * Created by Alberto Penas Amor on 25/05/2017.
  *
  * This class is a factory to provide an UseCaseExecutor, an object capable of execute async code
  * and handle errors.
@@ -16,11 +18,12 @@ import es.albertopeam.infrastructure.exceptions.ExceptionController;
  */
 public class UseCaseExecutorFactory {
 
-
     /**
-     * Provides the use case executor with defults
+     * Provides the use case executor
+     * @param exceptionController to handle exceptions
+     * @return UseCaseExecutor
      */
-    public static UseCaseExecutor provide(ExceptionController exceptionController){
+    public static UseCaseExecutor provide(@NonNull ExceptionController exceptionController){
         return  new UseCaseExecutorImpl(
                     new ExecutorImpl(),
                     new AndroidMainThreadImpl(),
