@@ -1,12 +1,10 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
-import android.support.annotation.NonNull;
-
 import java.util.List;
 
-import es.albertopeam.infrastructure.concurrency.Callback;
-import es.albertopeam.infrastructure.concurrency.UseCaseExecutor;
-import es.albertopeam.infrastructure.exceptions.Error;
+import com.github.albertopeam.infrastructure.concurrency.Callback;
+import com.github.albertopeam.infrastructure.concurrency.UseCaseExecutor;
+import com.github.albertopeam.infrastructure.exceptions.Error;
 
 
 /**

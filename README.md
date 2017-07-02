@@ -287,15 +287,14 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 ```
 
 #### Todos:
-*  Add a concurrency Looper, already done in old project.
-*  Add config in readme to install with dependecy. When moved to jcentral.
-*  CI: review github https://github.com/marketplace/category/continuous-integration https://github.com/works-with/category/continuous-integration
-*  Comment code review: concurrency and exceptions
-*  Check Javadoc
-*  Maybe break the interface of ExceptionController in two: use/build
-*  Library wiki(Github) with samples
-*  Travis or Circle CI.
+*  Waiting for jcenter aproval, then check in the example project and add "install section" in readme.
+*  Check Javadoc. Review: concurrency and exceptions.
+*  Travis or Circle CI. *  CI: review github https://github.com/marketplace/category/continuous-integration https://github.com/works-with/category/continuous-integration
 *  Automatic upload from CI to bintray.
+*  Add a concurrency Looper, already done in old project.
+*  Maybe break the interface of ExceptionController in two: use/build
+*  Library wiki(Github) with more samples: Services.
+*  Migrate to Dagger2 AndroidInjector.
 
 #### Collaborations
 Via PR. They will be well received

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="es.albertopeam.infrastructure">
+    package="com.github.albertopeam.infrastructure">
 
     <application>
     </application>

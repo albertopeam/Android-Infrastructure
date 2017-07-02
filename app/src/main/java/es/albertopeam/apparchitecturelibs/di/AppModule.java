@@ -8,11 +8,11 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import es.albertopeam.apparchitecturelibs.App;
-import es.albertopeam.infrastructure.concurrency.UseCaseExecutor;
-import es.albertopeam.infrastructure.concurrency.UseCaseExecutorFactory;
-import es.albertopeam.infrastructure.exceptions.ExceptionController;
-import es.albertopeam.infrastructure.exceptions.ExceptionControllerFactory;
-import es.albertopeam.infrastructure.exceptions.ExceptionDelegate;
+import com.github.albertopeam.infrastructure.concurrency.UseCaseExecutor;
+import com.github.albertopeam.infrastructure.concurrency.UseCaseExecutorFactory;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionControllerFactory;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionDelegate;
 
 @Module
 public class AppModule {

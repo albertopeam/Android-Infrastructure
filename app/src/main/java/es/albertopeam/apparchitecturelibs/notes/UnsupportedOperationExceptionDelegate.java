@@ -8,8 +8,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.lang.ref.WeakReference;
 
 import es.albertopeam.apparchitecturelibs.R;
-import es.albertopeam.infrastructure.exceptions.Error;
-import es.albertopeam.infrastructure.exceptions.ExceptionDelegate;
+import com.github.albertopeam.infrastructure.exceptions.Error;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionDelegate;
 
 class UnsupportedOperationExceptionDelegate
         implements ExceptionDelegate {

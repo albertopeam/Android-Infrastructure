@@ -8,9 +8,9 @@ import dagger.Subcomponent;
 import es.albertopeam.apparchitecturelibs.di.ActivityScope;
 import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import es.albertopeam.apparchitecturelibs.domain.NotesSingleton;
-import es.albertopeam.infrastructure.concurrency.UseCaseExecutor;
-import es.albertopeam.infrastructure.exceptions.ExceptionController;
-import es.albertopeam.infrastructure.exceptions.ExceptionDelegate;
+import com.github.albertopeam.infrastructure.concurrency.UseCaseExecutor;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionDelegate;
 
 import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideAddNote;
 import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideLoadNotes;
