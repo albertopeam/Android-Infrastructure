@@ -287,17 +287,15 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 ```
 
 #### Todos:
-*  add config in readme to install with dependecy
-*  improve gradle upload to bintray.
+*  Add a concurrency Looper, already done in old project.
+*  Add config in readme to install with dependecy. When moved to jcentral.
 *  CI: review github https://github.com/marketplace/category/continuous-integration https://github.com/works-with/category/continuous-integration
-*  Test: unit and infrastructure(database)
-*  Comment code: review concurrency and exceptions
+*  Comment code review: concurrency and exceptions
+*  Check Javadoc
 *  Maybe break the interface of ExceptionController in two: use/build
-*  Review infrastructure module. Clean and refactor.
-*  Upload to bintray.
 *  Library wiki(Github) with samples
-*  Mount a jenkinsfile. Local jenkins. Search free jenkins providers.
-*  Automatic upload fxrom jenkins to bintray.
+*  Travis or Circle CI.
+*  Automatic upload from CI to bintray.
 
 #### Collaborations
 Via PR. They will be well received
