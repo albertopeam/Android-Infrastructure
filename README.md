@@ -1,18 +1,57 @@
-### Android architecture
-This project shows how to build and app using mvp. It provides
-the basic infrastructure to handle multhithreading and errors.
-The project use Dagger2 DI framework. It uses some alpha android
-libraries.
+### Android Infrastructure
+The library intention /infrastructure is to help developers to handle
+multithreading andexception catching in a clean way, respecting the
+SOLID principles.
+One of the main goals is to allow the "created" threads and how to
+communicate between the Android main thread and the background threads.
+Another goal is to define a common way to handle the exceptions thrown
+during the execution of our services(by services we understand any
+operation that must be encapsulated into an object and decouple outside
+of the view code).
 
-The project is a sample that list, create and remove notes.
+The exampe app/ shows how to build and app using mvp with the aim of
+this library. It provides the basic configuration to create an use case
+executor and an exception controller, it shows how to create three
+sync services and wrap it on async use cases, the power is that we
+can build many sync services and compose onto a async use case.
+The project use Dagger2 DI framework, and one android alpha library(
+in a few months with the release of Android O will leave alpha/beta).
+The alpha dependency:
+```
+"android.arch.lifecycle:runtime:1.0.0-alpha3"
+```
+The project is a very basic app to list, create and destroy notes. The
+notes removal is not implemented intentionally to show the usage of
+the scoped exception delegates.
 
-### Table of contents
+### Install
+[Gradle Dependency](#dependency)
+
+### Usage
 1. [Create exception handler](#createexceptionhandler)
 2. [Create use case executor](#createinfra)
 3. [Create an use case](#createusecase)
 4. [Connect all to the presenter](#connectopresenter)
 5. [Scoped delegate](#scopeddelegate)
-6. [Test the activity](#testandroidui)
+
+### Testing
+[Test the activity](#testandroidui)
+
+
+Install
+-------
+
+##### <a name="dependency">Gradle Dependency</a>
+
+The Gradle dependency is available via jCenter.
+
+The minimum API level supported by this library is API 15 (ICE_CREAM_SANDWICH_MR1).
+```groovy
+compile 'com.github.albertopeam:infrastructure:0.0.1-alpha'
+```
+
+Usage
+-----
 
 ##### <a name="createexceptionhandler">1. Create exception handler</a>
 ExceptionController class handles all exceptions that are thrown during
@@ -213,7 +252,11 @@ ExceptionDelegate delegate = new UnsupportedOperationExceptionDelegate(activity)
 exceptionController.addDelegate(delegate, notesActivity.getLifecycle());
 ```
 
-##### <a name="testandroidui">6 Test the activity</a>
+
+Testing
+-------
+
+##### <a name="testandroidui">Test the activity</a>
 To test all this stuff that is mounted with the help of Dagger 2 we can
 use a library called [DaggerMock](https://github.com/fabioCollini/DaggerMock) .
 This library overrides the objects provided by the dagger modules, that
@@ -286,8 +329,8 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 }
 ```
 
-#### Todos:
-*  Waiting for jcenter aproval, then check in the example project and add "install section" in readme.
+Todos:
+------
 *  Check Javadoc. Review: concurrency and exceptions.
 *  Travis or Circle CI. *  CI: review github https://github.com/marketplace/category/continuous-integration https://github.com/works-with/category/continuous-integration
 *  Automatic upload from CI to bintray.
@@ -296,5 +339,28 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 *  Library wiki(Github) with more samples: Services.
 *  Migrate to Dagger2 AndroidInjector.
 
-#### Collaborations
-Via PR. They will be well received
+
+License
+-------
+
+    MIT License
+
+    Copyright (c) 2017 Alberto Penas Amor
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
