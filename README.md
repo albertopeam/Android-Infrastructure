@@ -336,7 +336,7 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 
 Todos:
 ------
-*  Travis CI config 
+*  Travis CI config  
 *  Check Javadoc. Review: concurrency and exceptions.
 *  Automatic upload from CI to bintray.
 *  Add a concurrency Looper, already done in old project.
