@@ -1,4 +1,9 @@
 ### Android Infrastructure
+
+[ ![Download](https://api.bintray.com/packages/albertopeam/android/Concurrency/images/download.svg) ](https://bintray.com/albertopeam/android/Concurrency/_latestVersion)
+[![Build Status](https://travis-ci.org/albertopeam/Android-Infrastructure.svg?branch=master)](https://travis-ci.org/albertopeam/Android-Infrastructure)
+[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/albertopeam/Android-Infrastructure/blob/master/LICENSE)
+
 The library intention /infrastructure is to help developers to handle
 multithreading andexception catching in a clean way, respecting the
 SOLID principles.
@@ -331,8 +336,8 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 
 Todos:
 ------
+*  Travis CI config
 *  Check Javadoc. Review: concurrency and exceptions.
-*  Travis or Circle CI. *  CI: review github https://github.com/marketplace/category/continuous-integration https://github.com/works-with/category/continuous-integration
 *  Automatic upload from CI to bintray.
 *  Add a concurrency Looper, already done in old project.
 *  Maybe break the interface of ExceptionController in two: use/build
