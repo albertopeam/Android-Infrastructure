@@ -57,11 +57,12 @@ before_install:
 #Source: https://medium.com/@oldergod/constraint-layout-and-circleci-travis-d50342696d2
 
 install:
- - sdkmanager --list || true
- # Update sdk tools to latest version and install/update components
- - echo yes | sdkmanager "tools"
- - echo yes | sdkmanager "platforms;android-23" # Latest platform required by SDK
- - sdkmanager --list || true
+  - echo y | android update sdk -u -a -t tools
+  - echo y | android update sdk -u -a -t platform-tools
+  - echo y | android update sdk -u -a -t build-tools-25.0.2
+  - echo y | android update sdk -u -a -t android-23
+  - echo y | android update sdk -u -a -t extra-google-m2repository
+ # - echo y | android update sdk -u -a -t extra-android-m2repository
 
 #not needed while connectedCheck not runs
 #before_script:
