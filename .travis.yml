@@ -45,7 +45,8 @@ android:
  - android-sdk-preview-license-.+
  - android-sdk-license-.+
  - google-gdk-license-.+
-
+ - '.+'
+ 
 before_install:
 #constraint layout
 #- mkdir "$ANDROID_HOME/licenses" || true
@@ -54,7 +55,12 @@ before_install:
 - chmod +x gradlew
 #- ./gradlew dependencies || true # DON'T ADD unless you are getting "Install missing components using SDK manager"
 #Source: https://medium.com/@oldergod/constraint-layout-and-circleci-travis-d50342696d2
-
+install:
+  - sdkmanager --list || true
+  # Update sdk tools to latest version and install/update components
+  - echo yes | sdkmanager "tools"
+  - echo yes | sdkmanager "platforms;android-23" # Latest platform required by SDK 
+ - sdkmanager --list || true
 #not needed while connectedCheck not runs
 #before_script:
 #- echo no | android create avd --force -n test -t android-23 --abi $ANDROID_ABI --tag $ANDROID_TAG
