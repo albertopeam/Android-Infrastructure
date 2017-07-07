@@ -29,8 +29,8 @@ branches:
 android:
  components:
  - tools
- - tools
  - platform-tools
+ - tools
  - build-tools-$ANDROID_BUILD_TOOLS
  - android-$ANDROID_API
  - android-$EMULATOR_API
