@@ -336,7 +336,8 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 
 Todos:
 ------
-*  Travis CI config.
+*  Travis CI config. bintrayUpload(auto build number). send email on builds.
+*  Coveralls. https://jeroenmols.com/blog/2015/11/13/traviscoveralls/
 *  Rename domain usecases to services
 *  Check Javadoc. Review: concurrency and exceptions.
 *  Automatic upload from CI to bintray.

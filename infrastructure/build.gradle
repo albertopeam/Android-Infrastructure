@@ -95,12 +95,12 @@ artifacts {
     archives sourcesJar
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//Properties properties = new Properties()
+//properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    user = System.getenv("BINTRAY_USER")//properties.getProperty("bintray.user")
+    key = System.getenv("BINTRAY_API_KEY")//properties.getProperty("bintray.apikey")
 
     configurations = ['archives']
     pkg {
@@ -113,7 +113,7 @@ bintray {
         version {
             gpg {
                 sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
+                passphrase = System.getenv("BINTRAY_GPG_PASSWD")//properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
             }
         }
     }
