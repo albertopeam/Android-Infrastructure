@@ -2,6 +2,7 @@
 
 [ ![Download](https://api.bintray.com/packages/albertopeam/android/Concurrency/images/download.svg) ](https://bintray.com/albertopeam/android/Concurrency/_latestVersion)
 [![Build Status](https://travis-ci.org/albertopeam/Android-Infrastructure.svg?branch=master)](https://travis-ci.org/albertopeam/Android-Infrastructure)
+[![Coverage Status](https://coveralls.io/repos/github/albertopeam/Android-Infrastructure/badge.svg?branch=master)](https://coveralls.io/github/albertopeam/Android-Infrastructure?branch=master)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/albertopeam/Android-Infrastructure/blob/master/LICENSE)
 
 The library intention /infrastructure is to help developers to handle
@@ -339,6 +340,7 @@ Todos:
 *  Travis CI config. bintrayUpload(auto build number). send email on builds.
 *  Coveralls. https://jeroenmols.com/blog/2015/11/13/traviscoveralls/
 *  Rename domain usecases to services
+*  warning javadoc.
 *  Check Javadoc. Review: concurrency and exceptions.
 *  Automatic upload from CI to bintray.
 *  Add a concurrency Looper, already done in old project.

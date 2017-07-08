@@ -1,3 +1,7 @@
+#
+# More info:
+#   https://docs.travis-ci.com/user/languages/android/
+#
 language: android
 sudo: required
 jdk: oraclejdk8
@@ -72,5 +76,11 @@ before_install:
 #- adb shell input keyevent 82 &
 
 script:
-- "./gradlew clean build test -PdisablePreDex --stacktrace"
+ - echo "Travis branch is $TRAVIS_BRANCH"
+ - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
+- "./gradlew clean build test coveralls -PdisablePreDex --stacktrace"
 #frozen 10m - "./gradlew clean build test connectedCheck -PdisablePreDex --stacktrace"
+
+notifications:
+    email:
+      - albertopeam@gmail.com

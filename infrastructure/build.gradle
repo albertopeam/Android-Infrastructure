@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.kt3k.coveralls'
 
 // This is the library version used when deploying the artifact
 version = "0.0.1-alpha"
@@ -17,6 +18,7 @@ android {
     }
     buildTypes {
         release {
+            testCoverageEnabled true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -95,12 +97,9 @@ artifacts {
     archives sourcesJar
 }
 
-//Properties properties = new Properties()
-//properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
 bintray {
-    user = System.getenv("BINTRAY_USER")//properties.getProperty("bintray.user")
-    key = System.getenv("BINTRAY_API_KEY")//properties.getProperty("bintray.apikey")
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_API_KEY")
 
     configurations = ['archives']
     pkg {
@@ -113,8 +112,17 @@ bintray {
         version {
             gpg {
                 sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = System.getenv("BINTRAY_GPG_PASSWD")//properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
+                passphrase = System.getenv("BINTRAY_GPG_PASSWD") //Optional. The passphrase for GPG signing'
             }
         }
     }
+}
+
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+}
+
+tasks.coveralls {
+    dependsOn 'test'
+    onlyIf { System.env.'CI' }
 }
