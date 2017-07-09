@@ -77,8 +77,7 @@ before_install:
 
 script:
  - echo "Travis branch is $TRAVIS_BRANCH"
- - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
-- "./gradlew clean build test coveralls -PdisablePreDex --stacktrace"
+ - "./gradlew clean build test coveralls -PdisablePreDex --stacktrace"
 #frozen 10m - "./gradlew clean build test connectedCheck -PdisablePreDex --stacktrace"
 
 notifications:

@@ -339,6 +339,7 @@ Todos:
 ------
 *  Travis CI config. bintrayUpload(auto build number). send email on builds.
 *  Coveralls. https://jeroenmols.com/blog/2015/11/13/traviscoveralls/
+*  review fb build library
 *  Rename domain usecases to services
 *  warning javadoc.
 *  Check Javadoc. Review: concurrency and exceptions.
