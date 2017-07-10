@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'jacoco-android'
 apply plugin: 'com.github.kt3k.coveralls'
 
 // This is the library version used when deploying the artifact
@@ -17,13 +18,18 @@ android {
         versionName version
     }
     buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
         release {
-            testCoverageEnabled true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     sourceSets { main { res.srcDirs = ['src/main/res', 'src/test/res'] } }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -116,6 +122,16 @@ bintray {
             }
         }
     }
+}
+
+jacoco {
+    toolVersion = "0.7.7.201606060606"
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled true
 }
 
 coveralls {
