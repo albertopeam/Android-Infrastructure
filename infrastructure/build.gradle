@@ -135,7 +135,8 @@ jacocoAndroidUnitTestReport {
 }
 
 coveralls {
-    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoTestReleaseUnitTestReport/jacocoTestReleaseUnitTestReport.xml"
+    //jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
 }
 
 tasks.coveralls {
