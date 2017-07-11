@@ -83,8 +83,13 @@ before_install:
 
 script:
  - echo "Travis branch is $TRAVIS_BRANCH"
- - "./gradlew clean build test coveralls -PdisablePreDex --stacktrace"
+ - "./gradlew clean build test jacocoTestReport -PdisablePreDex --stacktrace"
 #frozen 10m - "./gradlew clean build test connectedCheck -PdisablePreDex --stacktrace"
+
+#https://github.com/codecov/example-android
+#https://docs.codecov.io/v4.3.6/docs/about-the-codecov-bash-uploader
+after_success:
+ - bash <(curl -s https://codecov.io/bash)
 
 notifications:
     email:

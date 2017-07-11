@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'jacoco-android'
-apply plugin: 'com.github.kt3k.coveralls'
+//apply plugin: 'com.github.kt3k.coveralls'
 
 // This is the library version used when deploying the artifact
 version = "0.0.1-alpha"
@@ -135,16 +135,17 @@ jacocoAndroidUnitTestReport {
     xml.enabled true
 }*/
 
-
-
-/*coveralls {
-    //jacocoReportPath = "${buildDir}/reports/jacoco/jacocoTestReleaseUnitTestReport/jacocoTestReleaseUnitTestReport.xml"
-    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+/*
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoTestReleaseUnitTestReport/jacocoTestReleaseUnitTestReport.xml"
+    //jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
 }*/
-coveralls.jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+//coveralls.jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
 
 
+/*
 tasks.coveralls {
+    dependsOn 'check'
     dependsOn 'test'
-    onlyIf { System.env.'CI' }
-}
+    //onlyIf { System.env.'CI' }
+}*/
