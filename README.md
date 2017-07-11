@@ -2,7 +2,7 @@
 
 [ ![Download](https://api.bintray.com/packages/albertopeam/android/Concurrency/images/download.svg) ](https://bintray.com/albertopeam/android/Concurrency/_latestVersion)
 [![Build Status](https://travis-ci.org/albertopeam/Android-Infrastructure.svg?branch=master)](https://travis-ci.org/albertopeam/Android-Infrastructure)
-[![Coverage Status](https://coveralls.io/repos/github/albertopeam/Android-Infrastructure/badge.svg?branch=master)](https://coveralls.io/github/albertopeam/Android-Infrastructure?branch=master)
+[![codecov](https://codecov.io/gh/albertopeam/Android-Infrastructure/branch/master/graph/badge.svg)](https://codecov.io/gh/albertopeam/Android-Infrastructure)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/albertopeam/Android-Infrastructure/blob/master/LICENSE)
 
 The library intention /infrastructure is to help developers to handle
@@ -337,16 +337,13 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 
 Todos:
 ------
-*  coveralls file path... check travis ci logs
-*  Travis CI config. bintrayUpload(auto build number).
-*  Coveralls. https://jeroenmols.com/blog/2015/11/13/traviscoveralls/
 *  Clean gradle files. use multiple gradle files.
 *  androidTest or only test?
 *  review fb build library
 *  Rename domain usecases to services
 *  warning javadoc.
 *  Check Javadoc. Review: concurrency and exceptions.
-*  Automatic upload from CI to bintray.
+*  Automatic upload from CI to bintray.(auto build number)
 *  Add a concurrency Looper, already done in old project.
 *  Maybe break the interface of ExceptionController in two: use/build
 *  Library wiki(Github) with more samples: Services.
