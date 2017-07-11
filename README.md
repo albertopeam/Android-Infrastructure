@@ -337,8 +337,11 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 
 Todos:
 ------
-*  Travis CI config. bintrayUpload(auto build number). send email on builds.
+*  coveralls file path... check travis ci logs
+*  Travis CI config. bintrayUpload(auto build number).
 *  Coveralls. https://jeroenmols.com/blog/2015/11/13/traviscoveralls/
+*  Clean gradle files. use multiple gradle files.
+*  androidTest or only test?
 *  review fb build library
 *  Rename domain usecases to services
 *  warning javadoc.
