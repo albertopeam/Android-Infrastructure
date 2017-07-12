@@ -5,30 +5,33 @@
 [![codecov](https://codecov.io/gh/albertopeam/Android-Infrastructure/branch/master/graph/badge.svg)](https://codecov.io/gh/albertopeam/Android-Infrastructure)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/albertopeam/Android-Infrastructure/blob/master/LICENSE)
 
-The library intention /infrastructure is to help developers to handle
-multithreading andexception catching in a clean way, respecting the
-SOLID principles.
-One of the main goals is to allow the "created" threads and how to
-communicate between the Android main thread and the background threads.
-Another goal is to define a common way to handle the exceptions thrown
-during the execution of our services(by services we understand any
-operation that must be encapsulated into an object and decouple outside
-of the view code).
+The intention of this library is to help developers to decouple the
+Android framework and the execution of asynchronous code, providing an
+environment where the code is synchronous, which is more easy to read,
+mantain, scale and test. The other goal is to handle exceptions raised
+during the execution of the code and handle it in an uniform way
+without repeat code.
 
-The exampe app/ shows how to build and app using mvp with the aim of
-this library. It provides the basic configuration to create an use case
-executor and an exception controller, it shows how to create three
-sync services and wrap it on async use cases, the power is that we
-can build many sync services and compose onto a async use case.
-The project use Dagger2 DI framework, and one android alpha library(
-in a few months with the release of Android O will leave alpha/beta).
-The alpha dependency:
-```
-"android.arch.lifecycle:runtime:1.0.0-alpha3"
-```
-The project is a very basic app to list, create and destroy notes. The
-notes removal is not implemented intentionally to show the usage of
-the scoped exception delegates.
+Features:
+1. We avoid create threads in the middle of our code.
+2. We avoid handle communication between threads.
+3. We automate way of canceling tasks, linking those to the framework
+component lifecycle.
+4. We lead to write synchronous code that is easy read, maintain, scale
+and test.
+5. We provide a way of handle exceptions without repeat code.
+6. We provide a way of create scoped exceptions, that only can be
+triggered/handled on certain contexts.
+
+There is two modules in the repo, one called app and other infrastructure.
+The app module shows the usage of the infrastructure module, app is
+built based on MVP with the help of Dagger2 DI framework and is a very
+basic example to list, create and destroy notes.
+The infrastructure module is the core of the library. It has a
+dependency to an android alpha library
+("android.arch.lifecycle:runtime:1.0.0-alpha3"), which in a few
+months with the release of Android O will leave alpha.
+
 
 ### Install
 [Gradle Dependency](#dependency)
@@ -37,8 +40,8 @@ the scoped exception delegates.
 1. [Create exception handler](#createexceptionhandler)
 2. [Create use case executor](#createinfra)
 3. [Create an use case](#createusecase)
-4. [Connect all to the presenter](#connectopresenter)
-5. [Scoped delegate](#scopeddelegate)
+4. [Connect all to the presenter and the view](#connectopresenter)
+5. [Scoped delegates](#scopeddelegate)
 
 ### Testing
 [Test the activity](#testandroidui)
@@ -58,6 +61,9 @@ compile 'com.github.albertopeam:infrastructure:0.0.1-alpha'
 
 Usage
 -----
+Follow the next steps to create a basic infrastructure to execute
+asynchronous code and handle exceptions. Then we will wire this infrastructure
+to the view and the presenter to create a complete example.
 
 ##### <a name="createexceptionhandler">1. Create exception handler</a>
 ExceptionController class handles all exceptions that are thrown during
@@ -135,7 +141,7 @@ UseCase<String, String> upperCaseUseCase = new UseCase<String, String>(lifecycle
 };
 ```
 
-##### <a name="connectopresenter">4 Connect all to the presenter</a>
+##### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
 The presenter will handle the view(activity) input events and the
 use case executor output events. We will need to inject all the dependencies
 created below.
@@ -188,7 +194,7 @@ public class UpperCaseActivity
 }
 ```
 
-##### <a name="scopeddelegate">5 Scoped delegate</a>
+##### <a name="scopeddelegate">5 Scoped delegates</a>
 Scoped delegates can handle exceptions that are only triggered in a concrete
 scenario. For example an activity where we dont have available an Android Api,
 in this case we can add a scoped delegate that will only be used during
@@ -337,10 +343,13 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 
 Todos:
 ------
+*  review docu
+*  improve description with a list of features. review description
+*  Rename domain usecases to services
+*  remove testCoverageEnabled from app module to avoid generate reports....or not
 *  Clean gradle files. use multiple gradle files.
 *  androidTest or only test?
 *  review fb build library
-*  Rename domain usecases to services
 *  warning javadoc.
 *  Check Javadoc. Review: concurrency and exceptions.
 *  Automatic upload from CI to bintray.(auto build number)
