@@ -17,15 +17,15 @@ Features:
 2. We avoid handle communication between threads.
 3. We automate way of canceling tasks, linking those to the framework
 component lifecycle.
-4. We lead to write synchronous code that is easy read, maintain, scale
+4. We lead to write synchronous code that is easy to read, maintain, scale
 and test.
 5. We provide a way of handle exceptions without repeat code.
-6. We provide a way of create scoped exceptions, that only can be
-triggered/handled on certain contexts.
+6. We provide a way of create scoped exceptions handlers, that are
+linked to the lifecycle of the framework component.
 
-There is two modules in the repo, one called app and other infrastructure.
+There are two modules in the repo, one called app and other infrastructure.
 The app module shows the usage of the infrastructure module, app is
-built based on MVP with the help of Dagger2 DI framework and is a very
+built based on MVP with the help of Dagger2 DI framework. It is a very
 basic example to list, create and destroy notes.
 The infrastructure module is the core of the library. It has a
 dependency to an android alpha library
@@ -70,9 +70,10 @@ ExceptionController class handles all exceptions that are thrown during
 the use case execution. This will need a list of delegates as parameter,
 every one will handle a concrete expception.
 
-The next example covers a exception delegate that handle only a
-exception, a NullPointerException, it will return an Error that contains
-a description of the exception.
+The next example covers a exception delegate that handle a
+NullPointerException, it will return an Error that contains a
+description of the exception, because we consider that a NPE its not
+recoverable, we only inform that there is an internal error.
 ```java
 ExceptionDelegate aDelegate = new ExceptionDelegate() {
     @Override
@@ -111,22 +112,29 @@ ExceptionController exceptController = ExceptionControllerFactory.provide(delega
 ```
 
 ##### <a name="createinfra">2. Create use case executor</a>
-This use case executor provides the ability to run code in background and
-when it completes invoke the Android main thread with the result.
-This executor need as a parameter an implementation of a
-ExceptionController, this have been created in step one,
+The UseCaseExecutor object provides the ability to run UseCase objects
+in a separate thread and when the it completes, it invoke the Android
+main thread with the result. This is done behind the scenes.
+Another feature is that this UseCaseExecutor will handle Exceptions thrown
+during the execution of the UseCase(s) and report to the caller.
+This executor need as a parameter an implementation of an
+ExceptionController, like the one that we have been created in step one,
 [Create exception handler](#createexceptionhandler).
 ```java
 UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide(exceptionController);
 ```
 
 ##### <a name="createusecase">3. Create an use case</a>
-An use case is a piece of code that executes an operation and returns a
-result. This operation will be executed in a background thread. The result
-will be posted to main thread.
+An UseCase is a piece of code that executes one or more operations and
+returns a result to the caller, or if an exception was raised inform
+the caller. The UseCase make use of generics, as input and output, this
+will impact when we add it to the UseCaseExecutor and implement the
+Callback that already is linked to the same UseCase generics.
+
 We will need to pass as parameter a lifecycle, this lifecycle will
-handle use case cancelation in the case that the android component be
-destroyed. This lifecycle is in alpha, to get more information visit:
+handle UseCase cancelation in the case that the android component be
+destroyed. This lifecycle is in alpha(final release with Android O),
+to get more information visit:
 [Android lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
 
 In this example we will only return the string converted to uppercase.
@@ -143,12 +151,18 @@ UseCase<String, String> upperCaseUseCase = new UseCase<String, String>(lifecycle
 
 ##### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
 The presenter will handle the view(activity) input events and the
-use case executor output events. We will need to inject all the dependencies
-created below.
-If any exception is triggered in the use case there is a block to check if the Error
-can be recovered or not.
-In case of success the callback will invoke the onUpperCase method to
-send the result to the activity.
+UseCaseExecutor output events. We will need to inject all the dependencies
+created before, in the second(UseCaseExecutor) and third(UseCase) steps.
+
+In case of the code completes successfully the onSuccess method of the
+Callback will be invoked.
+
+If any exception is triggered in the UseCase the onError method of the
+Callback will be invoked with an Error. This can be an NotRecoverableError
+or a Error that is recoverable. We can choose to recover or not from this
+Error checking the isRecoverable() method of the Error.
+Recoverable Errors are usefull for handling Exceptions without repetitives
+endless of "if, else if, else" blocks.
 ```java
 void toUpperCase(String aString){
     useCaseExecutor.execute(aString, upperCaseUseCase, new Callback<String>(){
@@ -169,7 +183,8 @@ void toUpperCase(String aString){
 }
 
 ```
-Activity code that handles events from/toward the presenter.
+Activity code that handles events from/toward the presenter. It only shows
+a Toast with the result of the UseCase.
 ```java
 public class UpperCaseActivity
         extends LifecycleActivity {
@@ -195,21 +210,24 @@ public class UpperCaseActivity
 ```
 
 ##### <a name="scopeddelegate">5 Scoped delegates</a>
-Scoped delegates can handle exceptions that are only triggered in a concrete
-scenario. For example an activity where we dont have available an Android Api,
-in this case we can add a scoped delegate that will only be used during
-the activity Lifecycle.
+Scoped delegates can handle exceptions that are only triggered in a
+concrete context. For example in a Activity where we dont have available
+an Android Api or where we hasnt a permission over a dangerous feature.
+In this case we can add a scoped delegate that will only be used during
+the lifecycle of the Activity,  when the activity is destroyed then this
+scoped delegate will be removed from the list of delegates that the
+ExceptionController has.
 
-Scoped delegates have a method that must return if the current scope
-belongs or not to the Lyfecicle passed as parameter.
+Scoped delegates have a method that must return true if the current scope
+belongs or not to the LifecycleOwner passed as parameter.
 ```
 public boolean belongsTo(LifecycleOwner lifecycleOwner);
 ```
 
-This example shows how it can be used. This delegate must be added to the
-ExceptionController, when the scope of the Android component be destroyed
-then ExceptionDelegate will be removed from the list
-of delegates that the ExceptionController has.
+This example shows how it can be used. First define a new ExceptionDelegate
+class.
+In this case the delegate only show a Dialog when someone tries to
+recover, this Delegate will handle the UnsupportedOperationException.
 
 ```java
 class UnsupportedOperationExceptionDelegate
@@ -257,8 +275,12 @@ class UnsupportedOperationExceptionDelegate
     }
 }
 ```
-Create an instance of this class and add it to the ExceptionController
-
+Create an instance of UnsupportedOperationExceptionDelegate and add it
+to the ExceptionController. We are ready to run UseCases with an
+UseCaseExecutor, if any of our code throws an UnsupportedOperationException
+during the Lifecycle of the passed Activity to the
+UnsupportedOperationExceptionDelegate, then this delegate will handle
+the exception.
 ```java
 ExceptionDelegate delegate = new UnsupportedOperationExceptionDelegate(activity);
 exceptionController.addDelegate(delegate, notesActivity.getLifecycle());
@@ -269,14 +291,16 @@ Testing
 -------
 
 ##### <a name="testandroidui">Test the activity</a>
-To test all this stuff that is mounted with the help of Dagger 2 we can
-use a library called [DaggerMock](https://github.com/fabioCollini/DaggerMock) .
-This library overrides the objects provided by the dagger modules, that
-way we can replace dependencies with test doubles.
+
+Para probar todas estas cosas que se crean con la ayuda de Dagger 2 podemos
+Utilice una biblioteca llamada [DaggerMock] (https://github.com/fabioCollini/DaggerMock).
+Esta biblioteca reemplaza los objetos proporcionados por los módulos
+dagger, de esta manera podemos reemplazar las dependencias con dobles de
+prueba.
 
 First of all we need to replace the first Component that is created in the
-graph. We are assuming that the main component is called AppComponent/AppModule,
-the Application class name is App.
+graph. We are assuming that the main component/module is called
+AppComponent/AppModule, the Application class name is App.
 
 ```java
 public class EspressoDaggerMockRule
@@ -343,20 +367,16 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 
 Todos:
 ------
-*  review docu
-*  improve description with a list of features. review description
-*  Rename domain usecases to services
 *  remove testCoverageEnabled from app module to avoid generate reports....or not
-*  Clean gradle files. use multiple gradle files.
 *  androidTest or only test?
 *  review fb build library
-*  warning javadoc.
-*  Check Javadoc. Review: concurrency and exceptions.
 *  Automatic upload from CI to bintray.(auto build number)
 *  Add a concurrency Looper, already done in old project.
 *  Maybe break the interface of ExceptionController in two: use/build
-*  Library wiki(Github) with more samples: Services.
+*  Check Javadoc.
 *  Migrate to Dagger2 AndroidInjector.
+*  Clean gradle files. use multiple gradle files.
+*  warning javadoc.
 
 
 License
