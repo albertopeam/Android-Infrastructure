@@ -10,11 +10,6 @@ before_cache:
  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
-#cache:
-# directories:
-# - $HOME/.gradle/caches/
-# - $HOME/.gradle/wrapper/
-
 cache:
   directories:      #Cache all dirs under .gradle folder
     - $HOME/.gradle/daemon      #Cache daemon logs
@@ -34,7 +29,7 @@ env:
 branches:
  only:
  - master
- - stable
+ - develop
 
 android:
  components:
@@ -49,8 +44,8 @@ android:
 # - extra-android-m2repository # for design library
 # - addon-google_apis-google-19 # google play services
 #not needed while connectedCheck not runs
-# - sys-img-armeabi-v7a-google_apis-$ANDROID_API
-# - sys-img-armeabi-v7a-google_apis-$EMULATOR_API
+ - sys-img-armeabi-v7a-google_apis-$ANDROID_API
+ - sys-img-armeabi-v7a-google_apis-$EMULATOR_API
 
  licenses:
  - android-sdk-preview-license-.+
@@ -75,15 +70,15 @@ before_install:
 # # - echo y | android update sdk -u -a -t extra-android-m2repository
 
 #not needed while connectedCheck not runs
-#before_script:
-#- echo no | android create avd --force -n test -t android-23 --abi $ANDROID_ABI --tag $ANDROID_TAG
-#- emulator -avd test -no-skin -no-audio -no-window &
-#- android-wait-for-emulator
-#- adb shell input keyevent 82 &
+before_script:
+ - echo no | android create avd --force -n test -t android-23 --abi $ANDROID_ABI --tag $ANDROID_TAG
+ - emulator -avd test -no-skin -no-audio -no-window &
+ - android-wait-for-emulator
+ - adb shell input keyevent 82 &
 
 script:
  - echo "Travis branch is $TRAVIS_BRANCH"
- - "./gradlew clean build test jacocoTestReport -PdisablePreDex --stacktrace"
+ - "./gradlew clean build test connectedCheck jacocoTestReport -PdisablePreDex --stacktrace"
 #frozen 10m - "./gradlew clean build test connectedCheck -PdisablePreDex --stacktrace"
 
 #https://github.com/codecov/example-android
