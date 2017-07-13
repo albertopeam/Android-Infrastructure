@@ -1,5 +1,7 @@
 Todos:
 ------
+* current: connectedCheck
+*  Improve coverage
 *  remove testCoverageEnabled from app module to avoid generate reports....or not
 *  androidTest or only test?
 *  review fb build library
