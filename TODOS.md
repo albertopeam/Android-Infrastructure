@@ -1,6 +1,7 @@
 Todos:
 ------
 * current: connectedCheck
+*  docu: add service for better explanation of use case and use case composition
 *  Improve coverage
 *  remove testCoverageEnabled from app module to avoid generate reports....or not
 *  androidTest or only test?
