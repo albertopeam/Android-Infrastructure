@@ -126,7 +126,7 @@ UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide(exceptionContro
 
 ##### <a name="createusecase">3. Create an use case</a>
 An UseCase is a piece of code that executes one or more operations and
-returns a result to the caller, or if an exception was raised inform
+returns a result to the caller, or if an exception was raised, inform
 the caller. The UseCase make use of generics, as input and output, this
 will impact when we add it to the UseCaseExecutor and implement the
 Callback that already is linked to the same UseCase generics.
@@ -137,17 +137,49 @@ destroyed. This lifecycle is in alpha(final release with Android O),
 to get more information visit:
 [Android lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
 
-In this example we will only return the string converted to uppercase.
-```java
-Lifecycle lifecycle = activity.getLifecycle();
-UseCase<String, String> upperCaseUseCase = new UseCase<String, String>(lifecycle){
+In this example we are going to inject a domain service that receives a
+string and return it converted to uppercase. In this case we are only
+injecting one object but we can add more and use the UseCase as a coordinator
+between services.
 
-    @Override
-    protected String run(String s) throws Exception {
+Definition of the domain service:
+```java
+public class UpperCaseService {
+    public @NonNull String convert(@NonNull String s){
         return s.toUpperCase();
     }
-};
+}
 ```
+
+Definition of the UseCase that coordinates the service. Remember that many
+services can be injected and favor composition.
+```java
+class UpperCaseUseCase extends UseCase<String, String >{
+
+        private UpperCaseService upperCaseService;
+
+        UpperCaseUseCase(@NonNull Lifecycle lifecycle,
+                         @NonNull UpperCaseService upperCaseService) {
+            super(lifecycle);
+            this.upperCaseService = upperCaseService;
+        }
+
+        @Override
+        protected String run(String s) throws Exception {
+            return upperCaseService.convert(s);
+        }
+    }
+```
+
+Creation of the UseCase.
+```java
+Lifecycle lifecycle = activity.getLifecycle();
+UpperCaseService upperCaseService = new UpperCaseService();
+UpperCaseUseCase upperCaseUseCase= new UpperCaseUseCase(lifecycle, upperCaseService);
+```
+
+
+
 
 ##### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
 The presenter will handle the view(activity) input events and the
