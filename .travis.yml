@@ -79,9 +79,12 @@ before_install:
  # Emulator Management: Create, Start and Wait
 before_script:
  - echo no | android create avd --force -n test -t android-23 --abi $ANDROID_ABI --tag $ANDROID_TAG
- - emulator -avd test -no-audio -no-window &
+# - emulator -avd test -no-audio -no-window &
+# - emulator -avd test -no-window &
 #- travis_wait 15 android-wait-for-emulator
- - adb wait-for-device
+ - emulator -avd test -no-audio -no-window
+ - android-wait-for-emulator
+# - adb wait-for-device
  - adb shell input keyevent 82 &
 
 script:
