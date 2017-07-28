@@ -77,21 +77,21 @@ before_install:
 # - adb shell input keyevent 82 &
 
  # Emulator Management: Create, Start and Wait
-before_script:
- - echo no | android create avd --force -n test -t android-23 --abi $ANDROID_ABI --tag $ANDROID_TAG
+#before_script:
+# - echo no | android create avd --force -n test -t android-23 --abi $ANDROID_ABI --tag $ANDROID_TAG
 # - emulator -avd test -no-audio -no-window &
 # - emulator -avd test -no-window &
 #- travis_wait 15 android-wait-for-emulator
- - emulator -avd test -no-audio -no-window
- - android-wait-for-emulator
- https://medium.com/zendesk-engineering/speeding-up-android-builds-on-travis-ci-1bb4cdbd9c62
+# - emulator -avd test -no-audio -no-window
+# - android-wait-for-emulator
+# https://medium.com/zendesk-engineering/speeding-up-android-builds-on-travis-ci-1bb4cdbd9c62
 # - adb wait-for-device
- - adb shell input keyevent 82 &
+# - adb shell input keyevent 82 &
 
 script:
  - echo "Travis branch is $TRAVIS_BRANCH"
- - "./gradlew clean build test connectedCheck jacocoTestReport -PdisablePreDex --stacktrace"
-#frozen 10m - "./gradlew clean build test connectedCheck -PdisablePreDex --stacktrace"
+ - "./gradlew clean build test jacocoTestReport -PdisablePreDex --stacktrace"
+#frozen 10m - "./gradlew clean build test connectedCheck jacocoTestReport -PdisablePreDex --stacktrace"
 
 #https://github.com/codecov/example-android
 #https://docs.codecov.io/v4.3.6/docs/about-the-codecov-bash-uploader
