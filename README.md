@@ -66,7 +66,12 @@ allprojects {
 }
 ```
 
-Add dependency:
+Add the dependency to include Android components Lifecycle(LifecycleActivity, LifecycleFragment):
+```groovy
+compile 'android.arch.lifecycle:extensions:1.0.0-alpha5'
+```
+
+Add this library dependency:
 ```groovy
 compile 'com.github.albertopeam:infrastructure:0.0.2-alpha'
 ```
