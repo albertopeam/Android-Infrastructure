@@ -84,6 +84,7 @@ before_script:
 #- travis_wait 15 android-wait-for-emulator
  - emulator -avd test -no-audio -no-window
  - android-wait-for-emulator
+ https://medium.com/zendesk-engineering/speeding-up-android-builds-on-travis-ci-1bb4cdbd9c62
 # - adb wait-for-device
  - adb shell input keyevent 82 &
 

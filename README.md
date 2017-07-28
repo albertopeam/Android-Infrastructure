@@ -55,8 +55,20 @@ Install
 The Gradle dependency is available via jCenter.
 
 The minimum API level supported by this library is API 15 (ICE_CREAM_SANDWICH_MR1).
+
+Add the Google Maven repository:
 ```groovy
-compile 'com.github.albertopeam:infrastructure:0.0.1-alpha'
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.google.com' }
+    }
+}
+```
+
+Add dependency:
+```groovy
+compile 'com.github.albertopeam:infrastructure:0.0.2-alpha'
 ```
 
 Usage
