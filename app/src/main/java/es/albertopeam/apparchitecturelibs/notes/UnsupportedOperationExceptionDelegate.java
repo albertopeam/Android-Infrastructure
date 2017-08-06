@@ -3,6 +3,7 @@ package es.albertopeam.apparchitecturelibs.notes;
 import android.app.Activity;
 import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -56,7 +57,7 @@ class UnsupportedOperationExceptionDelegate
 
 
     @Override
-    public boolean belongsTo(@NonNull LifecycleOwner lifecycleOwner) {
+    public boolean belongsTo(@Nullable LifecycleOwner lifecycleOwner) {
         return activityWeakReference.get() == null || lifecycleOwner == activityWeakReference.get();
     }
 }

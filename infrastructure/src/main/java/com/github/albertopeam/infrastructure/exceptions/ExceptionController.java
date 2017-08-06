@@ -1,7 +1,9 @@
 package com.github.albertopeam.infrastructure.exceptions;
 
 import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.github.albertopeam.infrastructure.concurrency.UseCase;
 
@@ -21,9 +23,10 @@ public interface ExceptionController {
     /**
      * Handles an Exception.
      * @param exception to be handled
+     * @param lifecycleOwner from where the exception is thrown
      * @return an Error representing how we are going to handle the Exception
      */
-    Error handle(@NonNull Exception exception);
+    Error handle(@NonNull Exception exception, @Nullable LifecycleOwner lifecycleOwner);
 
     /**
      * Adds a scoped {@link ExceptionDelegate} to this ExceptionController

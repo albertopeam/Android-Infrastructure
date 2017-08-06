@@ -1,6 +1,7 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
 import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -19,9 +20,9 @@ class LoadNotesUseCase
     private NotesRepository repository;
 
 
-    LoadNotesUseCase(@NonNull Lifecycle lifecycle,
+    LoadNotesUseCase(@NonNull LifecycleOwner lifecycleOwner,
                      @NonNull NotesRepository repository) {
-        super(lifecycle);
+        super(lifecycleOwner);
         this.repository = repository;
     }
 

@@ -2,8 +2,10 @@ package com.github.albertopeam.infrastructure.concurrency;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Created by Alberto Penas Amor on 25/05/2017.
@@ -17,15 +19,14 @@ public abstract class UseCase<Args, Response>
         implements LifecycleObserver {
 
 
+    private LifecycleOwner lifecycleOwner;
     private LifecycleState state;
-    private enum LifecycleState {
-        CREATED, STARTED, RESUMED, PAUSED, STOPPED, DESTROYED, UNKNOW
-    }
 
 
-    protected UseCase(@NonNull Lifecycle lifecycle) {
-        lifecycle.addObserver(this);
+    protected UseCase(@NonNull LifecycleOwner lifecycleOwner){
+        this.lifecycleOwner = lifecycleOwner;
         this.state = LifecycleState.UNKNOW;
+        lifecycleOwner.getLifecycle().addObserver(this);
     }
 
 
@@ -34,6 +35,12 @@ public abstract class UseCase<Args, Response>
 
     boolean canRespond(){
         return state == LifecycleState.RESUMED;
+    }
+
+
+    @Nullable
+    LifecycleOwner lifecycleOwner(){
+        return lifecycleOwner;
     }
 
 
@@ -70,6 +77,7 @@ public abstract class UseCase<Args, Response>
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void destroy() {
         state = LifecycleState.DESTROYED;
+        lifecycleOwner = null;
     }
 
 }

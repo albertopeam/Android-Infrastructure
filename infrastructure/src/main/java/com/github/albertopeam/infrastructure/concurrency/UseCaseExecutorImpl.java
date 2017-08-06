@@ -80,12 +80,12 @@ class UseCaseExecutorImpl
 
     private void notifyError(final @NonNull UseCase useCase,
                              final @NonNull Callback callback,
-                             final @NonNull Exception e){
+                             final @NonNull Exception exception){
         mainThread.execute(new Runnable() {
             @Override
             public void run() {
                 if (useCase.canRespond()){
-                    final Error error = exceptionController.handle(e);
+                    final Error error = exceptionController.handle(exception, useCase.lifecycleOwner());
                     callback.onError(error);
                 }
                 tasks.removeUseCase(useCase);
