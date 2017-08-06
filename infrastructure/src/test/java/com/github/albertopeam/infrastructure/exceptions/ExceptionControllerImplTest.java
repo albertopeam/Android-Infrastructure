@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import static junit.framework.Assert.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -26,9 +27,6 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Alberto Penas Amorberto Penas Amor on 20/06/2017.
- */
 public class ExceptionControllerImplTest {
 
 
@@ -97,6 +95,11 @@ public class ExceptionControllerImplTest {
         sut = new ExceptionControllerImpl(delegates);
         sut.addDelegate(delegate, mockLifecycle);
         assertThat(delegates.size(), equalTo(0));
+    }
+
+    @Test
+    public void givenTwoDelegatesThatHandlesTheSameExceptionWhenThrownSameExceptionThen(){
+
     }
 }
 

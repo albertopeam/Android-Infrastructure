@@ -5,7 +5,6 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
 
-import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +57,7 @@ class ExceptionControllerImpl
 
     private synchronized void stateChanged(@NonNull LifecycleOwner lifecycleOwner,
                                            @NonNull Lifecycle.Event event){
-        if (event.compareTo(Lifecycle.Event.ON_DESTROY) == 0) {
+        if (event.equals(Lifecycle.Event.ON_DESTROY)) {
             List<ExceptionDelegate>toDestroyExceptionDelegates = new ArrayList<>();
             for (ExceptionDelegate delegate:delegates){
                 if (delegate.belongsTo(lifecycleOwner)){

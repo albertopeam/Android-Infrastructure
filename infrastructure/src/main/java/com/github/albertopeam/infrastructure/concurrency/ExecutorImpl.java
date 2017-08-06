@@ -14,29 +14,36 @@ class ExecutorImpl
         implements java.util.concurrent.Executor {
 
 
-    private int NUM_THREADS = 0;
     private ExecutorService executor;
 
 
     /**
-     * Returns a new ThreadExecutor with n threads where n is the number of processors availables
+     * Returns a new ExecutorImpl with n threads where n is the number of processors availables
      */
     ExecutorImpl() {
-        NUM_THREADS = Runtime.getRuntime().availableProcessors();
-        executor = Executors.newFixedThreadPool(NUM_THREADS);
+        int threads = Runtime.getRuntime().availableProcessors();
+        executor = Executors.newFixedThreadPool(threads);
     }
 
 
     /**
-     * Returns a new ThreadExecutor
-     * @param threads
+     * Returns a new ExecutorImpl
+     * @param threads that executor handle
      */
     ExecutorImpl(int threads) {
         if (threads < 1){
             throw new IllegalArgumentException("At least needed one thread");
         }
-        NUM_THREADS = threads;
-        executor = Executors.newFixedThreadPool(NUM_THREADS);
+        executor = Executors.newFixedThreadPool(threads);
+    }
+
+
+    /**
+     * Returns ExecutorImpl
+     * @param executor that will run code in background
+     */
+    ExecutorImpl(@NonNull ExecutorService executor){
+        this.executor = executor;
     }
 
 

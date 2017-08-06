@@ -19,12 +19,13 @@ public abstract class UseCase<Args, Response>
 
     private LifecycleState state;
     private enum LifecycleState {
-        CREATED, STARTED, RESUMED, PAUSED, STOPPED, DESTROYED;
+        CREATED, STARTED, RESUMED, PAUSED, STOPPED, DESTROYED, UNKNOW
     }
 
 
     protected UseCase(@NonNull Lifecycle lifecycle) {
         lifecycle.addObserver(this);
+        this.state = LifecycleState.UNKNOW;
     }
 
 

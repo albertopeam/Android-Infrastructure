@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 
 import com.github.albertopeam.infrastructure.concurrency.UseCase;
 
-import java.lang.*;
 
 /**
  * Created by Alberto Penas Amor on 28/05/2017.
@@ -15,7 +14,7 @@ import java.lang.*;
  * {@link Error} that represents the way in which we are going to handle the captured Exception.
  *
  * It can be added scoped {@link ExceptionDelegate} that will only live during the scope of its
- * {@link Lifecycle}. This delegates will be removed automatically when its Lifecicle be destroyed.
+ * {@link Lifecycle}. This delegates will be removed automatically when its Lifecycle be destroyed.
  */
 
 public interface ExceptionController {
