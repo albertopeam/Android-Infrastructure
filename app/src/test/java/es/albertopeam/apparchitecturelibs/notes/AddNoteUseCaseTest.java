@@ -1,6 +1,7 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
 import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import es.albertopeam.apparchitecturelibs.notes.AddNoteUseCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Alberto Penas Amor on 06/06/2017.
@@ -25,15 +28,16 @@ public class AddNoteUseCaseTest {
     private String note;
     private AddNoteUseCase sut;
     @Mock
-    private NotesRepository notesRepositoryMock;
+    NotesRepository notesRepositoryMock;
     @Mock
-    private Lifecycle lifecycle;
+    LifecycleOwner mockLifecycleOwner;
 
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        sut = new AddNoteUseCase(lifecycle, notesRepositoryMock);
+        when(mockLifecycleOwner.getLifecycle()).thenReturn(mock(Lifecycle.class));
+        sut = new AddNoteUseCase(mockLifecycleOwner, notesRepositoryMock);
     }
 
 
