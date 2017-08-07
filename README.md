@@ -5,12 +5,13 @@
 [![codecov](https://codecov.io/gh/albertopeam/Android-Infrastructure/branch/master/graph/badge.svg)](https://codecov.io/gh/albertopeam/Android-Infrastructure)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/albertopeam/Android-Infrastructure/blob/master/LICENSE)
 
-The intention of this library is to help developers to decouple the
-Android framework and the execution of asynchronous code, providing an
-environment where the code is synchronous, which is more easy to read,
-mantain, scale and test. The other goal is to handle exceptions raised
-during the execution of the code and handle it in an uniform way
+The intention of this library is to help developers to decouple their code
+from the Android framework and simplify the execution of asynchronous code, 
+providing an environment where the code is synchronous, which is more easy
+to read, mantain, scale and test. The other goal is to handle exceptions 
+raised during the execution of the code and handle them in an uniform way
 without repeat code.
+
 
 Features:
 1. We avoid create threads in the middle of our code.
