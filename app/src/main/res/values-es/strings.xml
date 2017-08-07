@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AppArchitectureLibs</string>
+    <string name="null_pointer_exception">Error interno.</string>
+    <string name="unsupported_operation_exception">Operation no soportada.</string>
+</resources>
