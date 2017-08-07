@@ -74,7 +74,7 @@ compile 'android.arch.lifecycle:extensions:1.0.0-alpha5'
 
 Add this library dependency:
 ```groovy
-compile 'com.github.albertopeam:infrastructure:0.0.2-alpha'
+compile 'com.github.albertopeam:infrastructure:0.0.3-alpha'
 ```
 
 Usage
@@ -262,14 +262,17 @@ public class UpperCaseActivity
 ##### <a name="scopeddelegate">5 Scoped delegates</a>
 Scoped delegates can handle exceptions that are only triggered in a
 concrete context. For example in a Activity where we dont have available
-an Android Api or where we hasnt a permission over a dangerous feature.
+an Android Api or where we don't have a permission over a dangerous feature.
 In this case we can add a scoped delegate that will only be used during
-the lifecycle of the Activity,  when the activity is destroyed then this
+the lifecycle of the Activity, when the activity is destroyed then this
 scoped delegate will be removed from the list of delegates that the
 ExceptionController has.
 
-Scoped delegates have a method that must return true if the current scope
-belongs or not to the LifecycleOwner passed as parameter.
+Delegates have a method that must return true if the scope of the delegate
+strictly belongs to the LifecycleOwner passed as parameter, otherwise false.
+We can have more than one delegate that handles the same exception but
+they must have diferent scopes. Then, when the belongsTo is invoked
+only one of them must return true.
 ```
 public boolean belongsTo(LifecycleOwner lifecycleOwner);
 ```

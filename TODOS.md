@@ -1,6 +1,7 @@
 Todos:
 ------
 * current: connectedCheck
+*  EXAMPLES IN KOTLIN!!! java/kt in same sections
 *  add changelog -> http://keepachangelog.com/es-ES/1.0.0/
 *  docu: add service for better explanation of use case and use case composition
 *  Improve coverage

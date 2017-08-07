@@ -1,5 +1,6 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.ViewModelProviders;
 
 import dagger.Module;
@@ -73,21 +74,21 @@ public interface NotesActivitySubcomponent {
         @ActivityScope
         public LoadNotesUseCase provideLoadNotesUseCase(NotesActivity notesActivity,
                                                         NotesRepository notesRepository){
-            return new LoadNotesUseCase(notesActivity.getLifecycle(), notesRepository);
+            return new LoadNotesUseCase(notesActivity, notesRepository);
         }
 
         @Provides
         @ActivityScope
         public AddNoteUseCase provideAddNoteUseCase(NotesActivity notesActivity,
                                                     NotesRepository notesRepository){
-            return new AddNoteUseCase(notesActivity.getLifecycle(), notesRepository);
+            return new AddNoteUseCase(notesActivity, notesRepository);
         }
 
         @Provides
         @ActivityScope
         public RemoveNoteUseCase provideRemoveNoteUseCase(NotesActivity notesActivity,
                                                           NotesRepository notesRepository){
-            return new RemoveNoteUseCase(notesActivity.getLifecycle(), notesRepository);
+            return new RemoveNoteUseCase(notesActivity, notesRepository);
         }
     }
 }

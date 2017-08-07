@@ -3,9 +3,6 @@ package com.github.albertopeam.infrastructure.exceptions;
 
 import com.github.albertopeam.infrastructure.R;
 
-import java.lang.*;
-
-
 /**
  * Created by Alberto Penas Amor on 28/05/2017.
  *

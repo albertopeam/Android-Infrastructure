@@ -1,7 +1,6 @@
 package com.github.albertopeam.infrastructure.concurrency;
 
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 
 /**
@@ -16,14 +15,14 @@ class AndroidMainThreadImpl
     private Handler handler;
 
 
-    AndroidMainThreadImpl() {
-        this.handler = new Handler(Looper.getMainLooper());
+    AndroidMainThreadImpl(Handler handler) {
+        this.handler = handler;
     }
 
 
     /**
      * Run the passed runnable in the UI thread
-     * @param runnable
+     * @param runnable to execute in background thread
      */
     @Override
     public void execute(@NonNull Runnable runnable) {

@@ -1,6 +1,7 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
 import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -31,15 +33,16 @@ public class LoadNotesUseCaseTest {
     private LoadNotesUseCase sut;
     private List<String> result;
     @Mock
-    private NotesRepository notesRepositoryMock;
+    NotesRepository notesRepositoryMock;
     @Mock
-    private Lifecycle lifecycle;
+    LifecycleOwner mockLifecycleOwner;
 
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        sut = new LoadNotesUseCase(lifecycle, notesRepositoryMock);
+        when(mockLifecycleOwner.getLifecycle()).thenReturn(mock(Lifecycle.class));
+        sut = new LoadNotesUseCase(mockLifecycleOwner, notesRepositoryMock);
     }
 
 

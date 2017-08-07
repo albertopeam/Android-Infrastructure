@@ -1,5 +1,7 @@
 package com.github.albertopeam.infrastructure.concurrency;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -18,15 +20,17 @@ import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
  */
 public class UseCaseExecutorFactory {
 
+    private UseCaseExecutorFactory(){}
+
     /**
      * Provides the use case executor
      * @param exceptionController to handle exceptions
      * @return UseCaseExecutor
      */
     public static UseCaseExecutor provide(@NonNull ExceptionController exceptionController){
-        return  new UseCaseExecutorImpl(
+        return new UseCaseExecutorImpl(
                     new ExecutorImpl(),
-                    new AndroidMainThreadImpl(),
+                    new AndroidMainThreadImpl(new Handler(Looper.getMainLooper())),
                     exceptionController,
                     new Tasks(new ArrayList<Task>())
             );

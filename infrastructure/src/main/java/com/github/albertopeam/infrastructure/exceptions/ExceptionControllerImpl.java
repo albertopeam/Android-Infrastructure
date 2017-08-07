@@ -4,8 +4,8 @@ import android.arch.lifecycle.GenericLifecycleObserver;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,15 +28,34 @@ class ExceptionControllerImpl
 
 
     @Override
-    public synchronized Error handle(@NonNull Exception exception) {
+    public Error handle(@NonNull Exception exception, @Nullable LifecycleOwner lifecycleOwner) {
+        List<ExceptionDelegate>targetDelegates = new ArrayList<>();
         for (ExceptionDelegate delegate:delegates){
             if (delegate.canHandle(exception)){
-                return delegate.handle(exception);
+                targetDelegates.add(delegate);
             }
         }
-        return new NotHandledError();
-    }
-
+        if (targetDelegates.isEmpty()){
+            return new NotHandledError();
+        }else if (targetDelegates.size() == 1){
+            ExceptionDelegate delegate = targetDelegates.get(0);
+            return delegate.handle(exception);
+        }else {
+            List<ExceptionDelegate>belongsDelegates = new ArrayList<>();
+            for (ExceptionDelegate delegate:targetDelegates){
+                if (delegate.belongsTo(lifecycleOwner)){
+                    belongsDelegates.add(delegate);
+                }
+            }
+            if (belongsDelegates.isEmpty()){
+                return new NotHandledError();
+            }else if(belongsDelegates.size() == 1){
+                ExceptionDelegate delegate = belongsDelegates.get(0);
+                return delegate.handle(exception);
+            }else{
+                return new DelegatesCollisionError();
+            }
+        }    }
 
     @Override
     public synchronized void addDelegate(@NonNull ExceptionDelegate delegate,
@@ -58,7 +77,7 @@ class ExceptionControllerImpl
 
     private synchronized void stateChanged(@NonNull LifecycleOwner lifecycleOwner,
                                            @NonNull Lifecycle.Event event){
-        if (event.compareTo(Lifecycle.Event.ON_DESTROY) == 0) {
+        if (event.equals(Lifecycle.Event.ON_DESTROY)) {
             List<ExceptionDelegate>toDestroyExceptionDelegates = new ArrayList<>();
             for (ExceptionDelegate delegate:delegates){
                 if (delegate.belongsTo(lifecycleOwner)){

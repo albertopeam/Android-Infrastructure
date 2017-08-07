@@ -1,5 +1,7 @@
 package com.github.albertopeam.infrastructure.concurrency;
 
+import android.arch.lifecycle.LifecycleOwner;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,6 +17,7 @@ import com.github.albertopeam.infrastructure.exceptions.Error;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -30,19 +33,19 @@ import static org.mockito.Mockito.when;
 public class UseCaseExecutorImplTest {
 
     @Mock
-    private UseCase<String, String> mockUseCase;
+    UseCase<String, String> mockUseCase;
     @Mock
-    private Callback<String> mockCallback;
+    Callback<String> mockCallback;
     @Mock
-    private ExceptionController mockExceptionController;
+    ExceptionController mockExceptionController;
     @Mock
-    private Tasks mockTasks;
+    Tasks mockTasks;
+    @Mock
+    LifecycleOwner mockLifecycleOwner;
     @Captor
-    private ArgumentCaptor<String>successArgCaptor;
+    ArgumentCaptor<String>successArgCaptor;
     @Captor
-    private ArgumentCaptor<Error>errorArgCaptor;
-    private Executor spyExecutor;
-    private AndroidMainThread spyAndroidMainThread;
+    ArgumentCaptor<Error>errorArgCaptor;
     private String mockArgs = "args";
     private String response = "response";
     private UseCaseExecutor useCaseExecutor;
@@ -51,8 +54,8 @@ public class UseCaseExecutorImplTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        spyExecutor = spy(new CurrentThreadExecutor());
-        spyAndroidMainThread = spy(new CurrentAndroidMainThread());
+        Executor spyExecutor = spy(new CurrentThreadExecutor());
+        AndroidMainThread spyAndroidMainThread = spy(new CurrentAndroidMainThread());
         useCaseExecutor = new UseCaseExecutorImpl(
                 spyExecutor,
                 spyAndroidMainThread,
@@ -103,10 +106,10 @@ public class UseCaseExecutorImplTest {
     @Test
     public void givenUseCaseWhenExecuteThenRespondErrorCallback() throws Exception{
         Error mockError = mock(Error.class);
-        Exception mockException = mock(Exception.class);
-        when(mockUseCase.run(anyString())).thenThrow(mockException);
+        when(mockUseCase.lifecycleOwner()).thenReturn(mock(LifecycleOwner.class));
+        when(mockUseCase.run(anyString())).thenThrow(mock(Exception.class));
         when(mockUseCase.canRespond()).thenReturn(true);
-        when(mockExceptionController.handle(mockException)).thenReturn(mockError);
+        when(mockExceptionController.handle(any(Exception.class), any(LifecycleOwner.class))).thenReturn(mockError);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));

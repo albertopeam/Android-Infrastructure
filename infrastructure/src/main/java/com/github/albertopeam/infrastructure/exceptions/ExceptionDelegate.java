@@ -2,6 +2,7 @@ package com.github.albertopeam.infrastructure.exceptions;
 
 import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.*;
 
@@ -27,10 +28,10 @@ public interface ExceptionDelegate {
     Error handle(@NonNull Exception exception);
 
     /**
-     * Check if this delegate is inside the scope of the {@link LifecycleOwner}
+     * Check if this delegate has strictly the same scope of the passed {@link LifecycleOwner}
      * @param lifecycleOwner to be checked
-     * @return true if the scope of this delegate belongs to the {@link LifecycleOwner}, otherwise
+     * @return true if the scope of this delegate belongs strictly to the {@link LifecycleOwner}, otherwise
      * false
      */
-    boolean belongsTo(@NonNull LifecycleOwner lifecycleOwner);
+    boolean belongsTo(@Nullable LifecycleOwner lifecycleOwner);
 }
