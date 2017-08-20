@@ -4,12 +4,14 @@ import android.support.annotation.NonNull;
 
 import java.util.concurrent.Executor;
 
-import com.github.albertopeam.infrastructure.exceptions.Error;
+import com.github.albertopeam.infrastructure.exceptions.HandledException;
 import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
 
 
 /**
  * Created by Alberto Penas Amor on 25/05/2017.
+ *
+ * Concrete implementation of UseCaseExecutor
  */
 
 class UseCaseExecutorImpl
@@ -57,11 +59,6 @@ class UseCaseExecutorImpl
     }
 
 
-    synchronized void setExceptionController(@NonNull ExceptionController exceptionController) {
-        this.exceptionController = exceptionController;
-    }
-
-
     private <Args, Response> void notifySuccess(
                                 final UseCase<Args, Response> useCase,
                                 final Callback<Response> callback,
@@ -85,8 +82,8 @@ class UseCaseExecutorImpl
             @Override
             public void run() {
                 if (useCase.canRespond()){
-                    final Error error = exceptionController.handle(exception, useCase.lifecycleOwner());
-                    callback.onError(error);
+                    final HandledException handledException = exceptionController.handle(exception, useCase.lifecycleOwner());
+                    callback.onException(handledException);
                 }
                 tasks.removeUseCase(useCase);
             }

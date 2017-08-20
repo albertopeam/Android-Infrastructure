@@ -13,7 +13,7 @@ import com.github.albertopeam.infrastructure.concurrency.UseCase;
  *
  * This interface provides a way of handle Exceptions raised during the execution of
  * {@link UseCase}, it returns an
- * {@link Error} that represents the way in which we are going to handle the captured Exception.
+ * {@link HandledException} that represents how we can recover from the handled Exception.
  *
  * It can be added scoped {@link ExceptionDelegate} that will only live during the scope of its
  * {@link Lifecycle}. This delegates will be removed automatically when its Lifecycle be destroyed.
@@ -23,10 +23,10 @@ public interface ExceptionController {
     /**
      * Handles an Exception.
      * @param exception to be handled
-     * @param lifecycleOwner from where the exception is thrown
-     * @return an Error representing how we are going to handle the Exception
+     * @param lifecycleOwner scope where the exception is thrown
+     * @return an HandledException representing how we can recover from the handled Exception
      */
-    Error handle(@NonNull Exception exception, @Nullable LifecycleOwner lifecycleOwner);
+    HandledException handle(@NonNull Exception exception, @Nullable LifecycleOwner lifecycleOwner);
 
     /**
      * Adds a scoped {@link ExceptionDelegate} to this ExceptionController

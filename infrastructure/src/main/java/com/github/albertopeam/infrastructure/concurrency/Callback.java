@@ -2,7 +2,7 @@ package com.github.albertopeam.infrastructure.concurrency;
 
 import android.support.annotation.NonNull;
 
-import com.github.albertopeam.infrastructure.exceptions.Error;
+import com.github.albertopeam.infrastructure.exceptions.HandledException;
 
 /**
  * Created by Alberto Penas Amor on 25/05/2017.
@@ -18,8 +18,8 @@ public interface Callback<Response> {
 
     /**
      * Invoked when an {@link UseCase} generates an exception during its execution
-     * @param error representing the exception captured. Check {@link Error} to see its options for
+     * @param handledException representing the exception captured. Check {@link HandledException} to see its options for
      *              recover or continue
      */
-    void onError(@NonNull Error error);
+    void onException(@NonNull HandledException handledException);
 }

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">AppArchitectureLibs</string>
-    <string name="null_pointer_exception">Internal error.</string>
+    <string name="null_pointer_exception">Internal handledException.</string>
     <string name="unsupported_operation_exception">Unsupported operation.</string>
 </resources>

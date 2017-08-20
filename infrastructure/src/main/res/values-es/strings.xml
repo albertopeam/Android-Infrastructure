@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="not_handled_error">Error no gestionado.</string>
-    <string name="collision_error">Colisión al gestionar un error.</string>
+    <string name="collision_error">Colisión al gestionar un handledException.</string>
 </resources>

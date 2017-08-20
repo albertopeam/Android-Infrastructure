@@ -1,20 +1,17 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import com.github.albertopeam.infrastructure.concurrency.Callback;
 import com.github.albertopeam.infrastructure.concurrency.UseCaseExecutor;
-import com.github.albertopeam.infrastructure.exceptions.Error;
-
-
-/**
- * Created by Alberto Penas Amorberto Penas Amor on 22/05/2017.
- */
+import com.github.albertopeam.infrastructure.exceptions.HandledException;
 
 class NotesPresenter {
 
 
-    public NotesView view;
+    private NotesView view;
     private NotesViewModel model;
     private UseCaseExecutor useCaseExecutor;
     private LoadNotesUseCase loadNotesUC;
@@ -41,19 +38,15 @@ class NotesPresenter {
         view.loading();
         useCaseExecutor.execute(null, loadNotesUC, new Callback<List<String>>() {
             @Override
-            public void onSuccess(List<String> notes) {
+            public void onSuccess(@NonNull List<String> notes) {
                 view.endLoading();
                 view.onLoadedNotes(notes);
             }
 
             @Override
-            public void onError(Error error) {
+            public void onException(@NonNull HandledException handledException) {
                 view.endLoading();
-                if (error.isRecoverable()){
-                    error.recover();
-                }else {
-                    view.showError(error.messageReference());
-                }
+                handledException.recover();
             }
         });
     }
@@ -62,17 +55,13 @@ class NotesPresenter {
     void addNote(String note){
         useCaseExecutor.execute(note, addNoteUC, new Callback<String>() {
             @Override
-            public void onSuccess(String s) {
+            public void onSuccess(@NonNull String s) {
                 view.onLoadedNotes(model.getNotes());
             }
 
             @Override
-            public void onError(Error error) {
-                if (error.isRecoverable()){
-                    error.recover();
-                }else {
-                    view.showError(error.messageReference());
-                }
+            public void onException(@NonNull HandledException handledException) {
+                handledException.recover();
             }
         });
     }
@@ -81,17 +70,13 @@ class NotesPresenter {
     void removeNote(String note){
         useCaseExecutor.execute(note, removeNoteUC, new Callback<String>(){
             @Override
-            public void onSuccess(String note) {
+            public void onSuccess(@NonNull String note) {
                 view.onRemovedNote(note);
             }
 
             @Override
-            public void onError(Error error) {
-                if (error.isRecoverable()){
-                    error.recover();
-                }else {
-                    view.showError(error.messageReference());
-                }
+            public void onException(@NonNull HandledException handledException) {
+                handledException.recover();
             }
         });
     }

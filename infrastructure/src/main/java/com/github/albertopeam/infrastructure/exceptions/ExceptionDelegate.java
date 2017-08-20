@@ -4,8 +4,6 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.*;
-
 /**
  * Created by Alberto Penas Amor on 28/05/2017.
  *
@@ -23,9 +21,9 @@ public interface ExceptionDelegate {
     /**
      * Handle the Exception
      * @param exception to be handled
-     * @return an Error that represents an Exception which may or not be recovered
+     * @return an HandledException that represents an Exception which may or not be recovered
      */
-    Error handle(@NonNull Exception exception);
+    HandledException handle(@NonNull Exception exception);
 
     /**
      * Check if this delegate has strictly the same scope of the passed {@link LifecycleOwner}

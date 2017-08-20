@@ -28,7 +28,8 @@ class ExceptionControllerImpl
 
 
     @Override
-    public Error handle(@NonNull Exception exception, @Nullable LifecycleOwner lifecycleOwner) {
+    public HandledException handle(@NonNull Exception exception,
+                                   @Nullable LifecycleOwner lifecycleOwner) {
         List<ExceptionDelegate>targetDelegates = new ArrayList<>();
         for (ExceptionDelegate delegate:delegates){
             if (delegate.canHandle(exception)){
@@ -36,7 +37,7 @@ class ExceptionControllerImpl
             }
         }
         if (targetDelegates.isEmpty()){
-            return new NotHandledError();
+            throw new NotHandledException(exception);
         }else if (targetDelegates.size() == 1){
             ExceptionDelegate delegate = targetDelegates.get(0);
             return delegate.handle(exception);
@@ -48,14 +49,15 @@ class ExceptionControllerImpl
                 }
             }
             if (belongsDelegates.isEmpty()){
-                return new NotHandledError();
+                throw new NotHandledException(exception);
             }else if(belongsDelegates.size() == 1){
                 ExceptionDelegate delegate = belongsDelegates.get(0);
                 return delegate.handle(exception);
             }else{
-                return new DelegatesCollisionError();
+                throw new CollisionException(exception, belongsDelegates);
             }
-        }    }
+        }
+    }
 
     @Override
     public synchronized void addDelegate(@NonNull ExceptionDelegate delegate,

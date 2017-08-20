@@ -4,7 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'jacoco-android'
 
 // This is the library version used when deploying the artifact
-version = "0.0.3-alpha"
+version = "0.0.4-alpha"
 
 android {
     compileSdkVersion 25

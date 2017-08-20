@@ -1,5 +1,5 @@
 <resources>
-    <string name="not_handled_error">Not handled error.</string>
-    <string name="collision_error">Colission when handling an error.</string>
+    <string name="not_handled_error">Not handled handledException.</string>
+    <string name="collision_error">Colission when handling an handledException.</string>
 
 </resources>

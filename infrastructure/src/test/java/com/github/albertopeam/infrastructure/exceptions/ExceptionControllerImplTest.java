@@ -5,8 +5,6 @@ import android.arch.lifecycle.GenericLifecycleObserver;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 
-import com.github.albertopeam.infrastructure.R;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,7 +17,6 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -40,27 +37,24 @@ public class ExceptionControllerImplTest {
     }
 
 
-    @Test
+    @Test(expected = NotHandledException.class)
     public void givenEmptyDelegatesWhenHandleExceptionThenThrowNotHandled(){
         sut = new ExceptionControllerImpl(new ArrayList<ExceptionDelegate>());
-        Error error = sut.handle(new Exception(), mockLifecycleOwner);
-        assertThat(error, instanceOf(NotHandledError.class));
+        sut.handle(new Exception(), mockLifecycleOwner);
     }
 
 
     @Test
-    public void givenNPEDelegateWhenHandleNPEExceptionThenReturnNotRecoverableError(){
+    public void givenConcreteDelegateWhenHandleItsExceptionThenReturnNotRecoverableError(){
         List<ExceptionDelegate> delegates = new ArrayList<>();
         delegates.add(mockDelegate);
         NullPointerException targetException = new NullPointerException();
-        Error error = new NotRecoverableError(R.string.npe_exception);
+        HandledException mockHandledException = mock(HandledException.class);
         when(mockDelegate.canHandle(targetException)).thenReturn(true);
-        when(mockDelegate.handle(targetException)).thenReturn(error);
+        when(mockDelegate.handle(targetException)).thenReturn(mockHandledException);
         sut = new ExceptionControllerImpl(delegates);
-        Error resultError = sut.handle(targetException, mockLifecycleOwner);
-        assertThat(resultError, instanceOf(NotRecoverableError.class));
-        assertThat(resultError, equalTo(error));
-        assertThat(resultError.messageReference(), equalTo(R.string.npe_exception));
+        HandledException resultHandledException = sut.handle(targetException, mockLifecycleOwner);
+        assertThat(resultHandledException, equalTo(mockHandledException));
     }
 
 
@@ -96,8 +90,9 @@ public class ExceptionControllerImplTest {
         assertThat(delegates.size(), equalTo(0));
     }
 
-    @Test
-    public void givenTwoDelegatesThatHandlesSameExceptionAndBelongsToSameLifecycleWhenHandleExceptionThenReturnDelegateCollisionError(){
+
+    @Test(expected = CollisionException.class)
+    public void givenTwoDelegatesThatHandlesSameExceptionAndBelongsToSameLifecycleWhenHandleExceptionThenThrowDelegateCollisionException(){
         List<ExceptionDelegate> delegates = new ArrayList<>();
         ExceptionDelegate mockDelegate1 = mock(ExceptionDelegate.class);
         ExceptionDelegate mockDelegate2 = mock(ExceptionDelegate.class);
@@ -110,11 +105,11 @@ public class ExceptionControllerImplTest {
         sut = new ExceptionControllerImpl(delegates);
         Exception mockException = mock(Exception.class);
         LifecycleOwner mockLifecycleOwner = mock(LifecycleOwner.class);
-        Error error = sut.handle(mockException, mockLifecycleOwner);
-        assertThat(error, instanceOf(DelegatesCollisionError.class));
+        sut.handle(mockException, mockLifecycleOwner);
     }
 
-    @Test
+
+    @Test(expected = NotHandledException.class)
     public void givenTwoDelegatesThatHandlesSameExceptionAndAnyBelongsToLifecycleWhenHandleExceptionThenReturnNotHandledError(){
         List<ExceptionDelegate> delegates = new ArrayList<>();
         ExceptionDelegate mockDelegate1 = mock(ExceptionDelegate.class);
@@ -128,13 +123,13 @@ public class ExceptionControllerImplTest {
         sut = new ExceptionControllerImpl(delegates);
         Exception mockException = mock(Exception.class);
         LifecycleOwner mockLifecycleOwner = mock(LifecycleOwner.class);
-        Error error = sut.handle(mockException, mockLifecycleOwner);
-        assertThat(error, instanceOf(NotHandledError.class));
+        sut.handle(mockException, mockLifecycleOwner);
     }
+
 
     @Test
     public void givenTwoDelegatesThatHandlesSameExceptionAndOnlyOneBelongsToLifecycleWhenHandleExceptionThenReturnDelegateError(){
-        Error mockError = mock(Error.class);
+        HandledException mockHandledException = mock(HandledException.class);
         List<ExceptionDelegate> delegates = new ArrayList<>();
         ExceptionDelegate mockDelegate1 = mock(ExceptionDelegate.class);
         ExceptionDelegate mockDelegate2 = mock(ExceptionDelegate.class);
@@ -142,14 +137,14 @@ public class ExceptionControllerImplTest {
         when(mockDelegate2.canHandle(any(Exception.class))).thenReturn(true);
         when(mockDelegate1.belongsTo(any(LifecycleOwner.class))).thenReturn(false);
         when(mockDelegate2.belongsTo(any(LifecycleOwner.class))).thenReturn(true);
-        when(mockDelegate2.handle(any(Exception.class))).thenReturn(mockError);
+        when(mockDelegate2.handle(any(Exception.class))).thenReturn(mockHandledException);
         delegates.add(mockDelegate1);
         delegates.add(mockDelegate2);
         sut = new ExceptionControllerImpl(delegates);
         Exception mockException = mock(Exception.class);
         LifecycleOwner mockLifecycleOwner = mock(LifecycleOwner.class);
-        Error error = sut.handle(mockException, mockLifecycleOwner);
-        assertThat(error, equalTo(mockError));
+        HandledException handledException = sut.handle(mockException, mockLifecycleOwner);
+        assertThat(handledException, equalTo(mockHandledException));
     }
 }
 
