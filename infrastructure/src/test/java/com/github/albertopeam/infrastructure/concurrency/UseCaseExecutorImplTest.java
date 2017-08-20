@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 
 
 import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
-import com.github.albertopeam.infrastructure.exceptions.Error;
+import com.github.albertopeam.infrastructure.exceptions.HandledException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,10 +25,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-
-/**
- * Created by Alberto Penas Amorberto Penas Amor on 09/06/2017.
- */
 
 public class UseCaseExecutorImplTest {
 
@@ -45,7 +41,7 @@ public class UseCaseExecutorImplTest {
     @Captor
     ArgumentCaptor<String>successArgCaptor;
     @Captor
-    ArgumentCaptor<Error>errorArgCaptor;
+    ArgumentCaptor<HandledException>errorArgCaptor;
     private String mockArgs = "args";
     private String response = "response";
     private UseCaseExecutor useCaseExecutor;
@@ -105,18 +101,18 @@ public class UseCaseExecutorImplTest {
 
     @Test
     public void givenUseCaseWhenExecuteThenRespondErrorCallback() throws Exception{
-        Error mockError = mock(Error.class);
+        HandledException mockHandledException = mock(HandledException.class);
         when(mockUseCase.lifecycleOwner()).thenReturn(mock(LifecycleOwner.class));
         when(mockUseCase.run(anyString())).thenThrow(mock(Exception.class));
         when(mockUseCase.canRespond()).thenReturn(true);
-        when(mockExceptionController.handle(any(Exception.class), any(LifecycleOwner.class))).thenReturn(mockError);
+        when(mockExceptionController.handle(any(Exception.class), any(LifecycleOwner.class))).thenReturn(mockHandledException);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));
         verify(mockUseCase, times(1)).run(mockArgs);
         verify(mockTasks, times(1)).removeUseCase(mockUseCase);
-        verify(mockCallback, times(1)).onError(errorArgCaptor.capture());
-        assertThat(errorArgCaptor.getValue(), equalTo(mockError));
+        verify(mockCallback, times(1)).onException(errorArgCaptor.capture());
+        assertThat(errorArgCaptor.getValue(), equalTo(mockHandledException));
     }
 
 

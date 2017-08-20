@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.lang.ref.WeakReference;
 
 import es.albertopeam.apparchitecturelibs.R;
-import com.github.albertopeam.infrastructure.exceptions.Error;
+import com.github.albertopeam.infrastructure.exceptions.HandledException;
 import com.github.albertopeam.infrastructure.exceptions.ExceptionDelegate;
 
 class UnsupportedOperationExceptionDelegate
@@ -32,23 +32,12 @@ class UnsupportedOperationExceptionDelegate
 
 
     @Override
-    public Error handle(@NonNull Exception exception) {
-        return new Error() {
-            @Override
-            public boolean isRecoverable() {
-                return true;
-            }
-
-            @Override
-            public int messageReference() {
-                return R.string.unsupported_operation_exception;
-            }
-
-
+    public HandledException handle(@NonNull Exception exception) {
+        return new HandledException(exception) {
             @Override
             public void recover() {
                 new MaterialDialog.Builder(activityWeakReference.get())
-                        .content(messageReference())
+                        .content(R.string.unsupported_operation_exception)
                         .positiveText("ok")
                         .show();
             }

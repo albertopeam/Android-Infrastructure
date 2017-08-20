@@ -30,7 +30,7 @@ built based on MVP with the help of Dagger2 DI framework. It is a very
 basic example to list, create and destroy notes.
 The infrastructure module is the core of the library. It has a
 dependency to an android alpha library
-("android.arch.lifecycle:runtime:1.0.0-alpha3"), which in a few
+("android.arch.lifecycle:runtime:1.0.0-alpha5"), which in a few
 months with the release of Android O will leave alpha.
 
 
@@ -38,7 +38,7 @@ months with the release of Android O will leave alpha.
 [Gradle Dependency](#dependency)
 
 ### Usage
-1. [Create exception handler](#createexceptionhandler)
+1. [Create exception controller](#createexceptionhandler)
 2. [Create use case executor](#createinfra)
 3. [Create an use case](#createusecase)
 4. [Connect all to the presenter and the view](#connectopresenter)
@@ -74,7 +74,7 @@ compile 'android.arch.lifecycle:extensions:1.0.0-alpha5'
 
 Add this library dependency:
 ```groovy
-compile 'com.github.albertopeam:infrastructure:0.0.3-alpha'
+compile 'com.github.albertopeam:infrastructure:0.0.4-alpha'
 ```
 
 Usage
@@ -83,15 +83,18 @@ Follow the next steps to create a basic infrastructure to execute
 asynchronous code and handle exceptions. Then we will wire this infrastructure
 to the view and the presenter to create a complete example.
 
-##### <a name="createexceptionhandler">1. Create exception handler</a>
-ExceptionController class handles all exceptions that are thrown during
+##### <a name="createexceptionhandler">1. Create exception controller</a>
+ExceptionController class handles the exceptions that are thrown during
 the use case execution. This will need a list of delegates as parameter,
-every one will handle a concrete expception.
+every one will handle a concrete exception. ExceptionDelegates are
+usefull for handling Exceptions without repetitives endless of "if,
+else if, else" blocks. Every ExceptionDelegate will return a HandleException
+that will handle the exception managed by its delegate.
 
-The next example covers a exception delegate that handle a
-NullPointerException, it will return an Error that contains a
-description of the exception, because we consider that a NPE its not
-recoverable, we only inform that there is an internal error.
+The next example covers the creation of a exception delegate that handle a
+FileNotFoundException, it will return a HandledException that can
+recover from it, in this example we only are going to inform that there
+is an internal error via log.
 ```java
 ExceptionDelegate aDelegate = new ExceptionDelegate() {
     @Override
@@ -100,21 +103,12 @@ ExceptionDelegate aDelegate = new ExceptionDelegate() {
     }
 
     @Override
-    public Error handle(Exception exception) {
-        return new Error() {
-            @Override
-            public boolean isRecoverable() {
-                return false;
-            }
-
-            @Override
-            public String message() {
-                return "Oh, there is an internal error.";
-            }
+    public HandledException handle(Exception exception) {
+        return new HandledException() {
 
             @Override
             public void recover() {
-                //not recoverable
+                Log.d("ExceptionDelegate","FileNotFoundException");
             }
         };
     }
@@ -129,6 +123,8 @@ delegates.add(aDelegate);
 ExceptionController exceptController = ExceptionControllerFactory.provide(delegates);
 ```
 
+
+
 ##### <a name="createinfra">2. Create use case executor</a>
 The UseCaseExecutor object provides the ability to run UseCase objects
 in a separate thread and when the it completes, it invoke the Android
@@ -142,12 +138,15 @@ ExceptionController, like the one that we have been created in step one,
 UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide(exceptionController);
 ```
 
+
+
 ##### <a name="createusecase">3. Create an use case</a>
 An UseCase is a piece of code that executes one or more operations and
 returns a result to the caller, or if an exception was raised, inform
-the caller. The UseCase make use of generics, as input and output, this
-will impact when we add it to the UseCaseExecutor and implement the
-Callback that already is linked to the same UseCase generics.
+the caller via a HandledException. The UseCase make use of generics,
+as input and output, this will impact when we add it to the
+UseCaseExecutor and implement the Callback that already is linked to the
+same UseCase generics.
 
 We will need to pass as parameter a lifecycle, this lifecycle will
 handle UseCase cancelation in the case that the android component be
@@ -198,7 +197,6 @@ UpperCaseUseCase upperCaseUseCase= new UpperCaseUseCase(lifecycle, upperCaseServ
 
 
 
-
 ##### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
 The presenter will handle the view(activity) input events and the
 UseCaseExecutor output events. We will need to inject all the dependencies
@@ -207,12 +205,9 @@ created before, in the second(UseCaseExecutor) and third(UseCase) steps.
 In case of the code completes successfully the onSuccess method of the
 Callback will be invoked.
 
-If any exception is triggered in the UseCase the onError method of the
-Callback will be invoked with an Error. This can be an NotRecoverableError
-or a Error that is recoverable. We can choose to recover or not from this
-Error checking the isRecoverable() method of the Error.
-Recoverable Errors are usefull for handling Exceptions without repetitives
-endless of "if, else if, else" blocks.
+If any exception is triggered in the UseCase the onException method of the
+Callback will be invoked with a HandledException. Then we can choose to
+recover from it invoking its recover method.
 ```java
 void toUpperCase(String aString){
     useCaseExecutor.execute(aString, upperCaseUseCase, new Callback<String>(){
@@ -222,12 +217,8 @@ void toUpperCase(String aString){
                 }
 
                 @Override
-                public void onError(Error error) {
-                    if (error.isRecoverable()){
-                        error.recover();
-                    }else {
-                        view.showError(error.message());
-                    }
+                public void onException(HandledException handledException) {
+                    handledException.recover();
                 }
             });
 }
@@ -251,17 +242,12 @@ public class UpperCaseActivity
     void onUpperCase(String result){
         Toast.makeText(this, result, Toast.LENGTH_LONG).show();
     }
-
-    void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-    }
-
 }
 ```
 
 ##### <a name="scopeddelegate">5 Scoped delegates</a>
 Scoped delegates can handle exceptions that are only triggered in a
-concrete context. For example in a Activity where we dont have available
+concrete context. For example in a Activity where we don't have available
 an Android Api or where we don't have a permission over a dangerous feature.
 In this case we can add a scoped delegate that will only be used during
 the lifecycle of the Activity, when the activity is destroyed then this
@@ -279,8 +265,9 @@ public boolean belongsTo(LifecycleOwner lifecycleOwner);
 
 This example shows how it can be used. First define a new ExceptionDelegate
 class.
-In this case the delegate only show a Dialog when someone tries to
-recover, this Delegate will handle the UnsupportedOperationException.
+In this case the delegate is going to return a HandledException that
+only shows a Dialog when its recover method be invoked, this Delegate will handle
+the UnsupportedOperationException.
 
 ```java
 class UnsupportedOperationExceptionDelegate
@@ -300,22 +287,13 @@ class UnsupportedOperationExceptionDelegate
     }
 
     @Override
-    public Error handle(Exception exception) {
-        return new Error() {
-            @Override
-            public boolean isRecoverable() {
-                return true;
-            }
-
-            @Override
-            public String message() {
-                return "Unsupported operation";
-            }
+    public HandledException handle(Exception exception) {
+        return new HandledException() {
 
             @Override
             public void recover() {
                 new MaterialDialog.Builder(activityWeakReference.get())
-                        .content(message())
+                        .content("Unsupported operation")
                         .positiveText("ok")
                         .show();
             }
