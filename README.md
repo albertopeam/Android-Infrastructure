@@ -91,10 +91,12 @@ usefull for handling Exceptions without repetitives endless of "if,
 else if, else" blocks. Every ExceptionDelegate will return a HandleException
 that will handle the exception managed by its delegate.
 
-The next example covers the creation of a exception delegate that handle a
-FileNotFoundException, it will return a HandledException that can
-recover from it, in this example we only are going to inform that there
-is an internal error via log.
+The next example covers the creation of a ExceptionDelegate that handle a
+NullPointerException, it will return a HandledException that  recover
+for the exception, in this example we only are going to inform that there
+is an internal error via log. This delegate is only a example,
+its discouraged to capture RuntimException(NullPointerException ) in order
+to solve program errors during the development phase.
 ```java
 ExceptionDelegate aDelegate = new ExceptionDelegate() {
     @Override

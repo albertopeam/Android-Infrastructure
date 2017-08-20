@@ -6,7 +6,9 @@ Todos:
 *  androidTest or only test?
 *  review fb build library
 *  Automatic upload from CI to bintray-> solo la rama master, circleci config.(auto build number)
-    1. test assemble install bintrayUpload
+    1. need to modify travis.yml: test assemble install bintrayUpload
+    2. only in master branch...
+    3. auto increment version number???
 *  Add a concurrency Looper, already done in old project.
 *  Maybe break the interface of ExceptionController in two: use/build
 *  Check Javadoc.
