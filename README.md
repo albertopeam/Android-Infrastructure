@@ -30,7 +30,7 @@ built based on MVP with the help of Dagger2 DI framework. It is a very
 basic example to list, create and destroy notes.
 The infrastructure module is the core of the library. It has a
 dependency to an android alpha library
-("android.arch.lifecycle:runtime:1.0.0-alpha5"), which in a few
+("android.arch.lifecycle:runtime:1.0.0-alpha9"), which in a few
 months with the release of Android O will leave alpha.
 
 
@@ -69,12 +69,12 @@ allprojects {
 
 Add the dependency to include Android components Lifecycle(LifecycleActivity, LifecycleFragment):
 ```groovy
-compile 'android.arch.lifecycle:extensions:1.0.0-alpha5'
+compile 'android.arch.lifecycle:extensions:1.0.0-alpha9'
 ```
 
 Add this library dependency:
 ```groovy
-compile 'com.github.albertopeam:infrastructure:0.0.4-alpha'
+compile 'com.github.albertopeam:infrastructure:0.0.9-alpha'
 ```
 
 Usage
