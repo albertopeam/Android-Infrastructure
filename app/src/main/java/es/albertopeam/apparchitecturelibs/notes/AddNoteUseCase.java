@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import com.github.albertopeam.infrastructure.concurrency.UseCase;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
 
 /**
  * Created by Alberto Penas Amorberto Penas Amor on 22/05/2017.
@@ -18,9 +19,10 @@ class AddNoteUseCase
     private NotesRepository repository;
 
 
-    AddNoteUseCase(@NonNull LifecycleOwner lifecycleOwner,
+    AddNoteUseCase(@NonNull ExceptionController exceptionController,
+                   @NonNull LifecycleOwner lifecycleOwner,
                    @NonNull NotesRepository repository) {
-        super(lifecycleOwner);
+        super(exceptionController, lifecycleOwner);
         this.repository = repository;
     }
 

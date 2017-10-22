@@ -28,15 +28,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public UseCaseExecutor provideUseCaseExecutor(ExceptionController exceptionController){
-        return UseCaseExecutorFactory.provide(exceptionController);
-    }
-
-
-    @Provides
-    @Singleton
-    public ExceptionController provideExceptionController(){
-        List<ExceptionDelegate> delegates = new ArrayList<>();
-        return ExceptionControllerFactory.provide(delegates);
+    public UseCaseExecutor provideUseCaseExecutor(){
+        return UseCaseExecutorFactory.provide();
     }
 }

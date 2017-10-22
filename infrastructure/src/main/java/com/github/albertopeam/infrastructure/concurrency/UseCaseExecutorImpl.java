@@ -18,7 +18,6 @@ class UseCaseExecutorImpl
     implements UseCaseExecutor{
 
 
-    private ExceptionController exceptionController;
     private Executor executor;
     private AndroidMainThread mainThread;
     private Tasks tasks;
@@ -26,11 +25,9 @@ class UseCaseExecutorImpl
 
     UseCaseExecutorImpl(@NonNull Executor executor,
                         @NonNull AndroidMainThread mainThread,
-                        @NonNull ExceptionController exceptionController,
                         @NonNull Tasks tasks) {
         this.executor = executor;
         this.mainThread = mainThread;
-        this.exceptionController = exceptionController;
         this.tasks = tasks;
     }
 
@@ -82,6 +79,7 @@ class UseCaseExecutorImpl
             @Override
             public void run() {
                 if (useCase.canRespond()){
+                    ExceptionController exceptionController = useCase.getExceptionController();
                     final HandledException handledException = exceptionController.handle(exception, useCase.lifecycleOwner());
                     callback.onException(handledException);
                 }

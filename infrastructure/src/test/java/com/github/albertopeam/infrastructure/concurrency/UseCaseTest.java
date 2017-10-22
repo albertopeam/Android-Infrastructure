@@ -4,6 +4,8 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -26,12 +28,14 @@ public class UseCaseTest {
     LifecycleOwner mockLifecycleOwner;
     @Mock
     Lifecycle mockLifecycle;
+    @Mock
+    ExceptionController mockExceptionController;
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         when(mockLifecycleOwner.getLifecycle()).thenReturn(mockLifecycle);
-        sut = new UseCase(mockLifecycleOwner) {
+        sut = new UseCase(mockExceptionController, mockLifecycleOwner) {
             @Override
             protected Object run(Object o) throws Exception {
                 return null;

@@ -24,14 +24,12 @@ public class UseCaseExecutorFactory {
 
     /**
      * Provides the use case executor
-     * @param exceptionController to handle exceptions
      * @return UseCaseExecutor
      */
-    public static UseCaseExecutor provide(@NonNull ExceptionController exceptionController){
+    public static UseCaseExecutor provide(){
         return new UseCaseExecutorImpl(
                     new ExecutorImpl(),
                     new AndroidMainThreadImpl(new Handler(Looper.getMainLooper())),
-                    exceptionController,
                     new Tasks(new ArrayList<Task>())
             );
     }

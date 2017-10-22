@@ -7,6 +7,8 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
+
 /**
  * Created by Alberto Penas Amor on 25/05/2017.
  *
@@ -20,10 +22,13 @@ public abstract class UseCase<Args, Response>
 
 
     private LifecycleOwner lifecycleOwner;
+    private ExceptionController exceptionController;
     private LifecycleState state;
 
 
-    protected UseCase(@NonNull LifecycleOwner lifecycleOwner){
+    protected UseCase(@NonNull ExceptionController exceptionController,
+                      @NonNull LifecycleOwner lifecycleOwner){
+        this.exceptionController = exceptionController;
         this.lifecycleOwner = lifecycleOwner;
         this.state = LifecycleState.UNKNOW;
         lifecycleOwner.getLifecycle().addObserver(this);
@@ -31,6 +36,12 @@ public abstract class UseCase<Args, Response>
 
 
     protected abstract Response run(Args args) throws Exception;
+
+
+    @NonNull
+    public ExceptionController getExceptionController() {
+        return exceptionController;
+    }
 
 
     boolean canRespond(){
@@ -78,6 +89,7 @@ public abstract class UseCase<Args, Response>
     void destroy() {
         state = LifecycleState.DESTROYED;
         lifecycleOwner = null;
+        exceptionController = null;
     }
 
 }

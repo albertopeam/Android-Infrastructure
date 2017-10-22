@@ -55,7 +55,6 @@ public class UseCaseExecutorImplTest {
         useCaseExecutor = new UseCaseExecutorImpl(
                 spyExecutor,
                 spyAndroidMainThread,
-                mockExceptionController,
                 mockTasks);
     }
 
