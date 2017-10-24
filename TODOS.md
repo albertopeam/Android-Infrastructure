@@ -1,6 +1,6 @@
 Todos:
 ------
-modificar docu del readme; poner q salvamos
+revisar docu de github con calma
 actualizar a las rc1, cambiar a rc1 mi lib.
 pushear a bintray
 

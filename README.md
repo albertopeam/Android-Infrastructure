@@ -21,8 +21,6 @@ component lifecycle.
 4. We lead to write synchronous code that is easy to read, maintain, scale
 and test.
 5. We provide a way of handle exceptions without repeat code.
-6. We provide a way of create scoped exceptions handlers, that are
-linked to the lifecycle of the framework component.
 
 There are two modules in the repo, one called app and other infrastructure.
 The app module shows the usage of the infrastructure module, app is
@@ -38,11 +36,10 @@ months with the release of Android O will leave alpha.
 [Gradle Dependency](#dependency)
 
 ### Usage
-1. [Create exception controller](#createexceptionhandler)
-2. [Create use case executor](#createinfra)
+1. [Create use case executor](#createinfra)
+2. [Create exception controller](#createexceptionhandler)
 3. [Create an use case](#createusecase)
 4. [Connect all to the presenter and the view](#connectopresenter)
-5. [Scoped delegates](#scopeddelegate)
 
 ### Testing
 [Test the activity](#testandroidui)
@@ -83,7 +80,19 @@ Follow the next steps to create a basic infrastructure to execute
 asynchronous code and handle exceptions. Then we will wire this infrastructure
 to the view and the presenter to create a complete example.
 
-##### <a name="createexceptionhandler">1. Create exception controller</a>
+
+##### <a name="createinfra">1. Create use case executor</a>
+The UseCaseExecutor object provides the ability to run UseCase objects
+in a separate thread and when the it completes, it invoke the Android
+main thread with the result. This is done behind the scenes.
+Another feature is that this UseCaseExecutor will handle Exceptions thrown
+during the execution of the UseCase(s) and report to the caller.
+```java
+UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide();
+```
+
+
+##### <a name="createexceptionhandler">2. Create exception controller</a>
 ExceptionController class handles the exceptions that are thrown during
 the use case execution. This will need a list of delegates as parameter,
 every one will handle a concrete exception. ExceptionDelegates are
@@ -95,7 +104,7 @@ The next example covers the creation of a ExceptionDelegate that handle a
 NullPointerException, it will return a HandledException that  recover
 for the exception, in this example we only are going to inform that there
 is an internal error via log. This delegate is only a example,
-its discouraged to capture RuntimException(NullPointerException ) in order
+its discouraged to capture RuntimException(NullPointerException) in order
 to solve program errors during the development phase.
 ```java
 ExceptionDelegate aDelegate = new ExceptionDelegate() {
@@ -122,22 +131,7 @@ ExceptionDelegate aDelegate = new ExceptionDelegate() {
 };
 List<ExceptionDelegate> delegates = new ArrayList<>();
 delegates.add(aDelegate);
-ExceptionController exceptController = ExceptionControllerFactory.provide(delegates);
-```
-
-
-
-##### <a name="createinfra">2. Create use case executor</a>
-The UseCaseExecutor object provides the ability to run UseCase objects
-in a separate thread and when the it completes, it invoke the Android
-main thread with the result. This is done behind the scenes.
-Another feature is that this UseCaseExecutor will handle Exceptions thrown
-during the execution of the UseCase(s) and report to the caller.
-This executor need as a parameter an implementation of an
-ExceptionController, like the one that we have been created in step one,
-[Create exception handler](#createexceptionhandler).
-```java
-UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide(exceptionController);
+ExceptionController exceptionController = ExceptionControllerFactory.provide(delegates);
 ```
 
 
@@ -150,16 +144,24 @@ as input and output, this will impact when we add it to the
 UseCaseExecutor and implement the Callback that already is linked to the
 same UseCase generics.
 
-We will need to pass as parameter a lifecycle, this lifecycle will
-handle UseCase cancelation in the case that the android component be
-destroyed. This lifecycle is in alpha(final release with Android O),
-to get more information visit:
+We will need to pass as parameter a ExceptionController([like the one
+that we have been created previously](#createexceptionhandler)) that is
+going to handle all Exceptions triggered during the UseCase execution;
+and a Lifecycle that is not going to respond to the Callback in the case
+that the android component be destroyed. Another case is when the UseCase
+is not going to run if the Lifecycle in not between creation and
+resumed state.
+This lifecycle is in alpha(final release with Android O), to get more
+information visit:
 [Android lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
+This executor need as a parameter an implementation of an
+ExceptionController,
 
 In this example we are going to inject a domain service that receives a
 string and return it converted to uppercase. In this case we are only
 injecting one object but we can add more and use the UseCase as a coordinator
 between services.
+
 
 Definition of the domain service:
 ```java
@@ -177,9 +179,10 @@ class UpperCaseUseCase extends UseCase<String, String >{
 
         private UpperCaseService upperCaseService;
 
-        UpperCaseUseCase(@NonNull Lifecycle lifecycle,
+        UpperCaseUseCase(@NonNull ExceptionController exceptionController,
+                         @NonNull Lifecycle lifecycle,
                          @NonNull UpperCaseService upperCaseService) {
-            super(lifecycle);
+            super(exceptionController, lifecycle);
             this.upperCaseService = upperCaseService;
         }
 
@@ -194,7 +197,8 @@ Creation of the UseCase.
 ```java
 Lifecycle lifecycle = activity.getLifecycle();
 UpperCaseService upperCaseService = new UpperCaseService();
-UpperCaseUseCase upperCaseUseCase= new UpperCaseUseCase(lifecycle, upperCaseService);
+ExceptionController exceptionController = ExceptionControllerFactory.provide(delegates);
+UpperCaseUseCase upperCaseUseCase= new UpperCaseUseCase(exceptionController, lifecycle, upperCaseService);
 ```
 
 
@@ -202,7 +206,7 @@ UpperCaseUseCase upperCaseUseCase= new UpperCaseUseCase(lifecycle, upperCaseServ
 ##### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
 The presenter will handle the view(activity) input events and the
 UseCaseExecutor output events. We will need to inject all the dependencies
-created before, in the second(UseCaseExecutor) and third(UseCase) steps.
+created before, in the first(UseCaseExecutor) and third(UseCase) steps.
 
 In case of the code completes successfully the onSuccess method of the
 Callback will be invoked.
@@ -245,78 +249,6 @@ public class UpperCaseActivity
         Toast.makeText(this, result, Toast.LENGTH_LONG).show();
     }
 }
-```
-
-##### <a name="scopeddelegate">5 Scoped delegates</a>
-Scoped delegates can handle exceptions that are only triggered in a
-concrete context. For example in a Activity where we don't have available
-an Android Api or where we don't have a permission over a dangerous feature.
-In this case we can add a scoped delegate that will only be used during
-the lifecycle of the Activity, when the activity is destroyed then this
-scoped delegate will be removed from the list of delegates that the
-ExceptionController has.
-
-Delegates have a method that must return true if the scope of the delegate
-strictly belongs to the LifecycleOwner passed as parameter, otherwise false.
-We can have more than one delegate that handles the same exception but
-they must have diferent scopes. Then, when the belongsTo is invoked
-only one of them must return true.
-```
-public boolean belongsTo(LifecycleOwner lifecycleOwner);
-```
-
-This example shows how it can be used. First define a new ExceptionDelegate
-class.
-In this case the delegate is going to return a HandledException that
-only shows a Dialog when its recover method be invoked, this Delegate will handle
-the UnsupportedOperationException.
-
-```java
-class UnsupportedOperationExceptionDelegate
-        implements ExceptionDelegate {
-
-    private WeakReference<Activity> activityWeakReference;
-
-
-    UnsupportedOperationExceptionDelegate(Activity activity) {
-        this.activityWeakReference = new WeakReference<>(activity);
-    }
-
-
-    @Override
-    public boolean canHandle(Exception exception) {
-        return exception instanceof UnsupportedOperationException;
-    }
-
-    @Override
-    public HandledException handle(Exception exception) {
-        return new HandledException() {
-
-            @Override
-            public void recover() {
-                new MaterialDialog.Builder(activityWeakReference.get())
-                        .content("Unsupported operation")
-                        .positiveText("ok")
-                        .show();
-            }
-        };
-    }
-
-    @Override
-    public boolean belongsTo(LifecycleOwner lifecycleOwner) {
-        return activityWeakReference.get() == null || lifecycleOwner == activityWeakReference.get();
-    }
-}
-```
-Create an instance of UnsupportedOperationExceptionDelegate and add it
-to the ExceptionController. We are ready to run UseCases with an
-UseCaseExecutor, if any of our code throws an UnsupportedOperationException
-during the Lifecycle of the passed Activity to the
-UnsupportedOperationExceptionDelegate, then this delegate will handle
-the exception.
-```java
-ExceptionDelegate delegate = new UnsupportedOperationExceptionDelegate(activity);
-exceptionController.addDelegate(delegate, notesActivity.getLifecycle());
 ```
 
 
