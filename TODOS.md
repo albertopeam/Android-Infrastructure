@@ -1,6 +1,6 @@
 Todos:
 ------
-modificar docu del readme
+modificar docu del readme; poner q salvamos
 actualizar a las rc1, cambiar a rc1 mi lib.
 pushear a bintray
 
