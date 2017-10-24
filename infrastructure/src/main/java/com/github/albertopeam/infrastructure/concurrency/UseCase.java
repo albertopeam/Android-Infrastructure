@@ -13,7 +13,7 @@ import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
  * Created by Alberto Penas Amor on 25/05/2017.
  *
  * Class used for execute async code. This class handle the activity or fragment {@link Lifecycle},
- * allowing know if it can return after its execution through a {@link Callback}
+ * allowing to know if it can run and return depending on the state of the {@link Lifecycle}.
  * To send to execution a subclass of {@link UseCase} its needed to pass it to
  * {@link UseCaseExecutor#execute(Object, UseCase, Callback)}
  */
@@ -39,13 +39,18 @@ public abstract class UseCase<Args, Response>
 
 
     @NonNull
-    public ExceptionController getExceptionController() {
+    ExceptionController exceptionController() {
         return exceptionController;
     }
 
 
     boolean canRespond(){
         return state == LifecycleState.RESUMED;
+    }
+
+
+    boolean canRun(){
+        return state == LifecycleState.CREATED || state == LifecycleState.STARTED || state == LifecycleState.RESUMED;
     }
 
 

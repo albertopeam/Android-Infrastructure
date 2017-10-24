@@ -43,10 +43,4 @@ class UnsupportedOperationExceptionDelegate
             }
         };
     }
-
-
-    @Override
-    public boolean belongsTo(@Nullable LifecycleOwner lifecycleOwner) {
-        return activityWeakReference.get() == null || lifecycleOwner == activityWeakReference.get();
-    }
 }

@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
 
@@ -30,7 +31,7 @@ public class UseCaseExecutorFactory {
         return new UseCaseExecutorImpl(
                     new ExecutorImpl(),
                     new AndroidMainThreadImpl(new Handler(Looper.getMainLooper())),
-                    new Tasks(new ArrayList<Task>())
+                    new Tasks(Collections.synchronizedList(new ArrayList<Task>()))
             );
     }
 

@@ -1,5 +1,11 @@
 Todos:
 ------
+modificar docu del readme
+actualizar a las rc1, cambiar a rc1 mi lib.
+pushear a bintray
+
+RESUMIR CARACTERISTICAS
+
 *  current: connectedCheck
 *  EXAMPLES IN KOTLIN!!! java/kt in same sections
 *  remove testCoverageEnabled from app module to avoid generate reports....or not

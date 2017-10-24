@@ -1,7 +1,9 @@
 package com.github.albertopeam.infrastructure.concurrency;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import java.util.Collections;
 import java.util.concurrent.Executor;
 
 import com.github.albertopeam.infrastructure.exceptions.HandledException;
@@ -39,15 +41,19 @@ class UseCaseExecutorImpl
         if (tasks.alreadyAdded(useCase)){
             return false;
         }
-        tasks.addUseCase(useCase);
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Response response = useCase.run(args);
-                    notifySuccess(useCase, callback, response);
+                    if (useCase.canRun()){
+                        tasks.addUseCase(useCase);
+                        Response response = useCase.run(args);
+                        notifySuccess(useCase, callback, response);
+                        tasks.removeUseCase(useCase);
+                    }
                 } catch (Exception e) {
                     notifyError(useCase, callback, e);
+                    tasks.removeUseCase(useCase);
                 }
 
             }
@@ -66,7 +72,6 @@ class UseCaseExecutorImpl
                 if (useCase.canRespond()){
                     callback.onSuccess(success);
                 }
-                tasks.removeUseCase(useCase);
             }
         });
     }
@@ -79,11 +84,10 @@ class UseCaseExecutorImpl
             @Override
             public void run() {
                 if (useCase.canRespond()){
-                    ExceptionController exceptionController = useCase.getExceptionController();
+                    ExceptionController exceptionController = useCase.exceptionController();
                     final HandledException handledException = exceptionController.handle(exception, useCase.lifecycleOwner());
                     callback.onException(handledException);
                 }
-                tasks.removeUseCase(useCase);
             }
         });
     }

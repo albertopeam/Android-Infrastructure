@@ -1,16 +1,12 @@
 package com.github.albertopeam.infrastructure.exceptions;
 
 
-import android.arch.lifecycle.GenericLifecycleObserver;
-import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +14,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -45,7 +40,7 @@ public class ExceptionControllerImplTest {
 
 
     @Test
-    public void givenConcreteDelegateWhenHandleItsExceptionThenReturnNotRecoverableError(){
+    public void givenADelegateThatHandleExceptionWhenHandleThisExceptionThenReturnHandledException(){
         List<ExceptionDelegate> delegates = new ArrayList<>();
         delegates.add(mockDelegate);
         NullPointerException targetException = new NullPointerException();
@@ -58,48 +53,13 @@ public class ExceptionControllerImplTest {
     }
 
 
-    @Test
-    public void givenScopedDelegateWhenAddedToExceptControllerThenAddedDelegateAndRegisterObserver(){
-        List<ExceptionDelegate> delegates = new ArrayList<>();
-        sut = new ExceptionControllerImpl(delegates);
-        Lifecycle mockLifecycle = mock(Lifecycle.class);
-        ExceptionDelegate exceptionDelegate = mock(ExceptionDelegate.class);
-        sut.addDelegate(exceptionDelegate, mockLifecycle);
-        assertThat(delegates.size(), equalTo(1));
-        assertThat(delegates.get(0), equalTo(exceptionDelegate));
-    }
-
-
-    @Test
-    public void givenScopedDelegateWhenAddedToExceptionControllerAndThrowADestroyStateChangeFromLifecycleThenRemoveDelegate(){
-        final LifecycleOwner mockOwner = mock(LifecycleOwner.class);
-        final Lifecycle.Event event = Lifecycle.Event.ON_DESTROY;
-        ExceptionDelegate delegate = mock(ExceptionDelegate.class);
-        Lifecycle mockLifecycle = mock(Lifecycle.class);
-        doAnswer(new Answer<GenericLifecycleObserver>() {
-            @Override
-            public GenericLifecycleObserver answer(InvocationOnMock invocation) throws Throwable {
-                ((GenericLifecycleObserver) invocation.getArguments()[0]).onStateChanged(mockOwner, event);
-                return null;
-            }
-        }).when(mockLifecycle).addObserver(any(GenericLifecycleObserver.class));
-        when(delegate.belongsTo(mockOwner)).thenReturn(true);
-        List<ExceptionDelegate> delegates = new ArrayList<>();
-        sut = new ExceptionControllerImpl(delegates);
-        sut.addDelegate(delegate, mockLifecycle);
-        assertThat(delegates.size(), equalTo(0));
-    }
-
-
     @Test(expected = CollisionException.class)
-    public void givenTwoDelegatesThatHandlesSameExceptionAndBelongsToSameLifecycleWhenHandleExceptionThenThrowDelegateCollisionException(){
+    public void givenTwoDelegatesThatHandlesSameExceptionWhenHandleExceptionThenThrowDelegateCollisionException(){
         List<ExceptionDelegate> delegates = new ArrayList<>();
         ExceptionDelegate mockDelegate1 = mock(ExceptionDelegate.class);
         ExceptionDelegate mockDelegate2 = mock(ExceptionDelegate.class);
         when(mockDelegate1.canHandle(any(Exception.class))).thenReturn(true);
         when(mockDelegate2.canHandle(any(Exception.class))).thenReturn(true);
-        when(mockDelegate1.belongsTo(any(LifecycleOwner.class))).thenReturn(true);
-        when(mockDelegate2.belongsTo(any(LifecycleOwner.class))).thenReturn(true);
         delegates.add(mockDelegate1);
         delegates.add(mockDelegate2);
         sut = new ExceptionControllerImpl(delegates);
@@ -110,41 +70,18 @@ public class ExceptionControllerImplTest {
 
 
     @Test(expected = NotHandledException.class)
-    public void givenTwoDelegatesThatHandlesSameExceptionAndAnyBelongsToLifecycleWhenHandleExceptionThenReturnNotHandledError(){
+    public void givenTwoDelegatesThatNotHandlesAExceptionWhenThrowAExceptionThenReturnNotHandledException(){
         List<ExceptionDelegate> delegates = new ArrayList<>();
         ExceptionDelegate mockDelegate1 = mock(ExceptionDelegate.class);
         ExceptionDelegate mockDelegate2 = mock(ExceptionDelegate.class);
-        when(mockDelegate1.canHandle(any(Exception.class))).thenReturn(true);
-        when(mockDelegate2.canHandle(any(Exception.class))).thenReturn(true);
-        when(mockDelegate1.belongsTo(any(LifecycleOwner.class))).thenReturn(false);
-        when(mockDelegate2.belongsTo(any(LifecycleOwner.class))).thenReturn(false);
+        when(mockDelegate1.canHandle(any(Exception.class))).thenReturn(false);
+        when(mockDelegate2.canHandle(any(Exception.class))).thenReturn(false);
         delegates.add(mockDelegate1);
         delegates.add(mockDelegate2);
         sut = new ExceptionControllerImpl(delegates);
         Exception mockException = mock(Exception.class);
         LifecycleOwner mockLifecycleOwner = mock(LifecycleOwner.class);
         sut.handle(mockException, mockLifecycleOwner);
-    }
-
-
-    @Test
-    public void givenTwoDelegatesThatHandlesSameExceptionAndOnlyOneBelongsToLifecycleWhenHandleExceptionThenReturnDelegateError(){
-        HandledException mockHandledException = mock(HandledException.class);
-        List<ExceptionDelegate> delegates = new ArrayList<>();
-        ExceptionDelegate mockDelegate1 = mock(ExceptionDelegate.class);
-        ExceptionDelegate mockDelegate2 = mock(ExceptionDelegate.class);
-        when(mockDelegate1.canHandle(any(Exception.class))).thenReturn(true);
-        when(mockDelegate2.canHandle(any(Exception.class))).thenReturn(true);
-        when(mockDelegate1.belongsTo(any(LifecycleOwner.class))).thenReturn(false);
-        when(mockDelegate2.belongsTo(any(LifecycleOwner.class))).thenReturn(true);
-        when(mockDelegate2.handle(any(Exception.class))).thenReturn(mockHandledException);
-        delegates.add(mockDelegate1);
-        delegates.add(mockDelegate2);
-        sut = new ExceptionControllerImpl(delegates);
-        Exception mockException = mock(Exception.class);
-        LifecycleOwner mockLifecycleOwner = mock(LifecycleOwner.class);
-        HandledException handledException = sut.handle(mockException, mockLifecycleOwner);
-        assertThat(handledException, equalTo(mockHandledException));
     }
 }
 

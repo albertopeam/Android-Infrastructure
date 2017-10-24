@@ -19,6 +19,9 @@ public class ExceptionControllerFactory {
      * @return ExceptionController
      */
     public static ExceptionController provide(@NonNull List<ExceptionDelegate> delegates){
+        if (delegates == null){
+            throw new NullPointerException("Delegates cannot be null");
+        }
         return new ExceptionControllerImpl(delegates);
     }
 }

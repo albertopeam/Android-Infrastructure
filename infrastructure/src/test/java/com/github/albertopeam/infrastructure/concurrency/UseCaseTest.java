@@ -67,4 +67,41 @@ public class UseCaseTest {
     public void givenWhenCreatedThenLifecycleOwnerIsNotNull(){
         assertThat(sut.lifecycleOwner(), is(notNullValue()));
     }
+
+    @Test
+    public void givenWhenCreatedThenCanRunReturnTrue(){
+        sut.create();
+        assertThat(sut.canRun(), is(true));
+    }
+
+    @Test
+    public void givenWhenStartedThenCanRunReturnTrue(){
+        sut.start();
+        assertThat(sut.canRun(), is(true));
+    }
+
+    @Test
+    public void givenWhenResumedThenCanRunReturnTrue(){
+        sut.resume();
+        assertThat(sut.canRun(), is(true));
+    }
+
+    @Test
+    public void givenWhenPausedThenCanRunReturnFalse(){
+        sut.pause();
+        assertThat(sut.canRun(), is(false));
+    }
+
+    @Test
+    public void givenWhenStoppedThenCanRunReturnFalse(){
+        sut.stop();
+        assertThat(sut.canRun(), is(false));
+    }
+
+    @Test
+    public void givenWhenDestroyedThenCanRunReturnFalse(){
+        sut.destroy();
+        assertThat(sut.canRun(), is(false));
+    }
+
 }

@@ -24,12 +24,4 @@ public interface ExceptionDelegate {
      * @return an HandledException that represents an Exception which may or not be recovered
      */
     HandledException handle(@NonNull Exception exception);
-
-    /**
-     * Check if this delegate has strictly the same scope of the passed {@link LifecycleOwner}
-     * @param lifecycleOwner to be checked
-     * @return true if the scope of this delegate belongs strictly to the {@link LifecycleOwner}, otherwise
-     * false
-     */
-    boolean belongsTo(@Nullable LifecycleOwner lifecycleOwner);
 }

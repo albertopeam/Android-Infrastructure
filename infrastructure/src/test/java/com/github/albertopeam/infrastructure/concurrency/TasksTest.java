@@ -76,6 +76,16 @@ public class TasksTest {
 
 
     @Test
+    public void givenInitTasksWhenDuplicateRemoveAlreadyAddedUseCaseThenTasksAreEmpty(){
+        UseCase mockUseCase = mock(UseCase.class);
+        sut.addUseCase(mockUseCase);
+        sut.removeUseCase(mockUseCase);
+        sut.removeUseCase(mockUseCase);
+        assertThat(sut.tasks().size(), equalTo(0));
+    }
+
+
+    @Test
     public void givenInitTasksWhenFindAlreadyAddedUseCaseThenReturnUseCase(){
         UseCase mockUseCase = mock(UseCase.class);
         sut.addUseCase(mockUseCase);

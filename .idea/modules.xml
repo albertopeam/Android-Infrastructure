@@ -5,8 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/Android-Infrastructure.iml" filepath="$PROJECT_DIR$/Android-Infrastructure.iml" />
       <module fileurl="file://$PROJECT_DIR$/ArchitectureLibrary.iml" filepath="$PROJECT_DIR$/ArchitectureLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/infrastructure/infrastructure.iml" filepath="$PROJECT_DIR$/infrastructure/infrastructure.iml" />
       <module fileurl="file://$PROJECT_DIR$/infrastructure/infrastructure.iml" filepath="$PROJECT_DIR$/infrastructure/infrastructure.iml" />
     </modules>
   </component>

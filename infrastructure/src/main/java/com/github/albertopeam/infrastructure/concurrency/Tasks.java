@@ -21,43 +21,53 @@ class Tasks {
     }
 
 
-    synchronized boolean alreadyAdded(@NonNull UseCase useCase){
-        for (Task task:tasks){
-            if (task.getUseCase() == useCase){
-                return true;
+    boolean alreadyAdded(@NonNull UseCase useCase){
+        synchronized (tasks) {
+            for (Task task : tasks) {
+                if (task.getUseCase() == useCase) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
+    @NonNull Task findTask(@NonNull UseCase useCase) throws NullPointerException{
+        synchronized (tasks) {
+            for (Task task : tasks) {
+                if (task.getUseCase() == useCase) {
+                    return task;
+                }
+            }
+            throw new NullPointerException();
+        }
+    }
+
+
+    void addUseCase(@NonNull UseCase useCase){
+        synchronized (tasks) {
+            tasks.add(new Task(useCase));
+        }
+    }
+
+
+    void removeUseCase(@NonNull UseCase useCase){
+        synchronized (tasks) {
+            try {
+                Task task = findTask(useCase);
+                tasks.remove(task);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
         }
-        return false;
     }
 
 
-    synchronized @NonNull Task findTask(@NonNull UseCase useCase) throws NullPointerException{
-        for (Task task : tasks) {
-            if (task.getUseCase() == useCase) {
-                return task;
-            }
+    @NonNull List<Task>tasks(){
+        synchronized (tasks) {
+            return tasks;
         }
-        throw new NullPointerException();
-    }
-
-
-    synchronized void addUseCase(@NonNull UseCase useCase){
-        tasks.add(new Task(useCase));
-    }
-
-
-    synchronized void removeUseCase(@NonNull UseCase useCase){
-        try{
-            Task task = findTask(useCase);
-            tasks.remove(task);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
-    }
-
-
-    synchronized @NonNull List<Task>tasks(){
-        return tasks;
     }
 
 }

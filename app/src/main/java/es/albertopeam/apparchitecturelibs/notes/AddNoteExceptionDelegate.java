@@ -13,11 +13,11 @@ import es.albertopeam.apparchitecturelibs.R;
  * Created by alberto.penas.amor on 22/10/17.
  */
 
-public class AddNoteExceptionDelegate implements ExceptionDelegate {
+class AddNoteExceptionDelegate implements ExceptionDelegate {
 
     private NotesActivity activity;
 
-    public AddNoteExceptionDelegate(NotesActivity activity) {
+    AddNoteExceptionDelegate(NotesActivity activity) {
         this.activity = activity;
     }
 
@@ -36,8 +36,4 @@ public class AddNoteExceptionDelegate implements ExceptionDelegate {
         };
     }
 
-    @Override
-    public boolean belongsTo(@Nullable LifecycleOwner lifecycleOwner) {
-        return lifecycleOwner == activity;
-    }
 }
