@@ -1,8 +1,9 @@
 Todos:
 ------
-revisar docu de github con calma
-actualizar a las rc1, cambiar a rc1 mi lib.
-pushear a bintray
+- revisar docu de github con calma: underline or mark classes in mkdown, make links to real
+repo code example
+- actualizar a las rc1, cambiar a rc1 mi lib.
+- pushear a bintray
 
 RESUMIR CARACTERISTICAS
 
