@@ -107,7 +107,7 @@ public class UseCaseExecutorImplTest {
         when(mockUseCase.lifecycleOwner()).thenReturn(mock(LifecycleOwner.class));
         when(mockUseCase.run(anyString())).thenThrow(mock(Exception.class));
         when(mockUseCase.canRespond()).thenReturn(true);
-        when(mockExceptionController.handle(any(Exception.class), any(LifecycleOwner.class))).thenReturn(mockHandledException);
+        when(mockExceptionController.handle(any(Exception.class))).thenReturn(mockHandledException);
         when(mockUseCase.exceptionController()).thenReturn(mockExceptionController);
         when(mockUseCase.canRun()).thenReturn(true);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
@@ -126,6 +126,7 @@ public class UseCaseExecutorImplTest {
         when(mockUseCase.run(anyString())).thenThrow(mockException);
         when(mockUseCase.canRespond()).thenReturn(false);
         when(mockUseCase.canRun()).thenReturn(true);
+        when(mockUseCase.exceptionController()).thenReturn(mockExceptionController);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));

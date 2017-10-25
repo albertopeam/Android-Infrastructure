@@ -1,8 +1,6 @@
 package com.github.albertopeam.infrastructure.exceptions;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +24,7 @@ class ExceptionControllerImpl
 
 
     @Override
-    public HandledException handle(@NonNull Exception exception,
-                                   @Nullable LifecycleOwner lifecycleOwner) {
+    public HandledException handle(@NonNull Exception exception) {
         List<ExceptionDelegate>targetDelegates = new ArrayList<>();
         for (ExceptionDelegate delegate:delegates){
             if (delegate.canHandle(exception)){

@@ -20,8 +20,7 @@ public interface ExceptionController {
     /**
      * Handles an Exception.
      * @param exception to be handled
-     * @param lifecycleOwner scope where the exception is thrown
      * @return an HandledException representing how we can recover from the handled Exception
      */
-    HandledException handle(@NonNull Exception exception, @Nullable LifecycleOwner lifecycleOwner);
+    HandledException handle(@NonNull Exception exception);
 }

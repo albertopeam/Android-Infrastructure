@@ -22,8 +22,6 @@ public class ExceptionControllerImplTest {
     private ExceptionControllerImpl sut;
     @Mock
     ExceptionDelegate mockDelegate;
-    @Mock
-    LifecycleOwner mockLifecycleOwner;
 
 
     @Before
@@ -35,7 +33,7 @@ public class ExceptionControllerImplTest {
     @Test(expected = NotHandledException.class)
     public void givenEmptyDelegatesWhenHandleExceptionThenThrowNotHandled(){
         sut = new ExceptionControllerImpl(new ArrayList<ExceptionDelegate>());
-        sut.handle(new Exception(), mockLifecycleOwner);
+        sut.handle(new Exception());
     }
 
 
@@ -48,7 +46,7 @@ public class ExceptionControllerImplTest {
         when(mockDelegate.canHandle(targetException)).thenReturn(true);
         when(mockDelegate.handle(targetException)).thenReturn(mockHandledException);
         sut = new ExceptionControllerImpl(delegates);
-        HandledException resultHandledException = sut.handle(targetException, mockLifecycleOwner);
+        HandledException resultHandledException = sut.handle(targetException);
         assertThat(resultHandledException, equalTo(mockHandledException));
     }
 
@@ -64,8 +62,7 @@ public class ExceptionControllerImplTest {
         delegates.add(mockDelegate2);
         sut = new ExceptionControllerImpl(delegates);
         Exception mockException = mock(Exception.class);
-        LifecycleOwner mockLifecycleOwner = mock(LifecycleOwner.class);
-        sut.handle(mockException, mockLifecycleOwner);
+        sut.handle(mockException);
     }
 
 
@@ -80,8 +77,7 @@ public class ExceptionControllerImplTest {
         delegates.add(mockDelegate2);
         sut = new ExceptionControllerImpl(delegates);
         Exception mockException = mock(Exception.class);
-        LifecycleOwner mockLifecycleOwner = mock(LifecycleOwner.class);
-        sut.handle(mockException, mockLifecycleOwner);
+        sut.handle(mockException);
     }
 }
 

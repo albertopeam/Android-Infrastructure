@@ -52,7 +52,9 @@ class UseCaseExecutorImpl
                         tasks.removeUseCase(useCase);
                     }
                 } catch (Exception e) {
-                    notifyError(useCase, callback, e);
+                    ExceptionController exceptionController = useCase.exceptionController();
+                    final HandledException handledException = exceptionController.handle(e);
+                    notifyError(useCase, callback, handledException);
                     tasks.removeUseCase(useCase);
                 }
 
@@ -79,13 +81,11 @@ class UseCaseExecutorImpl
 
     private void notifyError(final @NonNull UseCase useCase,
                              final @NonNull Callback callback,
-                             final @NonNull Exception exception){
+                             final @NonNull HandledException handledException){
         mainThread.execute(new Runnable() {
             @Override
             public void run() {
                 if (useCase.canRespond()){
-                    ExceptionController exceptionController = useCase.exceptionController();
-                    final HandledException handledException = exceptionController.handle(exception, useCase.lifecycleOwner());
                     callback.onException(handledException);
                 }
             }
