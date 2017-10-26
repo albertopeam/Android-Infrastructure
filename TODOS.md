@@ -1,7 +1,6 @@
 Todos:
 ------
-- revisar docu de github con calma: underline or mark classes in mkdown, make links to real
-repo code example
+- revisar travis.ci
 - pushear a bintray
 
 RESUMIR CARACTERISTICAS

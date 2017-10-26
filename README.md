@@ -66,13 +66,12 @@ isn't needed if you are using a version of [support library](https://developer.a
 ```groovy
 compile "android.arch.lifecycle:extensions:1.0.0-rc1"
 ```
+For more info, check [documentation](https://developer.android.com/topic/libraries/architecture/adding-components.html)
 
-Add this library dependency:
+Add infrastructure dependency:
 ```groovy
 compile 'com.github.albertopeam:infrastructure:0.0.10-rc1'
 ```
-
-For more info, check [documentation](https://developer.android.com/topic/libraries/architecture/adding-components.html)
 
 Usage
 -----
@@ -83,7 +82,7 @@ Then we will wire this infrastructure
 to the view and the presenter to create a complete example.
 
 
-##### <a name="createinfra">1. Create use case executor</a>
+#### <a name="createinfra">1. Create use case executor</a>
 The **UseCaseExecutor** object provides the ability to run **UseCase** objects
 in a separate thread and when it end running invokes the Android
 main thread with the result. This is done behind the scenes.
@@ -94,10 +93,10 @@ UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide();
 ```
 
 
-##### <a name="createexceptionhandler">2. Create exception controller</a>
+#### <a name="createexceptionhandler">2. Create exception controller</a>
 **ExceptionController** class handles the exceptions that are thrown during
 the **UseCase** execution. This will need a list of delegates as parameter,
-every one will handle a concrete exception. **ExceptionDelegates** are
+every one will handle a concrete exception. **ExceptionDelegate**(s) are
 usefull for handling exceptions without repetitives endless of "if,
 else if, else" blocks. Every **ExceptionDelegate** will return a **HandledException**
 that will handle the exception managed by its delegate.
@@ -138,7 +137,7 @@ ExceptionController exceptionController = ExceptionControllerFactory.provide(del
 
 
 
-##### <a name="createusecase">3. Create an use case</a>
+#### <a name="createusecase">3. Create an use case</a>
 An **UseCase** is a piece of code that executes one or more operations and
 returns a result to the caller, or if an exception was raised, inform
 the caller via a **HandledException**. The **UseCase** make use of generics,
@@ -190,7 +189,7 @@ class UpperCaseUseCase extends UseCase<String, String >{
     }
 ```
 
-Creation of the **UseCase**.
+Create the **UseCase**.
 ```java
 Lifecycle lifecycle = activity.getLifecycle();
 UpperCaseService upperCaseService = new UpperCaseService();
@@ -200,7 +199,7 @@ UpperCaseUseCase upperCaseUseCase= new UpperCaseUseCase(exceptionController, lif
 
 
 
-##### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
+#### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
 The presenter will handle the view(activity) input events and the
 **UseCaseExecutor** output events. We will need to inject all the dependencies
 created before, in the [first](#createinfra) and [third](createusecase) steps.
@@ -254,13 +253,12 @@ public class UpperCaseActivity
 Testing
 -------
 
-##### <a name="testandroidui">Test the activity</a>
+#### <a name="testandroidui">Test the activity</a>
 
-Para probar todas estas cosas que se crean con la ayuda de Dagger 2 podemos
-Utilice una biblioteca llamada [DaggerMock] (https://github.com/fabioCollini/DaggerMock).
-Esta biblioteca reemplaza los objetos proporcionados por los módulos
-dagger, de esta manera podemos reemplazar las dependencias con dobles de
-prueba.
+For test all this stuff that we have built using Dagger2 we can use a library called
+[DaggerMock](https://github.com/fabioCollini/DaggerMock).
+This library helps us replacing all the objects provided by the Dagger2 modules,
+in fact we can replace the dependencies of the subject under test with test doubles.
 
 First of all we need to replace the first **Component** that is created in the
 graph. We are assuming that the main component/module is called
