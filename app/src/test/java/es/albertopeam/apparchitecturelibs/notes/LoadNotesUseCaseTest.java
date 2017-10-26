@@ -3,6 +3,8 @@ package es.albertopeam.apparchitecturelibs.notes;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -36,13 +38,15 @@ public class LoadNotesUseCaseTest {
     NotesRepository notesRepositoryMock;
     @Mock
     LifecycleOwner mockLifecycleOwner;
+    @Mock
+    ExceptionController mockExceptionController;
 
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         when(mockLifecycleOwner.getLifecycle()).thenReturn(mock(Lifecycle.class));
-        sut = new LoadNotesUseCase(mockLifecycleOwner, notesRepositoryMock);
+        sut = new LoadNotesUseCase(mockExceptionController, mockLifecycleOwner, notesRepositoryMock);
     }
 
 

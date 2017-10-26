@@ -55,7 +55,6 @@ public class UseCaseExecutorImplTest {
         useCaseExecutor = new UseCaseExecutorImpl(
                 spyExecutor,
                 spyAndroidMainThread,
-                mockExceptionController,
                 mockTasks);
     }
 
@@ -63,6 +62,7 @@ public class UseCaseExecutorImplTest {
     @Test
     public void givenAddedAnUseCaseWhenAddItAgainBeforeEndThenReturnNotAddedToExecution(){
         when(mockTasks.alreadyAdded(mockUseCase)).thenReturn(false);
+        when(mockUseCase.canRun()).thenReturn(true);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
         when(mockTasks.alreadyAdded(mockUseCase)).thenReturn(true);
         boolean addedTwice = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
@@ -76,6 +76,7 @@ public class UseCaseExecutorImplTest {
     public void givenUseCaseWhenExecuteThenRespondSuccessCallback() throws Exception {
         when(mockUseCase.run(anyString())).thenReturn(response);
         when(mockUseCase.canRespond()).thenReturn(true);
+        when(mockUseCase.canRun()).thenReturn(true);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         verify(mockCallback, times(1)).onSuccess(successArgCaptor.capture());
@@ -87,9 +88,10 @@ public class UseCaseExecutorImplTest {
 
 
     @Test
-    public void givenUseCaseWithDestroyedStateWhenExecutedThenNotRespondToCallbackAndRemoveFromTasks() throws Exception {
+    public void givenUseCaseWithDestroyedStateWhenExecuteingThenNotRespondToCallbackAndRemoveFromTasks() throws Exception {
         when(mockUseCase.run(anyString())).thenReturn(response);
         when(mockUseCase.canRespond()).thenReturn(false);
+        when(mockUseCase.canRun()).thenReturn(true);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));
@@ -105,7 +107,9 @@ public class UseCaseExecutorImplTest {
         when(mockUseCase.lifecycleOwner()).thenReturn(mock(LifecycleOwner.class));
         when(mockUseCase.run(anyString())).thenThrow(mock(Exception.class));
         when(mockUseCase.canRespond()).thenReturn(true);
-        when(mockExceptionController.handle(any(Exception.class), any(LifecycleOwner.class))).thenReturn(mockHandledException);
+        when(mockExceptionController.handle(any(Exception.class))).thenReturn(mockHandledException);
+        when(mockUseCase.exceptionController()).thenReturn(mockExceptionController);
+        when(mockUseCase.canRun()).thenReturn(true);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));
@@ -117,15 +121,29 @@ public class UseCaseExecutorImplTest {
 
 
     @Test
-    public void givenUseCaseWithDestroyedStateWhenExecutedThenNotRespondCallbackAndRemoveFromTasks() throws Exception{
+    public void givenUseCaseWithDestroyedStateWhenExecutingThenNotRespondCallbackAndRemoveFromTasks() throws Exception{
         Exception mockException = mock(Exception.class);
         when(mockUseCase.run(anyString())).thenThrow(mockException);
         when(mockUseCase.canRespond()).thenReturn(false);
+        when(mockUseCase.canRun()).thenReturn(true);
+        when(mockUseCase.exceptionController()).thenReturn(mockExceptionController);
         boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));
         verify(mockUseCase, times(1)).run(mockArgs);
         verifyZeroInteractions(mockCallback);
         verify(mockTasks, times(1)).removeUseCase(mockUseCase);
+    }
+
+
+    @Test
+    public void givenUseCaseWithDestroyedStateWhenTryToExecuteThenNotRunUseCaseAndNotRespondToCallback() throws Exception{
+        when(mockUseCase.canRun()).thenReturn(false);
+        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
+        verify(mockTasks, times(0)).addUseCase(mockUseCase);
+        assertThat(added, equalTo(true));
+        verify(mockUseCase, times(0)).run(mockArgs);
+        verifyZeroInteractions(mockCallback);
+        verify(mockTasks, times(0)).removeUseCase(mockUseCase);
     }
 }

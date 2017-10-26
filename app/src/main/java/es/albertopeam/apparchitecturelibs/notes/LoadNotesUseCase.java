@@ -8,6 +8,7 @@ import java.util.List;
 
 import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import com.github.albertopeam.infrastructure.concurrency.UseCase;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
 
 /**
  * Created by Alberto Penas Amorberto Penas Amor on 22/05/2017.
@@ -20,9 +21,10 @@ class LoadNotesUseCase
     private NotesRepository repository;
 
 
-    LoadNotesUseCase(@NonNull LifecycleOwner lifecycleOwner,
+    LoadNotesUseCase(@NonNull ExceptionController exceptionController,
+                     @NonNull LifecycleOwner lifecycleOwner,
                      @NonNull NotesRepository repository) {
-        super(lifecycleOwner);
+        super(exceptionController, lifecycleOwner);
         this.repository = repository;
     }
 

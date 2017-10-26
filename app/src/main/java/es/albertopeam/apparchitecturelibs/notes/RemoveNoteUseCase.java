@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import com.github.albertopeam.infrastructure.concurrency.UseCase;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
 
 /**
  * Created by Alberto Penas Amorberto Penas Amor on 25/05/2017.
@@ -17,9 +18,10 @@ class RemoveNoteUseCase
     private NotesRepository repository;
 
 
-    RemoveNoteUseCase(@NonNull LifecycleOwner lifecycleOwner,
+    RemoveNoteUseCase(@NonNull ExceptionController exceptionController,
+                      @NonNull LifecycleOwner lifecycleOwner,
                       @NonNull NotesRepository repository) {
-        super(lifecycleOwner);
+        super(exceptionController, lifecycleOwner);
         this.repository = repository;
     }
 

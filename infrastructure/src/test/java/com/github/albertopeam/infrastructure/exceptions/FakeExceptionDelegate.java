@@ -16,9 +16,4 @@ class FakeExceptionDelegate
     public HandledException handle(@NonNull Exception exception) {
         return null;
     }
-
-    @Override
-    public boolean belongsTo(@Nullable LifecycleOwner lifecycleOwner) {
-        return false;
-    }
 }

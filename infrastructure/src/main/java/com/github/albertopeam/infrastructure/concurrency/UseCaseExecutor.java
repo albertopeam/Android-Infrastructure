@@ -9,20 +9,12 @@ import android.support.annotation.NonNull;
  */
 public interface UseCaseExecutor {
     /**
-     *
+     * Invoke this method to execute {@link UseCase} async, the {@link UseCase} is not going to be
+     * executed if the {@link LifecycleState} is not one of: CREATED || STARTED || RESUMED.
      * @param args passed to {@link UseCase} for its exection
      * @param useCase to execute in background thread
      * @param callback to respond in main thread after the execution of the {@link UseCase}
-     * @return true if sended to execution, false if already running
-     */
-    /**
-     * Invoke this method to execute {@link UseCase} async
-     * @param args passed to {@link UseCase} for its exection
-     * @param useCase to execute in background thread
-     * @param callback to respond in main thread after the execution of the {@link UseCase}
-     * @param <Args> generic for input params
-     * @param <Response> generic for output params
-     * @return true if sended to execution, false if already executing
+     * @return true if added to the execution queue, false if already executing.
      */
     <Args, Response> boolean execute(final Args args,
                                      final @NonNull UseCase<Args, Response> useCase,

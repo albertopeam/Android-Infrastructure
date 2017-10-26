@@ -4,6 +4,8 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 
+import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -26,12 +28,14 @@ public class UseCaseTest {
     LifecycleOwner mockLifecycleOwner;
     @Mock
     Lifecycle mockLifecycle;
+    @Mock
+    ExceptionController mockExceptionController;
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         when(mockLifecycleOwner.getLifecycle()).thenReturn(mockLifecycle);
-        sut = new UseCase(mockLifecycleOwner) {
+        sut = new UseCase(mockExceptionController, mockLifecycleOwner) {
             @Override
             protected Object run(Object o) throws Exception {
                 return null;
@@ -63,4 +67,41 @@ public class UseCaseTest {
     public void givenWhenCreatedThenLifecycleOwnerIsNotNull(){
         assertThat(sut.lifecycleOwner(), is(notNullValue()));
     }
+
+    @Test
+    public void givenWhenCreatedThenCanRunReturnTrue(){
+        sut.create();
+        assertThat(sut.canRun(), is(true));
+    }
+
+    @Test
+    public void givenWhenStartedThenCanRunReturnTrue(){
+        sut.start();
+        assertThat(sut.canRun(), is(true));
+    }
+
+    @Test
+    public void givenWhenResumedThenCanRunReturnTrue(){
+        sut.resume();
+        assertThat(sut.canRun(), is(true));
+    }
+
+    @Test
+    public void givenWhenPausedThenCanRunReturnFalse(){
+        sut.pause();
+        assertThat(sut.canRun(), is(false));
+    }
+
+    @Test
+    public void givenWhenStoppedThenCanRunReturnFalse(){
+        sut.stop();
+        assertThat(sut.canRun(), is(false));
+    }
+
+    @Test
+    public void givenWhenDestroyedThenCanRunReturnFalse(){
+        sut.destroy();
+        assertThat(sut.canRun(), is(false));
+    }
+
 }

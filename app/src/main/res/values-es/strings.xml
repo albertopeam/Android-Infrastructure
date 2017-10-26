@@ -3,4 +3,5 @@
     <string name="app_name">AppArchitectureLibs</string>
     <string name="null_pointer_exception">Error interno.</string>
     <string name="unsupported_operation_exception">Operation no soportada.</string>
+    <string name="cannot_add_note_exception">Cannot add note</string>
 </resources>

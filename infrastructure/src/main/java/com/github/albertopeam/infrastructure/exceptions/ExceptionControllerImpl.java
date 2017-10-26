@@ -1,10 +1,6 @@
 package com.github.albertopeam.infrastructure.exceptions;
 
-import android.arch.lifecycle.GenericLifecycleObserver;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +24,7 @@ class ExceptionControllerImpl
 
 
     @Override
-    public HandledException handle(@NonNull Exception exception,
-                                   @Nullable LifecycleOwner lifecycleOwner) {
+    public HandledException handle(@NonNull Exception exception) {
         List<ExceptionDelegate>targetDelegates = new ArrayList<>();
         for (ExceptionDelegate delegate:delegates){
             if (delegate.canHandle(exception)){
@@ -42,51 +37,8 @@ class ExceptionControllerImpl
             ExceptionDelegate delegate = targetDelegates.get(0);
             return delegate.handle(exception);
         }else {
-            List<ExceptionDelegate>belongsDelegates = new ArrayList<>();
-            for (ExceptionDelegate delegate:targetDelegates){
-                if (delegate.belongsTo(lifecycleOwner)){
-                    belongsDelegates.add(delegate);
-                }
-            }
-            if (belongsDelegates.isEmpty()){
-                throw new NotHandledException(exception);
-            }else if(belongsDelegates.size() == 1){
-                ExceptionDelegate delegate = belongsDelegates.get(0);
-                return delegate.handle(exception);
-            }else{
-                throw new CollisionException(exception, belongsDelegates);
-            }
+            throw new CollisionException(exception, targetDelegates);
         }
     }
 
-    @Override
-    public synchronized void addDelegate(@NonNull ExceptionDelegate delegate,
-                                         @NonNull Lifecycle lifecycle) {
-        delegates.add(delegate);
-        lifecycle.addObserver(new GenericLifecycleObserver() {
-            @Override
-            public void onStateChanged(LifecycleOwner lifecycleOwner, Lifecycle.Event event) {
-                stateChanged(lifecycleOwner, event);
-            }
-
-            @Override
-            public Object getReceiver() {
-                return null;
-            }
-        });
-    }
-
-
-    private synchronized void stateChanged(@NonNull LifecycleOwner lifecycleOwner,
-                                           @NonNull Lifecycle.Event event){
-        if (event.equals(Lifecycle.Event.ON_DESTROY)) {
-            List<ExceptionDelegate>toDestroyExceptionDelegates = new ArrayList<>();
-            for (ExceptionDelegate delegate:delegates){
-                if (delegate.belongsTo(lifecycleOwner)){
-                    toDestroyExceptionDelegates.add(delegate);
-                }
-            }
-            delegates.removeAll(toDestroyExceptionDelegates);
-        }
-    }
 }

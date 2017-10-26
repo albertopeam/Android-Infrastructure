@@ -11,7 +11,11 @@ import es.albertopeam.apparchitecturelibs.domain.NotesRepository;
 import es.albertopeam.apparchitecturelibs.domain.NotesSingleton;
 import com.github.albertopeam.infrastructure.concurrency.UseCaseExecutor;
 import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
+import com.github.albertopeam.infrastructure.exceptions.ExceptionControllerFactory;
 import com.github.albertopeam.infrastructure.exceptions.ExceptionDelegate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideAddNote;
 import static es.albertopeam.apparchitecturelibs.data.DatabaseFactory.provideLoadNotes;
@@ -34,15 +38,11 @@ public interface NotesActivitySubcomponent {
 
         @Provides
         @ActivityScope
-        public NotesPresenter provide(NotesActivity notesActivity,
-                                      UseCaseExecutor useCaseExecutor,
-                                      ExceptionController exceptionController,
+        public NotesPresenter provide(UseCaseExecutor useCaseExecutor,
                                       NotesViewModel model,
                                       LoadNotesUseCase loadNotesUseCase,
                                       AddNoteUseCase addNoteUseCase,
                                       RemoveNoteUseCase removeNoteUseCase){
-            ExceptionDelegate delegate = new UnsupportedOperationExceptionDelegate(activity);
-            exceptionController.addDelegate(delegate, notesActivity.getLifecycle());
             return new NotesPresenter(
                     activity,
                     model,
@@ -74,21 +74,31 @@ public interface NotesActivitySubcomponent {
         @ActivityScope
         public LoadNotesUseCase provideLoadNotesUseCase(NotesActivity notesActivity,
                                                         NotesRepository notesRepository){
-            return new LoadNotesUseCase(notesActivity, notesRepository);
+            List<ExceptionDelegate> delegates = new ArrayList<>();
+            ExceptionController exceptionController =  ExceptionControllerFactory.provide(delegates);
+            return new LoadNotesUseCase(exceptionController, notesActivity, notesRepository);
         }
 
         @Provides
         @ActivityScope
         public AddNoteUseCase provideAddNoteUseCase(NotesActivity notesActivity,
                                                     NotesRepository notesRepository){
-            return new AddNoteUseCase(notesActivity, notesRepository);
+            List<ExceptionDelegate> delegates = new ArrayList<>();
+            ExceptionDelegate delegate = new AddNoteExceptionDelegate(activity);
+            delegates.add(delegate);
+            ExceptionController exceptionController =  ExceptionControllerFactory.provide(delegates);
+            return new AddNoteUseCase(exceptionController, notesActivity, notesRepository);
         }
 
         @Provides
         @ActivityScope
         public RemoveNoteUseCase provideRemoveNoteUseCase(NotesActivity notesActivity,
                                                           NotesRepository notesRepository){
-            return new RemoveNoteUseCase(notesActivity, notesRepository);
+            List<ExceptionDelegate> delegates = new ArrayList<>();
+            ExceptionDelegate delegate = new UnsupportedOperationExceptionDelegate(activity);
+            delegates.add(delegate);
+            ExceptionController exceptionController =  ExceptionControllerFactory.provide(delegates);
+            return new RemoveNoteUseCase(exceptionController, notesActivity, notesRepository);
         }
     }
 }

@@ -21,28 +21,22 @@ component lifecycle.
 4. We lead to write synchronous code that is easy to read, maintain, scale
 and test.
 5. We provide a way of handle exceptions without repeat code.
-6. We provide a way of create scoped exceptions handlers, that are
-linked to the lifecycle of the framework component.
 
 There are two modules in the repo, one called app and other infrastructure.
 The app module shows the usage of the infrastructure module, app is
 built based on MVP with the help of Dagger2 DI framework. It is a very
 basic example to list, create and destroy notes.
-The infrastructure module is the core of the library. It has a
-dependency to an android alpha library
-("android.arch.lifecycle:runtime:1.0.0-alpha9"), which in a few
-months with the release of Android O will leave alpha.
+The infrastructure module is the core of the library.
 
 
 ### Install
 [Gradle Dependency](#dependency)
 
 ### Usage
-1. [Create exception controller](#createexceptionhandler)
-2. [Create use case executor](#createinfra)
+1. [Create use case executor](#createinfra)
+2. [Create exception controller](#createexceptionhandler)
 3. [Create an use case](#createusecase)
 4. [Connect all to the presenter and the view](#connectopresenter)
-5. [Scoped delegates](#scopeddelegate)
 
 ### Testing
 [Test the activity](#testandroidui)
@@ -57,7 +51,7 @@ The Gradle dependency is available via jCenter.
 
 The minimum API level supported by this library is API 15 (ICE_CREAM_SANDWICH_MR1).
 
-Add the Google Maven repository:
+Add the Google Maven repository if you are using a version of Android Studio < 3:
 ```groovy
 allprojects {
     repositories {
@@ -67,35 +61,51 @@ allprojects {
 }
 ```
 
-Add the dependency to include Android components Lifecycle(LifecycleActivity, LifecycleFragment):
+Add the dependency to include Android components Lifecycle(LifecycleActivity, LifecycleFragment), this
+isn't needed if you are using a version of [support library](https://developer.android.com/topic/libraries/support-library/revisions.html#26-1-0)>= 26.1.0:
 ```groovy
-compile 'android.arch.lifecycle:extensions:1.0.0-alpha9'
+compile "android.arch.lifecycle:extensions:1.0.0-rc1"
 ```
+For more info, check [documentation](https://developer.android.com/topic/libraries/architecture/adding-components.html)
 
-Add this library dependency:
+Add infrastructure dependency:
 ```groovy
-compile 'com.github.albertopeam:infrastructure:0.0.9-alpha'
+compile 'com.github.albertopeam:infrastructure:0.0.10-rc1'
 ```
 
 Usage
 -----
 Follow the next steps to create a basic infrastructure to execute
-asynchronous code and handle exceptions. Then we will wire this infrastructure
+asynchronous code and handle exceptions that are raised during the execution
+of the operations.
+Then we will wire this infrastructure
 to the view and the presenter to create a complete example.
 
-##### <a name="createexceptionhandler">1. Create exception controller</a>
-ExceptionController class handles the exceptions that are thrown during
-the use case execution. This will need a list of delegates as parameter,
-every one will handle a concrete exception. ExceptionDelegates are
-usefull for handling Exceptions without repetitives endless of "if,
-else if, else" blocks. Every ExceptionDelegate will return a HandleException
+
+#### <a name="createinfra">1. Create use case executor</a>
+The **UseCaseExecutor** object provides the ability to run **UseCase** objects
+in a separate thread and when it end running invokes the Android
+main thread with the result. This is done behind the scenes.
+Another feature is that this **UseCaseExecutor** will handle Exceptions thrown
+during the execution of the **UseCase** and report to the caller.
+```java
+UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide();
+```
+
+
+#### <a name="createexceptionhandler">2. Create exception controller</a>
+**ExceptionController** class handles the exceptions that are thrown during
+the **UseCase** execution. This will need a list of delegates as parameter,
+every one will handle a concrete exception. **ExceptionDelegate**(s) are
+usefull for handling exceptions without repetitives endless of "if,
+else if, else" blocks. Every **ExceptionDelegate** will return a **HandledException**
 that will handle the exception managed by its delegate.
 
-The next example covers the creation of a ExceptionDelegate that handle a
-NullPointerException, it will return a HandledException that  recover
+The next example covers the creation of a **ExceptionDelegate** that handle a
+NullPointerException, it will return a **HandledException** that  recover
 for the exception, in this example we only are going to inform that there
 is an internal error via log. This delegate is only a example,
-its discouraged to capture RuntimException(NullPointerException ) in order
+its discouraged to capture RuntimeException(NullPointerException) in order
 to solve program errors during the development phase.
 ```java
 ExceptionDelegate aDelegate = new ExceptionDelegate() {
@@ -122,44 +132,32 @@ ExceptionDelegate aDelegate = new ExceptionDelegate() {
 };
 List<ExceptionDelegate> delegates = new ArrayList<>();
 delegates.add(aDelegate);
-ExceptionController exceptController = ExceptionControllerFactory.provide(delegates);
+ExceptionController exceptionController = ExceptionControllerFactory.provide(delegates);
 ```
 
 
 
-##### <a name="createinfra">2. Create use case executor</a>
-The UseCaseExecutor object provides the ability to run UseCase objects
-in a separate thread and when the it completes, it invoke the Android
-main thread with the result. This is done behind the scenes.
-Another feature is that this UseCaseExecutor will handle Exceptions thrown
-during the execution of the UseCase(s) and report to the caller.
-This executor need as a parameter an implementation of an
-ExceptionController, like the one that we have been created in step one,
-[Create exception handler](#createexceptionhandler).
-```java
-UseCaseExecutor useCaseExecutor = UseCaseExecutorFactory.provide(exceptionController);
-```
-
-
-
-##### <a name="createusecase">3. Create an use case</a>
-An UseCase is a piece of code that executes one or more operations and
+#### <a name="createusecase">3. Create an use case</a>
+An **UseCase** is a piece of code that executes one or more operations and
 returns a result to the caller, or if an exception was raised, inform
-the caller via a HandledException. The UseCase make use of generics,
+the caller via a **HandledException**. The **UseCase** make use of generics,
 as input and output, this will impact when we add it to the
-UseCaseExecutor and implement the Callback that already is linked to the
-same UseCase generics.
+**UseCaseExecutor** and implement the **Callback** that already is linked to the
+same **UseCase** generics.
 
-We will need to pass as parameter a lifecycle, this lifecycle will
-handle UseCase cancelation in the case that the android component be
-destroyed. This lifecycle is in alpha(final release with Android O),
-to get more information visit:
-[Android lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
+We will need to pass as parameter a **ExceptionController**([like the one
+that we have been created previously](#createexceptionhandler)) that is
+going to handle all exceptions triggered during the **UseCase** execution;
+and a **LifecycleOwner** that is not going to respond to the **Callback** in the case
+that the android component be destroyed. Another case is when the **UseCase**
+is not going to run if the **LifecycleOwner** in not between creation and
+resumed state.
 
 In this example we are going to inject a domain service that receives a
 string and return it converted to uppercase. In this case we are only
-injecting one object but we can add more and use the UseCase as a coordinator
+injecting one object but we can add more and use the **UseCase** as a coordinator
 between services.
+
 
 Definition of the domain service:
 ```java
@@ -170,16 +168,17 @@ public class UpperCaseService {
 }
 ```
 
-Definition of the UseCase that coordinates the service. Remember that many
+Definition of the **UseCase** that coordinates the service. Remember that many
 services can be injected and favor composition.
 ```java
 class UpperCaseUseCase extends UseCase<String, String >{
 
         private UpperCaseService upperCaseService;
 
-        UpperCaseUseCase(@NonNull Lifecycle lifecycle,
+        UpperCaseUseCase(@NonNull ExceptionController exceptionController,
+                         @NonNull Lifecycle lifecycle,
                          @NonNull UpperCaseService upperCaseService) {
-            super(lifecycle);
+            super(exceptionController, lifecycle);
             this.upperCaseService = upperCaseService;
         }
 
@@ -190,25 +189,26 @@ class UpperCaseUseCase extends UseCase<String, String >{
     }
 ```
 
-Creation of the UseCase.
+Create the **UseCase**.
 ```java
 Lifecycle lifecycle = activity.getLifecycle();
 UpperCaseService upperCaseService = new UpperCaseService();
-UpperCaseUseCase upperCaseUseCase= new UpperCaseUseCase(lifecycle, upperCaseService);
+ExceptionController exceptionController = ExceptionControllerFactory.provide(delegates);
+UpperCaseUseCase upperCaseUseCase= new UpperCaseUseCase(exceptionController, lifecycle, upperCaseService);
 ```
 
 
 
-##### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
+#### <a name="connectopresenter">4 Connect all to the presenter and the view</a>
 The presenter will handle the view(activity) input events and the
-UseCaseExecutor output events. We will need to inject all the dependencies
-created before, in the second(UseCaseExecutor) and third(UseCase) steps.
+**UseCaseExecutor** output events. We will need to inject all the dependencies
+created before, in the [first](#createinfra) and [third](createusecase) steps.
 
 In case of the code completes successfully the onSuccess method of the
-Callback will be invoked.
+**Callback** will be invoked.
 
-If any exception is triggered in the UseCase the onException method of the
-Callback will be invoked with a HandledException. Then we can choose to
+If any exception is triggered in the **UseCase** the onException method of the
+**Callback** will be invoked with a **HandledException**. Then we can choose to
 recover from it invoking its recover method.
 ```java
 void toUpperCase(String aString){
@@ -226,8 +226,10 @@ void toUpperCase(String aString){
 }
 
 ```
-Activity code that handles events from/toward the presenter. It only shows
+**Activity** code that handles events from/toward the presenter. It only shows
 a Toast with the result of the UseCase.
+If you are using support library >= 26.1.0 you can extend from activity in
+other case you must need to use **LifecycleActivity**
 ```java
 public class UpperCaseActivity
         extends LifecycleActivity {
@@ -247,93 +249,20 @@ public class UpperCaseActivity
 }
 ```
 
-##### <a name="scopeddelegate">5 Scoped delegates</a>
-Scoped delegates can handle exceptions that are only triggered in a
-concrete context. For example in a Activity where we don't have available
-an Android Api or where we don't have a permission over a dangerous feature.
-In this case we can add a scoped delegate that will only be used during
-the lifecycle of the Activity, when the activity is destroyed then this
-scoped delegate will be removed from the list of delegates that the
-ExceptionController has.
-
-Delegates have a method that must return true if the scope of the delegate
-strictly belongs to the LifecycleOwner passed as parameter, otherwise false.
-We can have more than one delegate that handles the same exception but
-they must have diferent scopes. Then, when the belongsTo is invoked
-only one of them must return true.
-```
-public boolean belongsTo(LifecycleOwner lifecycleOwner);
-```
-
-This example shows how it can be used. First define a new ExceptionDelegate
-class.
-In this case the delegate is going to return a HandledException that
-only shows a Dialog when its recover method be invoked, this Delegate will handle
-the UnsupportedOperationException.
-
-```java
-class UnsupportedOperationExceptionDelegate
-        implements ExceptionDelegate {
-
-    private WeakReference<Activity> activityWeakReference;
-
-
-    UnsupportedOperationExceptionDelegate(Activity activity) {
-        this.activityWeakReference = new WeakReference<>(activity);
-    }
-
-
-    @Override
-    public boolean canHandle(Exception exception) {
-        return exception instanceof UnsupportedOperationException;
-    }
-
-    @Override
-    public HandledException handle(Exception exception) {
-        return new HandledException() {
-
-            @Override
-            public void recover() {
-                new MaterialDialog.Builder(activityWeakReference.get())
-                        .content("Unsupported operation")
-                        .positiveText("ok")
-                        .show();
-            }
-        };
-    }
-
-    @Override
-    public boolean belongsTo(LifecycleOwner lifecycleOwner) {
-        return activityWeakReference.get() == null || lifecycleOwner == activityWeakReference.get();
-    }
-}
-```
-Create an instance of UnsupportedOperationExceptionDelegate and add it
-to the ExceptionController. We are ready to run UseCases with an
-UseCaseExecutor, if any of our code throws an UnsupportedOperationException
-during the Lifecycle of the passed Activity to the
-UnsupportedOperationExceptionDelegate, then this delegate will handle
-the exception.
-```java
-ExceptionDelegate delegate = new UnsupportedOperationExceptionDelegate(activity);
-exceptionController.addDelegate(delegate, notesActivity.getLifecycle());
-```
-
 
 Testing
 -------
 
-##### <a name="testandroidui">Test the activity</a>
+#### <a name="testandroidui">Test the activity</a>
 
-Para probar todas estas cosas que se crean con la ayuda de Dagger 2 podemos
-Utilice una biblioteca llamada [DaggerMock] (https://github.com/fabioCollini/DaggerMock).
-Esta biblioteca reemplaza los objetos proporcionados por los módulos
-dagger, de esta manera podemos reemplazar las dependencias con dobles de
-prueba.
+For test all this stuff that we have built using Dagger2 we can use a library called
+[DaggerMock](https://github.com/fabioCollini/DaggerMock).
+This library helps us replacing all the objects provided by the Dagger2 modules,
+in fact we can replace the dependencies of the subject under test with test doubles.
 
-First of all we need to replace the first Component that is created in the
+First of all we need to replace the first **Component** that is created in the
 graph. We are assuming that the main component/module is called
-AppComponent/AppModule, the Application class name is App.
+**AppComponent**/**AppModule**, the **Application** class name is App.
 
 ```java
 public class EspressoDaggerMockRule
@@ -356,7 +285,7 @@ public class EspressoDaggerMockRule
 
 Now in the instrumentation test. We define all the mocks that we will need
 in the test. Also create the ActivityTestRule but config it to avoid autorun.
-Finally create the EspressoDaggerMockRule. With the setup complete we can
+Finally create the **EspressoDaggerMockRule**. With the setup complete we can
 create a test and run it. All the mocks will be injected as doubles in the
 Activity module.
 
@@ -397,6 +326,23 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
     onView(withId(R.id.recycler)).check(RecyclerViewAssertions.hasItemsCount(1));
 }
 ```
+
+Contribute
+-------
+If you want to contribute feel free to make a PR, here are some of the
+future taks:
+*  review packaging
+*  Code examples in kotlin
+*  remove testCoverageEnabled from app module to avoid generate reports
+*  Automatic upload from CI to bintray -> master branch
+    1. need to modify travis.yml: test assemble install bintrayUpload
+    2. only in master branch
+    3. auto increment version number
+*  Add a concurrency Looper
+*  Check Javadoc.
+*  Migrate to >= Dagger2.11 (AndroidInjector)
+*  Clean gradle files. use multiple gradle files.
+*  warning javadoc.
 
 License
 -------

@@ -1,7 +1,9 @@
 package com.github.albertopeam.infrastructure.concurrency;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import java.util.Collections;
 import java.util.concurrent.Executor;
 
 import com.github.albertopeam.infrastructure.exceptions.HandledException;
@@ -18,7 +20,6 @@ class UseCaseExecutorImpl
     implements UseCaseExecutor{
 
 
-    private ExceptionController exceptionController;
     private Executor executor;
     private AndroidMainThread mainThread;
     private Tasks tasks;
@@ -26,11 +27,9 @@ class UseCaseExecutorImpl
 
     UseCaseExecutorImpl(@NonNull Executor executor,
                         @NonNull AndroidMainThread mainThread,
-                        @NonNull ExceptionController exceptionController,
                         @NonNull Tasks tasks) {
         this.executor = executor;
         this.mainThread = mainThread;
-        this.exceptionController = exceptionController;
         this.tasks = tasks;
     }
 
@@ -42,15 +41,21 @@ class UseCaseExecutorImpl
         if (tasks.alreadyAdded(useCase)){
             return false;
         }
-        tasks.addUseCase(useCase);
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Response response = useCase.run(args);
-                    notifySuccess(useCase, callback, response);
+                    if (useCase.canRun()){
+                        tasks.addUseCase(useCase);
+                        Response response = useCase.run(args);
+                        notifySuccess(useCase, callback, response);
+                        tasks.removeUseCase(useCase);
+                    }
                 } catch (Exception e) {
-                    notifyError(useCase, callback, e);
+                    ExceptionController exceptionController = useCase.exceptionController();
+                    final HandledException handledException = exceptionController.handle(e);
+                    notifyError(useCase, callback, handledException);
+                    tasks.removeUseCase(useCase);
                 }
 
             }
@@ -69,7 +74,6 @@ class UseCaseExecutorImpl
                 if (useCase.canRespond()){
                     callback.onSuccess(success);
                 }
-                tasks.removeUseCase(useCase);
             }
         });
     }
@@ -77,15 +81,13 @@ class UseCaseExecutorImpl
 
     private void notifyError(final @NonNull UseCase useCase,
                              final @NonNull Callback callback,
-                             final @NonNull Exception exception){
+                             final @NonNull HandledException handledException){
         mainThread.execute(new Runnable() {
             @Override
             public void run() {
                 if (useCase.canRespond()){
-                    final HandledException handledException = exceptionController.handle(exception, useCase.lifecycleOwner());
                     callback.onException(handledException);
                 }
-                tasks.removeUseCase(useCase);
             }
         });
     }
