@@ -327,6 +327,23 @@ public void givenResumedWhenLoadedNotesThenShowThenInAList() throws InterruptedE
 }
 ```
 
+Contribute
+-------
+If you want to contribute feel free to make a PR, here are some of the
+future taks:
+*  review packaging
+*  Code examples in kotlin
+*  remove testCoverageEnabled from app module to avoid generate reports
+*  Automatic upload from CI to bintray -> master branch
+    1. need to modify travis.yml: test assemble install bintrayUpload
+    2. only in master branch
+    3. auto increment version number
+*  Add a concurrency Looper
+*  Check Javadoc.
+*  Migrate to >= Dagger2.11 (AndroidInjector)
+*  Clean gradle files. use multiple gradle files.
+*  warning javadoc.
+
 License
 -------
 
