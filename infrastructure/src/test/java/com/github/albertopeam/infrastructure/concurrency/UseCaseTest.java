@@ -1,7 +1,6 @@
 package com.github.albertopeam.infrastructure.concurrency;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 
 import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
@@ -11,13 +10,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -30,11 +24,14 @@ public class UseCaseTest {
     Lifecycle mockLifecycle;
     @Mock
     ExceptionController mockExceptionController;
+    @Mock
+    Lifecycle.State mockState;
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         when(mockLifecycleOwner.getLifecycle()).thenReturn(mockLifecycle);
+        when(mockLifecycle.getCurrentState()).thenReturn(mockState);
         sut = new UseCase(mockExceptionController, mockLifecycleOwner) {
             @Override
             protected Object run(Object o) throws Exception {
@@ -44,64 +41,28 @@ public class UseCaseTest {
     }
 
     @Test
-    public void givenWhenCreatedThenRegisteredAsObserver(){
-        verify(mockLifecycleOwner).getLifecycle();
-        verify(mockLifecycle).addObserver(any(LifecycleObserver.class));
-        assertThat(sut.canRespond(), equalTo(false));
-    }
-
-    @Test
-    public void givenWhenDestroyedThenMustNotRespond(){
-        sut.destroy();
-        assertThat(sut.canRespond(), equalTo(false));
-        assertThat(sut.lifecycleOwner(), is(nullValue()));
-    }
-
-    @Test
-    public void givenWhenResumedThenCanRespond(){
-        sut.resume();
-        assertThat(sut.canRespond(), equalTo(true));
-    }
-
-    @Test
-    public void givenWhenCreatedThenLifecycleOwnerIsNotNull(){
-        assertThat(sut.lifecycleOwner(), is(notNullValue()));
-    }
-
-    @Test
-    public void givenWhenCreatedThenCanRunReturnTrue(){
-        sut.create();
+    public void givenWhenInitializedThenCanRun(){
+        when(mockLifecycle.getCurrentState()).thenReturn(Lifecycle.State.INITIALIZED);
         assertThat(sut.canRun(), is(true));
     }
 
     @Test
-    public void givenWhenStartedThenCanRunReturnTrue(){
-        sut.start();
-        assertThat(sut.canRun(), is(true));
-    }
-
-    @Test
-    public void givenWhenResumedThenCanRunReturnTrue(){
-        sut.resume();
-        assertThat(sut.canRun(), is(true));
-    }
-
-    @Test
-    public void givenWhenPausedThenCanRunReturnFalse(){
-        sut.pause();
-        assertThat(sut.canRun(), is(false));
-    }
-
-    @Test
-    public void givenWhenStoppedThenCanRunReturnFalse(){
-        sut.stop();
-        assertThat(sut.canRun(), is(false));
-    }
-
-    @Test
-    public void givenWhenDestroyedThenCanRunReturnFalse(){
+    public void givenWhenDestroyedThenCanNotRun(){
+        when(mockLifecycle.getCurrentState()).thenReturn(Lifecycle.State.INITIALIZED);
         sut.destroy();
         assertThat(sut.canRun(), is(false));
     }
 
+    @Test
+    public void givenWhenInitializedThenCanRespond(){
+        when(mockLifecycle.getCurrentState()).thenReturn(Lifecycle.State.INITIALIZED);
+        assertThat(sut.canRespond(), is(true));
+    }
+
+    @Test
+    public void givenWhenDestroyedThenCanNotRespond(){
+        when(mockLifecycle.getCurrentState()).thenReturn(Lifecycle.State.INITIALIZED);
+        sut.destroy();
+        assertThat(sut.canRespond(), is(false));
+    }
 }

@@ -56,7 +56,6 @@ public class NotesActivity
         presenter.loadNotes();
     }
 
-
     @Override
     public void onLoadedNotes(List<String> notes) {
         NotesAdapter notesAdapter = (NotesAdapter) recyclerView.getAdapter();

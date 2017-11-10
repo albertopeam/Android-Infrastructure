@@ -64,13 +64,13 @@ allprojects {
 Add the dependency to include Android components Lifecycle(LifecycleActivity, LifecycleFragment), this
 isn't needed if you are using a version of [support library](https://developer.android.com/topic/libraries/support-library/revisions.html#26-1-0)>= 26.1.0:
 ```groovy
-compile "android.arch.lifecycle:extensions:1.0.0-rc1"
+compile "android.arch.lifecycle:extensions:1.0.0"
 ```
 For more info, check [documentation](https://developer.android.com/topic/libraries/architecture/adding-components.html)
 
 Add infrastructure dependency:
 ```groovy
-compile 'com.github.albertopeam:infrastructure:0.0.10-rc1'
+compile 'com.github.albertopeam:infrastructure:0.0.11'
 ```
 
 Usage
@@ -124,11 +124,6 @@ ExceptionDelegate aDelegate = new ExceptionDelegate() {
             }
         };
     }
-
-    @Override
-    public boolean belongsTo(LifecycleOwner lifecycleOwner) {
-        return false;
-    }
 };
 List<ExceptionDelegate> delegates = new ArrayList<>();
 delegates.add(aDelegate);
@@ -150,8 +145,8 @@ that we have been created previously](#createexceptionhandler)) that is
 going to handle all exceptions triggered during the **UseCase** execution;
 and a **LifecycleOwner** that is not going to respond to the **Callback** in the case
 that the android component be destroyed. Another case is when the **UseCase**
-is not going to run if the **LifecycleOwner** in not between creation and
-resumed state.
+is not going to run if the **LifecycleOwner** is not initializated(before
+```onCreate```).
 
 In this example we are going to inject a domain service that receives a
 string and return it converted to uppercase. In this case we are only
