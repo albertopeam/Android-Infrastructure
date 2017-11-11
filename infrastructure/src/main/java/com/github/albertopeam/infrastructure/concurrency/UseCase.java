@@ -76,7 +76,6 @@ public abstract class UseCase<Args, Response>
     public void destroy() {
         lifecycleState = LifecycleState.DESTROYED;
         lifecycleOwner = null;
-        exceptionController = null;
     }
 
 }
