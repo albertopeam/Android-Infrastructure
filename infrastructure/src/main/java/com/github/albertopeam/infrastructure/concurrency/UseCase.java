@@ -23,15 +23,15 @@ public abstract class UseCase<Args, Response>
 
     private LifecycleOwner lifecycleOwner;
     private ExceptionController exceptionController;
-    private LifecycleState state;
+    private LifecycleState lifecycleState;
 
 
     protected UseCase(@NonNull ExceptionController exceptionController,
                       @NonNull LifecycleOwner lifecycleOwner){
         this.exceptionController = exceptionController;
         this.lifecycleOwner = lifecycleOwner;
-        this.state = LifecycleState.UNKNOW;
-        lifecycleOwner.getLifecycle().addObserver(this);
+        this.lifecycleOwner.getLifecycle().addObserver(this);
+        this.lifecycleState = LifecycleState.INITIALIZED;
     }
 
 
@@ -45,12 +45,24 @@ public abstract class UseCase<Args, Response>
 
 
     boolean canRespond(){
-        return state == LifecycleState.RESUMED;
+        if (lifecycleOwner == null){
+            return false;
+        }
+        Lifecycle lifecycle = lifecycleOwner.getLifecycle();
+        boolean isInitialized = lifecycle.getCurrentState().isAtLeast(Lifecycle.State.INITIALIZED);
+        boolean isNotDestroyed = lifecycleState != LifecycleState.DESTROYED;
+        return isInitialized && isNotDestroyed;
     }
 
 
     boolean canRun(){
-        return state == LifecycleState.CREATED || state == LifecycleState.STARTED || state == LifecycleState.RESUMED;
+        if (lifecycleOwner == null){
+            return false;
+        }
+        Lifecycle lifecycle = lifecycleOwner.getLifecycle();
+        boolean isInitialized = lifecycle.getCurrentState().isAtLeast(Lifecycle.State.INITIALIZED);
+        boolean isNotDestroyed = lifecycleState != LifecycleState.DESTROYED;
+        return isInitialized && isNotDestroyed;
     }
 
 
@@ -60,41 +72,10 @@ public abstract class UseCase<Args, Response>
     }
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    void create() {
-        state = LifecycleState.CREATED;
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    void start() {
-        state = LifecycleState.STARTED;
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    void resume() {
-        state = LifecycleState.RESUMED;
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    void pause() {
-        state = LifecycleState.PAUSED;
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    void stop() {
-        state = LifecycleState.STOPPED;
-    }
-
-
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    void destroy() {
-        state = LifecycleState.DESTROYED;
+    public void destroy() {
+        lifecycleState = LifecycleState.DESTROYED;
         lifecycleOwner = null;
-        exceptionController = null;
     }
 
 }

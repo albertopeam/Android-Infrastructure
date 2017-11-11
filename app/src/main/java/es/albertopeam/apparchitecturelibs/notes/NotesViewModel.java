@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Alberto Penas Amorberto Penas Amor on 22/05/2017.
  */
-class NotesViewModel
+public class NotesViewModel
         extends ViewModel{
 
 
