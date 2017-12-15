@@ -1,12 +1,6 @@
 package es.albertopeam.apparchitecturelibs.notes;
 
-import android.support.annotation.NonNull;
-
-import java.util.List;
-
-import com.github.albertopeam.infrastructure.concurrency.Callback;
 import com.github.albertopeam.infrastructure.concurrency.UseCaseExecutor;
-import com.github.albertopeam.infrastructure.exceptions.HandledException;
 
 class NotesPresenter {
 
@@ -36,48 +30,26 @@ class NotesPresenter {
 
     void loadNotes(){
         view.loading();
-        useCaseExecutor.execute(null, loadNotesUC, new Callback<List<String>>() {
-            @Override
-            public void onSuccess(@NonNull List<String> notes) {
-                view.endLoading();
-                view.onLoadedNotes(notes);
-            }
-
-            @Override
-            public void onException(@NonNull HandledException handledException) {
-                view.endLoading();
-                handledException.recover();
-            }
+        useCaseExecutor.execute(null, loadNotesUC, notes -> {
+            view.endLoading();
+            view.onLoadedNotes(notes);
+        }, handledException -> {
+            view.endLoading();
+            handledException.recover();
         });
     }
 
 
     void addNote(String note){
-        useCaseExecutor.execute(note, addNoteUC, new Callback<String>() {
-            @Override
-            public void onSuccess(@NonNull String s) {
-                view.onLoadedNotes(model.getNotes());
-            }
-
-            @Override
-            public void onException(@NonNull HandledException handledException) {
-                handledException.recover();
-            }
-        });
+        useCaseExecutor.execute(note, addNoteUC,
+                notes -> view.onLoadedNotes(model.getNotes()),
+                handledException -> handledException.recover());
     }
 
 
-    void removeNote(String note){
-        useCaseExecutor.execute(note, removeNoteUC, new Callback<String>(){
-            @Override
-            public void onSuccess(@NonNull String note) {
-                view.onRemovedNote(note);
-            }
-
-            @Override
-            public void onException(@NonNull HandledException handledException) {
-                handledException.recover();
-            }
-        });
+    void removeNote(String text){
+        useCaseExecutor.execute(text, removeNoteUC,
+                note -> view.onRemovedNote(note),
+                handledException ->  handledException.recover());
     }
 }

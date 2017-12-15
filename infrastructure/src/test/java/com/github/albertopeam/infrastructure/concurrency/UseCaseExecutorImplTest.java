@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -31,7 +32,9 @@ public class UseCaseExecutorImplTest {
     @Mock
     UseCase<String, String> mockUseCase;
     @Mock
-    Callback<String> mockCallback;
+    SuccessCallback<String> mockSuccessCallback;
+    @Mock
+    ExceptionCallback mockExceptionCallback;
     @Mock
     ExceptionController mockExceptionController;
     @Mock
@@ -63,9 +66,9 @@ public class UseCaseExecutorImplTest {
     public void givenAddedAnUseCaseWhenAddItAgainBeforeEndThenReturnNotAddedToExecution(){
         when(mockTasks.alreadyAdded(mockUseCase)).thenReturn(false);
         when(mockUseCase.canRun()).thenReturn(true);
-        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
+        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockSuccessCallback, mockExceptionCallback);
         when(mockTasks.alreadyAdded(mockUseCase)).thenReturn(true);
-        boolean addedTwice = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
+        boolean addedTwice = useCaseExecutor.execute(mockArgs, mockUseCase, mockSuccessCallback, mockExceptionCallback);
         assertThat(added, equalTo(true));
         assertThat(addedTwice, equalTo(false));
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
@@ -77,9 +80,10 @@ public class UseCaseExecutorImplTest {
         when(mockUseCase.run(anyString())).thenReturn(response);
         when(mockUseCase.canRespond()).thenReturn(true);
         when(mockUseCase.canRun()).thenReturn(true);
-        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
+        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockSuccessCallback, mockExceptionCallback);
+        verifyZeroInteractions(mockExceptionCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
-        verify(mockCallback, times(1)).onSuccess(successArgCaptor.capture());
+        verify(mockSuccessCallback, times(1)).onSuccess(successArgCaptor.capture());
         verify(mockTasks, times(1)).removeUseCase(mockUseCase);
         assertThat(successArgCaptor.getValue(), equalTo(response));
         assertThat(added, equalTo(true));
@@ -92,11 +96,12 @@ public class UseCaseExecutorImplTest {
         when(mockUseCase.run(anyString())).thenReturn(response);
         when(mockUseCase.canRespond()).thenReturn(false);
         when(mockUseCase.canRun()).thenReturn(true);
-        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
+        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockSuccessCallback, mockExceptionCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));
         verify(mockUseCase, times(1)).run(mockArgs);
-        verifyZeroInteractions(mockCallback);
+        verifyZeroInteractions(mockSuccessCallback);
+        verifyZeroInteractions(mockExceptionCallback);
         verify(mockTasks, times(1)).removeUseCase(mockUseCase);
     }
 
@@ -110,12 +115,13 @@ public class UseCaseExecutorImplTest {
         when(mockExceptionController.handle(any(Exception.class))).thenReturn(mockHandledException);
         when(mockUseCase.exceptionController()).thenReturn(mockExceptionController);
         when(mockUseCase.canRun()).thenReturn(true);
-        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
+        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockSuccessCallback, mockExceptionCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));
         verify(mockUseCase, times(1)).run(mockArgs);
         verify(mockTasks, times(1)).removeUseCase(mockUseCase);
-        verify(mockCallback, times(1)).onException(errorArgCaptor.capture());
+        verifyZeroInteractions(mockSuccessCallback);
+        verify(mockExceptionCallback, times(1)).onException(errorArgCaptor.capture());
         assertThat(errorArgCaptor.getValue(), equalTo(mockHandledException));
     }
 
@@ -127,11 +133,12 @@ public class UseCaseExecutorImplTest {
         when(mockUseCase.canRespond()).thenReturn(false);
         when(mockUseCase.canRun()).thenReturn(true);
         when(mockUseCase.exceptionController()).thenReturn(mockExceptionController);
-        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
+        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockSuccessCallback, mockExceptionCallback);
         verify(mockTasks, times(1)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));
         verify(mockUseCase, times(1)).run(mockArgs);
-        verifyZeroInteractions(mockCallback);
+        verifyZeroInteractions(mockSuccessCallback);
+        verifyZeroInteractions(mockExceptionCallback);
         verify(mockTasks, times(1)).removeUseCase(mockUseCase);
     }
 
@@ -139,11 +146,12 @@ public class UseCaseExecutorImplTest {
     @Test
     public void givenUseCaseWithDestroyedStateWhenTryToExecuteThenNotRunUseCaseAndNotRespondToCallback() throws Exception{
         when(mockUseCase.canRun()).thenReturn(false);
-        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockCallback);
+        boolean added = useCaseExecutor.execute(mockArgs, mockUseCase, mockSuccessCallback, mockExceptionCallback);
         verify(mockTasks, times(0)).addUseCase(mockUseCase);
         assertThat(added, equalTo(true));
         verify(mockUseCase, times(0)).run(mockArgs);
-        verifyZeroInteractions(mockCallback);
+        verifyZeroInteractions(mockSuccessCallback);
+        verifyZeroInteractions(mockExceptionCallback);
         verify(mockTasks, times(0)).removeUseCase(mockUseCase);
     }
 }
