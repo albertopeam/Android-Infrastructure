@@ -7,15 +7,9 @@ import com.github.albertopeam.infrastructure.exceptions.HandledException;
 /**
  * Created by Alberto Penas Amor on 25/05/2017.
  *
- * Generic callback used to respond to the caller of an {@link UseCase}
+ * Generic callback used to respond to the caller of an {@link UseCase} if an Exception is thrown
  */
-public interface Callback<Response> {
-    /**
-     * Invoked when a {@link UseCase} is finallized normally
-     * @param response data
-     */
-    void onSuccess(@NonNull Response response);
-
+public interface ExceptionCallback{
     /**
      * Invoked when an {@link UseCase} generates an exception during its execution
      * @param handledException representing the exception captured. Check {@link HandledException} to see its options for

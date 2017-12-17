@@ -13,10 +13,11 @@ public interface UseCaseExecutor {
      * executed if the {@link LifecycleState} is not one of: CREATED || STARTED || RESUMED.
      * @param args passed to {@link UseCase} for its exection
      * @param useCase to execute in background thread
-     * @param callback to respond in main thread after the execution of the {@link UseCase}
+     * @param successCallback to respond in main thread after the execution of the {@link UseCase}
      * @return true if added to the execution queue, false if already executing.
      */
     <Args, Response> boolean execute(final Args args,
                                      final @NonNull UseCase<Args, Response> useCase,
-                                     final @NonNull Callback<Response> callback);
+                                     final @NonNull SuccessCallback<Response> successCallback,
+                                     final @NonNull ExceptionCallback exceptionCallback);
 }

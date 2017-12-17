@@ -1,9 +1,7 @@
 package com.github.albertopeam.infrastructure.concurrency;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import java.util.Collections;
 import java.util.concurrent.Executor;
 
 import com.github.albertopeam.infrastructure.exceptions.HandledException;
@@ -36,29 +34,27 @@ class UseCaseExecutorImpl
 
     @Override
     public <Args, Response> boolean execute(final Args args,
-                                           final @NonNull UseCase<Args, Response> useCase,
-                                           final @NonNull Callback<Response>callback){
+                                            final @NonNull UseCase<Args, Response> useCase,
+                                            final @NonNull SuccessCallback<Response> successCallback,
+                                            final @NonNull ExceptionCallback exceptionCallback){
         if (tasks.alreadyAdded(useCase)){
             return false;
         }
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (useCase.canRun()){
-                        tasks.addUseCase(useCase);
-                        Response response = useCase.run(args);
-                        notifySuccess(useCase, callback, response);
-                        tasks.removeUseCase(useCase);
-                    }
-                } catch (Exception e) {
-                    ExceptionController exceptionController = useCase.exceptionController();
-                    final HandledException handledException = exceptionController.handle(e);
-                    notifyError(useCase, callback, handledException);
+        executor.execute(() -> {
+            try {
+                if (useCase.canRun()){
+                    tasks.addUseCase(useCase);
+                    Response response = useCase.run(args);
+                    notifySuccess(useCase, successCallback, response);
                     tasks.removeUseCase(useCase);
                 }
-
+            } catch (Exception e) {
+                ExceptionController exceptionController = useCase.exceptionController();
+                final HandledException handledException = exceptionController.handle(e);
+                notifyError(useCase, exceptionCallback, handledException);
+                tasks.removeUseCase(useCase);
             }
+
         });
         return true;
     }
@@ -66,28 +62,22 @@ class UseCaseExecutorImpl
 
     private <Args, Response> void notifySuccess(
                                 final UseCase<Args, Response> useCase,
-                                final Callback<Response> callback,
+                                final SuccessCallback<Response> successCallback,
                                 final Response success){
-        mainThread.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (useCase.canRespond()){
-                    callback.onSuccess(success);
-                }
+        mainThread.execute(() -> {
+            if (useCase.canRespond()){
+                successCallback.onSuccess(success);
             }
         });
     }
 
 
     private void notifyError(final @NonNull UseCase useCase,
-                             final @NonNull Callback callback,
+                             final @NonNull ExceptionCallback exceptionCallback,
                              final @NonNull HandledException handledException){
-        mainThread.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (useCase.canRespond()){
-                    callback.onException(handledException);
-                }
+        mainThread.execute(() -> {
+            if (useCase.canRespond()){
+                exceptionCallback.onException(handledException);
             }
         });
     }

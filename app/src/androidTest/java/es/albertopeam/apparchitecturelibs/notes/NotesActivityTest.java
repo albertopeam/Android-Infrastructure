@@ -19,7 +19,7 @@ import java.util.List;
 import es.albertopeam.apparchitecturelibs.R;
 import es.albertopeam.apparchitecturelibs.di.EspressoDaggerMockRule;
 import es.albertopeam.apparchitecturelibs.espresso.RecyclerViewAssertions;
-import com.github.albertopeam.infrastructure.concurrency.Callback;
+import com.github.albertopeam.infrastructure.concurrency.SuccessCallback;
 import com.github.albertopeam.infrastructure.concurrency.UseCaseExecutor;
 import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
 
@@ -69,13 +69,13 @@ public class NotesActivityTest {
           doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                ((Callback<List<String>>)invocationOnMock.getArguments()[2]).onSuccess(notes);
+                ((SuccessCallback<List<String>>)invocationOnMock.getArguments()[2]).onSuccess(notes);
                 return null;
             }
         }).when(mockUseCaseExecutor).execute(
                 ArgumentMatchers.<Void>any(),
                 any(LoadNotesUseCase.class),
-                ArgumentMatchers.<Callback<List<String>>>any());
+                ArgumentMatchers.<SuccessCallback<List<String>>>any());
         activityTestRule.launchActivity(null);
         onView(withId(R.id.progressBar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
         onView(withId(R.id.recycler)).check(RecyclerViewAssertions.hasItemsCount(1));
