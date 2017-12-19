@@ -4,7 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'jacoco-android'
 
 // This is the library version used when deploying the artifact
-version = "0.0.11"
+version = "0.0.12"
 
 android {
     compileSdkVersion 25
@@ -29,6 +29,10 @@ android {
     lintOptions {
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -37,7 +41,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
     testCompile "android.arch.lifecycle:runtime:1.0.3"
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.8.9'
+    testCompile 'org.mockito:mockito-core:2.11.0'
     testCompile 'org.hamcrest:hamcrest-library:1.3'
 }
 

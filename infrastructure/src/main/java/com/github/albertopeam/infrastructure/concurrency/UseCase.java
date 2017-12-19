@@ -15,7 +15,7 @@ import com.github.albertopeam.infrastructure.exceptions.ExceptionController;
  * Class used for execute async code. This class handle the activity or fragment {@link Lifecycle},
  * allowing to know if it can run and return depending on the state of the {@link Lifecycle}.
  * To send to execution a subclass of {@link UseCase} its needed to pass it to
- * {@link UseCaseExecutor#execute(Object, UseCase, Callback)}
+ * {@link UseCaseExecutor#execute(Object, UseCase, SuccessCallback, ExceptionCallback)}
  */
 public abstract class UseCase<Args, Response>
         implements LifecycleObserver {
