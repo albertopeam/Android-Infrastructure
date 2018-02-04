@@ -30,7 +30,8 @@ The infrastructure module is the core of the library.
 
 
 ### Install
-[Gradle Dependency](#dependency)
+1. [Gradle Dependency](#dependency)
+2. [Java 8 compatibility](#java8)
 
 ### Usage
 1. [Create use case executor](#createinfra)
@@ -71,6 +72,18 @@ For more info, check [documentation](https://developer.android.com/topic/librari
 Add infrastructure dependency:
 ```groovy
 compile 'com.github.albertopeam:infrastructure:0.0.11'
+```
+
+##### <a name="java8">Java 8 compatibility</a>
+
+This library uses Java 8 compatibility so you need to configure it on your module build.gradle
+```groovy
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
 ```
 
 Usage
