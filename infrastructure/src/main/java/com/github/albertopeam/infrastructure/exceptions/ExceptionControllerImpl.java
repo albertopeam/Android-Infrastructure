@@ -32,11 +32,13 @@ class ExceptionControllerImpl
             }
         }
         if (targetDelegates.isEmpty()){
+            exception.printStackTrace();
             throw new NotHandledException(exception);
         }else if (targetDelegates.size() == 1){
             ExceptionDelegate delegate = targetDelegates.get(0);
             return delegate.handle(exception);
         }else {
+            exception.printStackTrace();
             throw new CollisionException(exception, targetDelegates);
         }
     }

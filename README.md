@@ -71,7 +71,7 @@ For more info, check [documentation](https://developer.android.com/topic/librari
 
 Add infrastructure dependency:
 ```groovy
-compile 'com.github.albertopeam:infrastructure:0.0.12'
+compile 'com.github.albertopeam:infrastructure:0.0.13'
 ```
 
 ##### <a name="java8">Java 8 compatibility</a>
@@ -351,6 +351,12 @@ future taks:
 *  Migrate to >= Dagger2.11 (AndroidInjector)
 *  Clean gradle files. use multiple gradle files.
 *  warning javadoc.
+
+Todo
+-------
+* V1
+    * update compileSdkVersion, targetSdkVersion and support-annotations to last ones(travis.ci also need update)
+    * queue usecase with diff parameters
 
 License
 -------
