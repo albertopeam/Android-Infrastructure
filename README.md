@@ -70,7 +70,7 @@ For more info, check [documentation](https://developer.android.com/topic/librari
 
 Add infrastructure dependency:
 ```groovy
-compile 'com.github.albertopeam:infrastructure:0.0.12'
+compile 'com.github.albertopeam:infrastructure:0.0.13'
 ```
 
 Usage
