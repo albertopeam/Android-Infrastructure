@@ -355,6 +355,7 @@ future taks:
 Todo
 -------
 * V1
+    * update compileSdkVersion, targetSdkVersion and support-annotations to last ones(travis.ci also need update)
     * queue usecase with diff parameters
 
 License
